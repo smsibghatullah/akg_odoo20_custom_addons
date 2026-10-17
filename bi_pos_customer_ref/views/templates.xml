@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Invoice report: print the POS customer reference.
+         (Odoo 16 replaced the whole account.report_invoice_document with a copy, which cannot work on Odoo 20.
+          Saudi/GCC bilingual layout is now provided by l10n_sa / l10n_gcc_invoice, which build on this template.) -->
+    <template id="report_invoice_document_customer_reference" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@id='informations']//div[@name='reference']" position="after">
+            <div class="col" t-if="o.customer_reference" name="customer_reference">
+                <strong>Customer Reference / مرجع العميل</strong>
+                <div t-field="o.customer_reference"/>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- QR code image in the footer of every report layout (all Odoo 20 layouts use this template) -->
+    <template id="external_layout_footer_content_qr" inherit_id="web.external_layout_footer_content">
+        <xpath expr="//div[contains(@t-attf-class, 'o_footer_content')]" position="inside">
+            <div class="text-end">
+                <img src="/bi_pos_customer_ref/static/src/img/qr_code.png" width="80" height="80" alt="QR"/>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Sales order / quotation report: salesperson phone -->
+    <template id="report_saleorder_document_salesperson_phone_number" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@id='informations']" position="inside">
+            <div t-if="doc.user_id.phone" class="col" name="salesperson_phone">
+                <strong>Phone Number</strong>
+                <div t-field="doc.user_id.phone"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

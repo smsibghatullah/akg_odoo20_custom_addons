@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_warehouse_dashboard" model="ir.actions.client">
+        <field name="name">POS Dashboard</field>
+        <field name="tag">warehouse_dashboard_tag</field>
+    </record>
+
+    <menuitem id="menu_warehouse_dashboard_root"
+              name="POS Dashboard"
+              parent="stock.menu_stock_root"
+              action="action_warehouse_dashboard"
+              sequence="1"/>
+
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_warehouse_delivery.Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension">
+        <xpath expr="//ul[hasclass('info-list')]" position="inside">
+            <li t-if="this.showWarehouseInfo"
+                class="pos-wh-wrapper w-100"
+                t-on-pointerdown="this.stopEvent"
+                t-on-pointerup="this.stopEvent"
+                t-on-click="this.stopEvent">
+
+                <t t-if="this.line.isSelected()">
+                    <!-- Row 1: Warehouse dropdown -->
+                    <div class="pos-wh-field-row">
+                        <span class="pos-wh-field-label">Warehouse</span>
+                        <select class="pos-wh-select form-select form-select-sm"
+                                t-on-change="this.onWarehouseChange">
+                            <option t-if="!this.defaultWarehouse" value="">-- Select --</option>
+                            <t t-foreach="this.warehouseOptions" t-as="wh" t-key="wh.id">
+                                <option t-att-value="wh.id"
+                                        t-att-selected="this.selectedWarehouseId === wh.id"
+                                        t-out="wh.name"/>
+                            </t>
+                        </select>
+                    </div>
+
+                    <t t-if="this.allowShipLater">
+                        <!-- Row 2: Ship Later checkbox -->
+                        <div class="pos-wh-field-row">
+                            <span class="pos-wh-field-label">Ship Later</span>
+                            <label class="pos-ship-later-inline-toggle">
+                                <input type="checkbox"
+                                       class="pos-ship-later-checkbox form-check-input m-0"
+                                       t-att-checked="this.isShipLater"
+                                       t-on-change="this.onShipLaterToggle"/>
+                                <span class="pos-ship-later-inline-text">Enable ship later</span>
+                            </label>
+                        </div>
+                        <!-- Row 3: Ship date, only when ship later is ON for this line -->
+                        <div t-if="this.isShipLater" class="pos-wh-field-row">
+                            <span class="pos-wh-field-label">Ship Date</span>
+                            <input type="datetime-local"
+                                   class="pos-wh-date-input form-control form-control-sm"
+                                   t-att-value="this.shipLaterDateValue"
+                                   t-on-change="this.onShipLaterDateChange"/>
+                        </div>
+                    </t>
+                </t>
+
+                <!-- Not selected: one-line summary -->
+                <div t-else="" class="pos-wh-summary">
+                    <i class="fa fa-building-o me-1"/><t t-out="this.warehouseName or 'No warehouse'"/>
+                    <t t-if="this.allowShipLater and this.isShipLater">
+                        <i class="fa fa-clock-o ms-2 me-1"/><t t-out="this.shipLaterDateLabel"/>
+                    </t>
+                </div>
+            </li>
+        </xpath>
+    </t>
+</templates>

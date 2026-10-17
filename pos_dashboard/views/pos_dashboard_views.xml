@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_pos_dashboard" model="ir.actions.client">
+        <field name="name">POS Dashboard</field>
+        <field name="tag">pos_dashboard_tag</field>
+    </record>
+
+    <menuitem id="menu_pos_dashboard_root"
+              name="POS Dashboard"
+              parent="point_of_sale.menu_point_root"
+              action="action_pos_dashboard"
+              groups="point_of_sale.group_pos_user"
+              sequence="15"/>
+
+</odoo>

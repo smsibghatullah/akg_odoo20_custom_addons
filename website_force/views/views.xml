@@ -1,0 +1,4 @@
+<odoo>
+    <!-- The original file only held a bogus access record (it pointed model_id at a client action).
+         It was never loaded by the manifest and is removed in the Odoo 20 port. -->
+</odoo>

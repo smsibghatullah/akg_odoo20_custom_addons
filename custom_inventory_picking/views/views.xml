@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Groups: privilege ke baghair (dropdown nahi banta). privilege_id ko eval="False" se saaf karna
+        zaroori hai, warna purani value database mein reh jati hai.
+        Heading "Transfer Approval Workflow" + char checkboxes neeche wali user-form view se aate hain.
+    -->
+    <record id="group_transfer_request_user" model="res.groups">
+        <field name="name">Transfer Request User</field>
+        <field name="privilege_id" eval="False"/>
+    </record>
+
+    <record id="group_confirm_request_user" model="res.groups">
+        <field name="name">Request Received User</field>
+        <field name="privilege_id" eval="False"/>
+    </record>
+
+    <record id="group_approve_transfer_user" model="res.groups">
+        <field name="name">Dispatched Transfer User</field>
+        <field name="privilege_id" eval="False"/>
+    </record>
+
+    <record id="group_validate_transfer_user" model="res.groups">
+        <field name="name">Validate Transfer User</field>
+        <field name="privilege_id" eval="False"/>
+    </record>
+
+    <!-- User form: Access Rights tab mein "Transfer Approval Workflow" heading aur uske neeche 4 checkboxes
+         (fields models/res_users.py mein hain) -->
+    <record id="view_users_form_transfer_workflow" model="ir.ui.view">
+        <field name="name">res.users.form.transfer.workflow</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='group_ids']" position="after">
+                <group string="Transfer Approval Workflow" name="transfer_approval_workflow">
+                    <field name="is_transfer_request_user"/>
+                    <field name="is_confirm_request_user"/>
+                    <field name="is_approve_transfer_user"/>
+                    <field name="is_validate_transfer_user"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Picking form: extend the core Odoo 20 form instead of replacing the whole header -->
+    <record id="view_picking_form_inherit_custom" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_cancel']" position="before">
+                <!-- Validate for internal transfers (standard Validate buttons are hidden for them) -->
+                <button name="button_validate" string="Validate" type="object" class="oe_highlight"
+                        groups="custom_inventory_picking.group_validate_transfer_user"
+                        invisible="picking_type_code != 'internal' or state != 'validate_transfer'"/>
+
+                <!-- Transfer Request -->
+                <button name="action_initial_approve" type="object" string="Transfer Request"
+                        class="btn-primary"
+                        groups="custom_inventory_picking.group_transfer_request_user"
+                        invisible="state != 'initial_request'"/>
+
+                <!-- Confirm Request -->
+                <button name="action_confirm_transfer_approve" type="object" string="Request Received"
+                        class="btn-primary"
+                        groups="custom_inventory_picking.group_confirm_request_user"
+                        invisible="state != 'confirm_transfer'"/>
+
+                <!-- Approve Transfer -->
+                <button name="action_approved_manager_approve" type="object" string="Dispatched"
+                        class="btn-primary"
+                        groups="custom_inventory_picking.group_approve_transfer_user"
+                        invisible="state != 'approved_manager'"/>
+            </xpath>
+
+            <!-- Helper fields providing the dynamic domains (onchange domains no longer exist) -->
+            <xpath expr="//field[@name='picking_type_id'][@options]" position="before">
+                <field name="allowed_picking_type_ids" invisible="1"/>
+                <field name="allowed_src_location_ids" invisible="1"/>
+                <field name="allowed_dest_location_ids" invisible="1"/>
+                <field name="restrict_dest_location" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='picking_type_id'][@options]" position="attributes">
+                <attribute name="domain">[('id', 'in', allowed_picking_type_ids)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='location_id'][@groups='stock.group_stock_multi_locations']" position="attributes">
+                <attribute name="domain">[('id', 'in', allowed_src_location_ids)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='location_dest_id'][@groups='stock.group_stock_multi_locations']" position="attributes">
+                <attribute name="domain">[('id', 'in', allowed_dest_location_ids)] if restrict_dest_location else []</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Detailed operations list: on internal transfers the quantity can only be edited once dispatched -->
+    <record id="view_stock_move_line_detailed_operation_list_custom" model="ir.ui.view">
+        <field name="name">stock.move.line.operations.list.custom</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='quantity']" position="before">
+                <field name="picking_state" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='quantity']" position="attributes">
+                <attribute name="readonly">(state in ('done', 'cancel') and is_locked) or (picking_type_code == 'internal' and picking_state != 'approved_manager')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="picking_type_code" column_invisible="True"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

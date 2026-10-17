@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="bi_pos_customer_ref.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <xpath expr="//SelectPartnerButton" position="after">
+            <button class="btn btn-secondary btn-lg lh-lg text-truncate" t-on-click="() => this.clickCustomerReference()">
+                <i class="fa fa-file-text-o me-1" role="img" aria-hidden="true"/>
+                <span t-if="this.currentOrder?.customer_reference" t-out="this.currentOrder.customer_reference"/>
+                <span t-else="">Customer Reference</span>
+            </button>
+        </xpath>
+    </t>
+</templates>

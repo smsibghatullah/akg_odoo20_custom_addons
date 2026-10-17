@@ -1,0 +1,29 @@
+<!--
+    Adds a "Free Qty" column to the Inventory section of the POS
+    Product Information popup, placed BEFORE the "On hand / available"
+    column (i.e. right after the warehouse name).
+
+    IMPORTANT (Odoo 16 quirk): this file must NOT start with an
+    <?xml ...?> declaration and must NOT be wrapped in its own
+    <templates> tag. Odoo's assetsbundle.py automatically wraps any
+    file that doesn't start with "<odoo>" inside a <templates> tag
+    before parsing it. If we also wrap it ourselves, the file ends up
+    double-wrapped (<templates><templates>...) and Odoo can no longer
+    find our <t t-inherit="..."> node, which causes the confusing
+    "Template name is missing in file ..." crash on every POS load.
+    So: just the raw <t t-inherit="..."> node below, nothing else
+    around it.
+
+    On this instance, td[3] in the warehouse row was empirically
+    confirmed (by inspecting where an "after"-positioned column landed
+    on screen) to be the "available" / on-hand column - so inserting
+    "before" td[3] puts the new Free Qty column right in front of it,
+    as requested.
+-->
+<t t-inherit="point_of_sale.ProductInfoPopup" t-inherit-mode="extension">
+    <xpath expr="//div[hasclass('section-inventory-body')]//tr/td[3]" position="before">
+        <td>
+            <t t-out="warehouse.free_qty"/> free,
+        </td>
+    </xpath>
+</t>

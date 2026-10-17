@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_pos_form_delivery" model="ir.ui.view">
+        <field name="name">pos.order.form.delivery</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <!-- warehouse + ship_later + ship_later_date columns -->
+            <xpath expr="//field[@name='lines']/list//field[@name='qty']" position="before">
+                <field name="warehouse_id" optional="show"/>
+                <field name="ship_later" optional="show"/>
+                <field name="ship_later_date" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

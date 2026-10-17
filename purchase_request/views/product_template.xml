@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="product_template_form_view_inherit">
+        <field name="name">product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <!-- stock.view_template_property_form no longer exists in Odoo 20 -->
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_general']" position="inside">
+                <field name="purchase_request" widget="boolean" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

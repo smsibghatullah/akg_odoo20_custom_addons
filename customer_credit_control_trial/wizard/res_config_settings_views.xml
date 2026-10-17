@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_cc_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.cc</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Odoo 17+: settings use <app>/<block>/<setting>. Anchor on the Sales <app> (stable) -->
+            <xpath expr="//app[@name='sale_management']" position="inside">
+                <block title="Customer Credit Control" name="customer_credit_control_container"
+                       groups="sales_team.group_sale_manager,account.group_account_manager">
+                    <setting id="cc_trial_info" string="Trial Version"
+                             help="Universal Customer Credit Control is disabled for trial version. Click 'How to Enable?' to find out how to get the full Customer Credit Control App.">
+                        <div class="mt8">
+                            <button name="%(customer_credit_control_trial.action_warning_wizard)d" class="btn-primary" type="action" string="How to Enable?"/>
+                        </div>
+                    </setting>
+                    <setting id="cc_enable_universal" help="This Credit Control Setting applies to all Customers, Who doesn't have Credit Control configured.">
+                        <field name="enable_universal_credit_control" readonly="1"/>
+                    </setting>
+                    <setting id="cc_force_universal" help="Force apply these credit control settings over settings done in partner form.">
+                        <field name="force_universal_credit_control" readonly="1"/>
+                    </setting>
+                    <setting id="cc_amount_limit" help="Add Credit Control to Limit Amount of how much credit sales can be done to a Customer.">
+                        <field name="is_amount_credit_limit" readonly="1"/>
+                    </setting>
+                    <setting id="cc_days_limit" help="Add Credit Control to Limit No. of Days how long a Customer can keep the amount due.">
+                        <field name="is_days_credit_limit" readonly="1"/>
+                    </setting>
+                    <setting id="cc_limit_amount">
+                        <field name="credit_limit_amount" readonly="1"/>
+                    </setting>
+                    <setting id="cc_limit_days">
+                        <field name="credit_limit_days" readonly="1"/>
+                    </setting>
+                    <setting id="cc_amount_tolerance">
+                        <field name="amount_tolerance" readonly="1"/>
+                    </setting>
+                    <setting id="cc_days_tolerance">
+                        <field name="days_tolerance" readonly="1"/>
+                    </setting>
+                    <setting id="cc_email_from" help="This user's email will be used to send warning email. For Universal and Partner Form, both Settings.">
+                        <field name="email_from" readonly="1"/>
+                    </setting>
+                    <setting id="cc_enable_warning" help="Enable / Disable Warning emails along side their configurations.">
+                        <field name="enable_warning" readonly="1"/>
+                    </setting>
+                    <setting id="cc_warning_amount">
+                        <field name="warning_amount" readonly="1"/>
+                    </setting>
+                    <setting id="cc_warning_days">
+                        <field name="warning_days" readonly="1"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

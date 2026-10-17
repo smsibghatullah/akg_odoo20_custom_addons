@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_warning_wizard_form" model="ir.ui.view">
+        <field name="name">warning.wizard.form.view</field>
+        <field name="model">warning.wizard</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h3><field name="name" readonly="1" force_save="1"/></h3>
+                    <field name="message" readonly="1" force_save="1"/>
+                </sheet>
+                <footer>
+                    <button string="Got It!" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_warning_wizard" model="ir.actions.act_window">
+        <field name="name">Warning</field>
+        <field name="res_model">warning.wizard</field>
+        <field name="view_id" ref="customer_credit_control_trial.view_warning_wizard_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{
+            'default_name': "Trial App Warning!!",
+            'default_message': "Only Amount Credit Control is enabled in this application.. Kindly Purchase Main Application 'Customer Credit Control' for access. Configuration are given here to just give you the idea what we offer in main application."
+        }</field>
+    </record>
+
+</odoo>

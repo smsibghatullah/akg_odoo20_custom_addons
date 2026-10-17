@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_partner_form_credit_control" model="ir.ui.view">
+        <field name="name">res.partner.credit.control.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page name="credit_control" string="Credit Control" groups="sales_team.group_sale_manager, account.group_account_manager">
+
+                    <div class="alert alert-warning" role="alert" style="margin-bottom:0px;" invisible="not parent_id">
+                        <p>Credit Control settings are managed on <button name="open_commercial_entity" type="object" string="the parent company" class="oe_link"/></p>
+                    </div>
+                    <group name="credit_control_main" string="Credit Control" invisible="parent_id">
+                        <group>
+                            <field name="total_due_amount"/>
+                            <field name="is_amount_credit_limit"/>
+                            <field name="credit_limit_amount" invisible="not is_amount_credit_limit" required="is_amount_credit_limit"/>
+                            <field name="amount_tolerance" invisible="not is_amount_credit_limit"/>
+                        </group>
+                        <group>
+                            <field name="is_days_credit_limit"/>
+                            <field name="credit_limit_days" invisible="not is_days_credit_limit" required="is_days_credit_limit"/>
+                            <field name="days_tolerance" invisible="not is_days_credit_limit"/>
+                        </group>
+                        <group>
+                            <field name="is_enable_warning"/>
+                            <field name="warning_amount"  invisible="not is_enable_warning"/>
+                            <field name="warning_days"  invisible="not is_enable_warning"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

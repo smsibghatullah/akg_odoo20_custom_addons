@@ -1,0 +1,166 @@
+.o_pos_dashboard {
+    padding: 16px 20px;
+    background-color: #f4f5f7;
+    min-height: 100%;
+
+    .o_wh_dashboard_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+
+        h2 {
+            font-weight: 600;
+            font-size: 19px;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .o_wh_refresh_btn {
+            border-radius: 6px;
+        }
+    }
+
+    .o_wh_dashboard_loading,
+    .o_wh_dashboard_empty {
+        text-align: center;
+        padding: 60px 0;
+        font-size: 15px;
+        color: #888;
+    }
+
+    // Horizontal scrolling kanban board, one column per warehouse
+    .o_wh_board {
+        display: flex;
+        align-items: flex-start;
+        gap: 0;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .o_wh_column {
+        flex: 0 0 300px;
+        width: 300px;
+        border-right: 1px solid #e3e5e8;
+        padding: 0 14px;
+
+        &:first-child {
+            padding-left: 2px;
+        }
+
+        .o_wh_column_header {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            padding: 6px 2px 12px 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            .o_wh_column_sub {
+                font-size: 11px;
+                font-weight: 400;
+                color: #9aa0a6;
+            }
+        }
+
+        .o_wh_column_body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+
+    .o_wh_card {
+        background: #ffffff;
+        border: 1px solid #e3e5e8;
+        border-radius: 3px;
+        padding: 10px 12px 12px 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        transition: box-shadow 0.15s ease;
+
+        &:hover {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.09);
+        }
+
+        .o_wh_card_head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .o_wh_card_title {
+                font-size: 14px;
+                font-weight: 700;
+                color: #2c3e50;
+            }
+
+            .o_wh_card_menu {
+                color: #b0b6bd;
+                cursor: pointer;
+                font-size: 13px;
+
+                &:hover {
+                    color: #666;
+                }
+            }
+        }
+
+        .o_wh_card_subtitle {
+            font-size: 12px;
+            color: #8f96a3;
+            margin-bottom: 10px;
+        }
+
+        .o_wh_card_row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .o_wh_process_btn {
+            background-color: #017e84;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.15s ease;
+
+            &:hover {
+                background-color: #016369;
+            }
+        }
+
+        .o_wh_card_stats {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .o_wh_stat_link {
+            font-size: 12px;
+            color: #4a90d9;
+            cursor: pointer;
+            white-space: nowrap;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .o_wh_stat_late {
+            color: #4a90d9;
+            font-weight: 500;
+        }
+    }
+}

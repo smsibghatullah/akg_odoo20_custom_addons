@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_config_form_warehouse_delivery" model="ir.ui.view">
+        <field name="name">pos.config.form.warehouse.delivery</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='configuration']//div[hasclass('o_settings_container')]" position="inside">
+                <setting id="warehouse_delivery"
+                         string="Warehouse-wise Delivery Orders"
+                         help="Create separate delivery orders per warehouse for each POS sale.">
+                    <field name="enable_warehouse_delivery"/>
+                    <div class="content-group mt16" invisible="not enable_warehouse_delivery">
+                        <div class="row">
+                            <label for="default_warehouse_id" string="Default Warehouse" class="col-lg-4 o_light_label"/>
+                            <field name="default_warehouse_id"/>
+                        </div>
+                    </div>
+                </setting>
+                <setting id="allow_ship_later"
+                         string="Allow Ship Later"
+                         help="Allow ship later (scheduled delivery date) on POS product screen lines.">
+                    <field name="allow_ship_later"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

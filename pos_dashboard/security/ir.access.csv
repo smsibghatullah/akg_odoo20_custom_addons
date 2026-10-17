@@ -1,0 +1,2 @@
+id,name,model_id,group_id/id,operation,domain
+access_pos_dashboard_user,pos.dashboard.user,pos.dashboard,base.group_user,r,

@@ -1,0 +1,2 @@
+id,name,model_id,group_id/id,operation,domain
+access_warehouse_dashboard_user,warehouse.dashboard.user,warehouse.dashboard,base.group_user,r,
