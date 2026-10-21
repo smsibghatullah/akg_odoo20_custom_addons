@@ -90,13 +90,23 @@ class AccountPayment(models.Model):
                                        help="Enable/disable if approving"
                                             " person.")
 
+    def _is_pos_payment(self):
+        """POS session payments are created and posted automatically while
+        closing a session, so they must never wait for approval."""
+        self.ensure_one()
+        for fname in ('pos_session_id', 'pos_payment_method_id', 'pos_order_id'):
+            if fname in self._fields and self[fname]:
+                return True
+        return bool(self.env.context.get('skip_payment_approval'))
+
     def action_post(self):
         """Allow posting payments after approval in Odoo."""
         payments = self
         for payment in payments:
             if payment.state == 'waiting_approval':
                 raise UserError(_("Only a draft or approved payment can be posted."))
-        payments_to_check = payments.filtered(lambda p: p.state == 'draft')
+        payments_to_check = payments.filtered(
+            lambda p: p.state == 'draft' and not p._is_pos_payment())
         for payment in payments_to_check:
             if not payment._check_payment_approval():
                 return
@@ -109,7 +119,7 @@ class AccountPayment(models.Model):
         """This function checks the payment approval if payment_amount grater
          than amount,then state changed to waiting_approval """
         self.ensure_one()
-        if self.state == "draft":
+        if self.state == "draft" and not self._is_pos_payment():
             first_approval = self._approval_enabled()
             if first_approval:
                 amount = self._approval_get_float(
