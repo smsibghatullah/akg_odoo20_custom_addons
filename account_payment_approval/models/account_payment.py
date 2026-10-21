@@ -19,7 +19,7 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from odoo import fields, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import  UserError
 
 
@@ -33,19 +33,57 @@ class AccountPayment(models.Model):
         ('approved', 'Approved'),
     ],ondelete={'waiting_approval': 'set default','approved': 'set default'}, tracking=True)
 
-    def _compute_is_approve_person(self):
-        """This function fetches the value of the
-        'account_payment_approval.payment_approval' parameter using the
-        get_param method and converts to integer, it checks if the current
-        user's ID matches the ID stored in the 'approval_user_id'
-        parameter. If both conditions are met, it sets the is_approve_person
-         field to True"""
-        approval = self.env['ir.config_parameter'].sudo().get_param(
+    @api.model
+    def _approval_get_param(self, key, default=False):
+        """Read a system parameter in a way that works on every Odoo
+        version. Newer Odoo 20 builds removed ``get_param`` from
+        ``ir.config_parameter``, so fall back to other accessors and finally
+        to a direct search on the model."""
+        icp = self.env['ir.config_parameter'].sudo()
+        for name in ('get_param', '_get_param'):
+            getter = getattr(icp, name, None)
+            if getter:
+                try:
+                    value = getter(key, default)
+                except TypeError:
+                    value = getter(key)
+                return default if value is None else value
+        param = icp.search([('key', '=', key)], limit=1)
+        return param.value if param and param.value not in (None, '') \
+            else default
+
+    @api.model
+    def _approval_get_int(self, key):
+        """Return the parameter as int (0 when empty or invalid)."""
+        try:
+            return int(self._approval_get_param(key) or 0)
+        except (TypeError, ValueError):
+            return 0
+
+    @api.model
+    def _approval_get_float(self, key):
+        """Return the parameter as float (0.0 when empty or invalid)."""
+        try:
+            return float(self._approval_get_param(key) or 0.0)
+        except (TypeError, ValueError):
+            return 0.0
+
+    @api.model
+    def _approval_enabled(self):
+        """True when the 'Payment Approval' setting is switched on."""
+        value = self._approval_get_param(
             'account_payment_approval.payment_approval')
-        approver_id = int(self.env['ir.config_parameter'].sudo().get_param(
-            'account_payment_approval.approval_user_id'))
-        self.is_approve_person = True if (self.env.user.id == approver_id and
-                                          approval) else False
+        return str(value).strip().lower() not in ('', 'false', '0', 'none')
+
+    def _compute_is_approve_person(self):
+        """Set is_approve_person to True when the current user is the
+        configured approving person and payment approval is enabled."""
+        approval = self._approval_enabled()
+        approver_id = self._approval_get_int(
+            'account_payment_approval.approval_user_id')
+        for payment in self:
+            payment.is_approve_person = bool(
+                approval and approver_id and self.env.user.id == approver_id)
 
     is_approve_person = fields.Boolean(string='Approving Person',
                                        compute=_compute_is_approve_person,
@@ -72,14 +110,12 @@ class AccountPayment(models.Model):
          than amount,then state changed to waiting_approval """
         self.ensure_one()
         if self.state == "draft":
-            first_approval = self.env['ir.config_parameter'].sudo().get_param(
-                'account_payment_approval.payment_approval')
+            first_approval = self._approval_enabled()
             if first_approval:
-                amount = float(self.env['ir.config_parameter'].sudo().get_param(
-                    'account_payment_approval.approval_amount'))
-                payment_currency_id = int(
-                    self.env['ir.config_parameter'].sudo().get_param(
-                        'account_payment_approval.approval_currency_id'))
+                amount = self._approval_get_float(
+                    'account_payment_approval.approval_amount')
+                payment_currency_id = self._approval_get_int(
+                    'account_payment_approval.approval_currency_id')
                 payment_amount = self.amount
                 if payment_currency_id:
                     if (self.currency_id and
