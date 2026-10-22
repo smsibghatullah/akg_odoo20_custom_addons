@@ -6,7 +6,6 @@ import { useService } from "@web/core/utils/hooks";
 
 export class MailSystrayItem extends Component {
     static template = "global_mail_message.mail_icon";
-    static props = {};
 
     setup() {
         this.action = useService("action");

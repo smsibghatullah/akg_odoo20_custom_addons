@@ -6,7 +6,6 @@ import { useService } from "@web/core/utils/hooks";
 
 export class WhatsappSystrayItem extends Component {
     static template = "whatsapp_mail_messaging.whatsapp_icon";
-    static props = {};
 
     setup() {
         this.action = useService("action");
