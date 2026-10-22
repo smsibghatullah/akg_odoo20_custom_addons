@@ -20,6 +20,7 @@
 #
 #############################################################################
 
+import re
 import urllib.parse as urllib
 
 from odoo import models, fields, api
@@ -36,12 +37,11 @@ class PortalShare(models.TransientModel):
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        self.mobile_number = self.partner_id.mobile
+        self.mobile_number = self.partner_id.phone
 
     def action_send_whatsapp(self):
-        """"""
         """In this function we are redirecting to the whatsapp web
-                with required parameters"""
+        with required parameters"""
         if self.note and self.mobile_number:
             if self.res_model == 'sale.order':
                 common_message = 'You have been invited to access the following Sale Order.'
@@ -54,12 +54,11 @@ class PortalShare(models.TransientModel):
             message_string = self.note + '%0a' + common_message + '%0a' + urllib.quote(self.share_link)
             related_record = self.env[self.res_model].search([('id', '=', int(self.res_id))])
             related_record.message_post(body=message_string)
+            # WhatsApp ko sirf digits chahiye (+, space, - hata do)
+            phone = re.sub(r'\D', '', self.mobile_number)
             return {
                 'type': 'ir.actions.act_url',
-                'url': "https://api.whatsapp.com/send?phone=" + self.mobile_number + "&text=" + message_string,
+                'url': "https://api.whatsapp.com/send?phone=" + phone + "&text=" + message_string,
                 'target': 'new',
                 'res_id': self.id,
             }
-
-
-

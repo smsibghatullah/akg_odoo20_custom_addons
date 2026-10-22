@@ -20,11 +20,14 @@
 #
 #############################################################################
 
+import re
+
 from odoo import models, fields, api
 
 
 class WhatsappSendMessage(models.TransientModel):
     _name = 'whatsapp.message.wizard'
+    _description = 'Whatsapp Message Wizard'
 
     partner_id = fields.Many2one('res.partner', string="Recipient")
     mobile = fields.Char(required=True, string="Contact Number")
@@ -33,9 +36,9 @@ class WhatsappSendMessage(models.TransientModel):
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        """Function for fetching the mobile number and image of partner
+        """Function for fetching the phone number and image of partner
         in Odoo"""
-        self.mobile = self.partner_id.mobile
+        self.mobile = self.partner_id.phone
         self.image_1920 = self.partner_id.image_1920
 
     def send_message(self):
@@ -49,10 +52,12 @@ class WhatsappSendMessage(models.TransientModel):
             message_string = message_string[:(len(message_string) - 3)]
             message_post_content = message_string
             if self.partner_id:
-            	self.partner_id.message_post(body=message_post_content)
+                self.partner_id.message_post(body=message_post_content)
+            # WhatsApp ko sirf digits chahiye (+, space, - hata do)
+            phone = re.sub(r'\D', '', self.mobile)
             return {
                 'type': 'ir.actions.act_url',
-                'url': "https://api.whatsapp.com/send?phone=" + self.mobile + "&text=" + message_string,
+                'url': "https://api.whatsapp.com/send?phone=" + phone + "&text=" + message_string,
                 'target': 'new',
                 'res_id': self.id,
             }
