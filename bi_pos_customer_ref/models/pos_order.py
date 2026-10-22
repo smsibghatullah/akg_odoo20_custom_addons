@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import base64
+import functools
 from io import BytesIO
 
 import qrcode
@@ -9,8 +10,16 @@ from odoo import _, api, fields, models
 QR_LINK = "https://linktr.ee/akg_hardware"
 
 
+@functools.lru_cache(maxsize=1)
 def _akg_qr_png():
-    """Return the base64 encoded PNG of the company QR code."""
+    """Return the company QR code as a base64 encoded PNG, as a ``str``.
+
+    Odoo 20 Binary fields no longer accept ``bytes`` on assignment
+    (``TypeError: use BinaryValue instead of bytes``). The documented way to assign
+    base64 content is a base64 ``str`` (the same format an RPC call sends), so the
+    ``b64encode`` result is decoded to text here. The image never changes, so it is
+    generated once per process instead of on every recomputation.
+    """
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -22,7 +31,7 @@ def _akg_qr_png():
     img = qr.make_image(fill_color="black", back_color="white")
     buf = BytesIO()
     img.save(buf, format="PNG")
-    return base64.b64encode(buf.getvalue())
+    return base64.b64encode(buf.getvalue()).decode("ascii")
 
 
 class AccountMove(models.Model):
