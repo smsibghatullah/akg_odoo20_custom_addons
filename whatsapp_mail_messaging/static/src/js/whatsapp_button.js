@@ -1,28 +1,29 @@
 /** @odoo-module **/
-console.log('wht')
-import SystrayMenu from 'web.SystrayMenu';
-import Widget from 'web.Widget';
 
-const { Component } = owl;
+import { Component } from "@odoo/owl";
+import { registry } from "@web/core/registry";
+import { useService } from "@web/core/utils/hooks";
 
-var ActionMenu = Widget.extend({
-    template: 'whatsapp_mail_messaging.whatsapp_icon',
-    events: {
-        'click .whatsapp_icon': 'onclick_whatsapp_icon',
-    },
-    onclick_whatsapp_icon: function() {
-        var self = this;
-        self.do_action({
-            name: 'Compose Whatsapp Message',
-            res_model: 'whatsapp.message.wizard',
-            views: [[false, 'form']],
-            type: 'ir.actions.act_window',
-            view_mode: 'form',
-            target: 'new'
+export class WhatsappSystrayItem extends Component {
+    static template = "whatsapp_mail_messaging.whatsapp_icon";
+    static props = {};
+
+    setup() {
+        this.action = useService("action");
+    }
+
+    onClickWhatsappIcon() {
+        this.action.doAction({
+            name: "Compose Whatsapp Message",
+            res_model: "whatsapp.message.wizard",
+            views: [[false, "form"]],
+            type: "ir.actions.act_window",
+            view_mode: "form",
+            target: "new",
         });
-    },
-});
+    }
+}
 
-SystrayMenu.Items.push(ActionMenu);
-
-export default ActionMenu;
+registry
+    .category("systray")
+    .add("whatsapp_mail_messaging.whatsapp_icon", { Component: WhatsappSystrayItem }, { sequence: 25 });

@@ -7,13 +7,6 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Whatsapp Message">
-                    <script>
-                        $(document).ready(function(){
-                        $('.modal-dialog').css({'width': '70%', 'height': '60%'});
-                        $('.modal-content').css({'height': '100%'});
-                        $('.modal-body').css({'height': '100%'});
-                        });
-                    </script>
                     <group col="2" colspan="4">
                         <group>
                             <field name="partner_id"/>
