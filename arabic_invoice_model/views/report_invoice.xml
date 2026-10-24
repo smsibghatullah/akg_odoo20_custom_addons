@@ -22,9 +22,9 @@
     </template>
 
     <!-- SELF-CONTAINED document: own header, own footer, all CSS inline.
-         It does not use web.external_layout and does not rely on Bootstrap.
-         (Class names deliberately avoid the words header / footer / article,
-          which Odoo's PDF engine looks for.) -->
+         No web.external_layout, no Bootstrap. The outer div MUST keep
+         class "article" + data-oe-* (Odoo's PDF engine needs it for UTF-8 and
+         for splitting the PDF per record). -->
     <template id="arabic_english_invoice">
         <t t-set="company" t-value="o.company_id"/>
         <t t-set="o_sec" t-value="o.with_context(lang='ar_001')"/>
@@ -34,28 +34,46 @@
         <t t-set="digits" t-value="o.currency_id.decimal_places"/>
         <t t-set="logo_uri" t-value="o._akg_logo_uri()"/>
         <t t-set="qr_uri" t-value="o._akg_qr_uri()"/>
-        <!-- Edit these two values if they change -->
+
+        <!-- ===== Edit these values if they change ===== -->
         <t t-set="tax_card_no" t-value="'8458551'"/>
         <t t-set="cr_no" t-value="o._akg_cr_no()"/>
+        <t t-set="footer_ar_name" t-value="'روابي بوشر للتجارة والمقاولات ش ش و'"/>
+        <t t-set="thank_you_en" t-value="'Thank you !'"/>
+        <t t-set="thank_you_ar" t-value="'شكرًا لك'"/>
 
-        <div class="akg-doc" style="font-family: 'Oswald', 'DejaVu Sans', Arial, sans-serif; font-size: 12px; color: #222; padding-bottom: 110px;">
+        <div t-attf-class="article akg-doc o_company_#{company.id}_layout"
+             t-att-data-oe-model="o and o._name"
+             t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')"
+             style="padding-bottom: 120px;">
             <style>
+                @font-face { font-family: 'Oswald'; font-weight: normal;
+                    src: url('/arabic_invoice_model/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
+                @font-face { font-family: 'Oswald'; font-weight: bold;
+                    src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
+                .akg-doc { font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
                 .akg-doc table { border-collapse: collapse; width: 100%; }
                 .akg-doc td, .akg-doc th { vertical-align: top; }
-                .akg-doc .akg-lines th { border-top: 2px solid #444; border-bottom: 1px solid #444; padding: 5px 6px; text-align: right; font-size: 11px; text-transform: uppercase; }
-                .akg-doc .akg-lines td { border-bottom: 1px solid #ccc; padding: 7px 6px; text-align: right; }
-                .akg-doc .akg-tot td { border: 1px solid #ccc; padding: 7px 8px; text-align: right; }
-                .akg-doc .akg-info td { padding: 2px 0; }
-                .akg-doc .akg-teal { color: #1ca3b8; }
+                .akg-doc .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
+                .akg-doc .ar-n { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: normal; color: #222; }
+                .akg-doc .teal { color: #1ca3b8; }
+                .akg-doc .lines th { border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: normal; text-transform: uppercase; line-height: 1.5; }
+                .akg-doc .lines th .ar { font-size: 12px; text-transform: none; display: block; }
+                .akg-doc .lines td { border-bottom: 1px solid #ccc; border-left: 1px solid #ddd; padding: 14px 8px; text-align: right; }
+                .akg-doc .lines { border-bottom: 2px solid #444; }
+                .akg-doc .tot td { border: 1px solid #e3e3e3; padding: 15px 9px; text-align: right; }
+                .akg-doc .tot .lbl { font-family: 'DejaVu Sans', sans-serif; font-weight: bold; color: #555; font-size: 12px; }
+                .akg-doc .info td { padding: 3px 0; font-size: 13px; }
             </style>
 
-            <!-- ============ TOP: logo + company ============ -->
+            <!-- ============ TOP: logo (left) + company (right) ============ -->
             <table style="width:100%">
                 <tr>
-                    <td style="width:50%; text-align:left;">
-                        <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 210px;"/>
+                    <td style="width:45%; text-align:left;">
+                        <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 95px; max-width: 220px;"/>
                     </td>
-                    <td style="width:50%; text-align:right; padding-top:6px; font-size:13px; line-height:1.6;">
+                    <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
                         <div style="font-weight:bold"><t t-out="company.name"/></div>
                         <div t-if="company.vat">Tax ID: <t t-out="company.vat"/></div>
                         <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
@@ -64,10 +82,10 @@
             </table>
 
             <!-- ============ Customer address (right) ============ -->
-            <table style="width:100%; margin-top:14px;">
+            <table style="width:100%; margin-top:30px;">
                 <tr>
                     <td style="width:50%"/>
-                    <td style="width:50%; text-align:right; font-size:13px; line-height:1.5;">
+                    <td style="width:50%; text-align:right; font-size:14px; line-height:1.55;">
                         <address t-field="o.partner_id"
                                  t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
                                  style="margin:0; text-align:right;"/>
@@ -79,73 +97,73 @@
             </table>
 
             <!-- ============ Title row ============ -->
-            <table style="width:100%; margin-top:10px;">
+            <table style="width:100%; margin-top:14px;">
                 <tr>
-                    <td style="width:36%; text-align:left; font-size:20px; font-weight:bold;" class="akg-teal">
+                    <td style="width:38%; text-align:left; font-size:21px;" class="teal">
                         <t t-out="titles[0]"/>
                     </td>
-                    <td style="width:28%; text-align:center; font-size:20px; font-weight:bold;" class="akg-teal">
+                    <td style="width:26%; text-align:center; font-size:21px; font-weight:bold;" class="teal">
                         <t t-if="o.name and o.name != '/'" t-out="o.name"/>
                     </td>
-                    <td style="width:36%; text-align:right; font-size:20px; font-weight:bold;" class="akg-teal">
-                        <t t-out="titles[1]"/>
+                    <td style="width:36%; text-align:right; font-size:21px;" class="teal">
+                        <span class="ar teal"><t t-out="titles[1]"/></span>
                     </td>
                 </tr>
             </table>
 
             <!-- ============ Information block ============ -->
-            <table style="width:100%; margin:10px 0 12px 0;">
+            <table style="width:100%; margin:10px 0 18px 0;">
                 <tr>
-                    <td style="width:50%; padding-right:14px;">
-                        <table class="akg-info">
+                    <td style="width:50%; padding-right:12px;">
+                        <table class="info">
                             <tr t-if="o._akg_customer_phone()">
-                                <td style="width:36%; font-weight:bold; white-space:nowrap;">Customer Mobile:</td>
-                                <td style="width:30%; text-align:center;"><t t-out="o._akg_customer_phone()"/></td>
-                                <td style="width:34%; text-align:right; font-weight:bold; white-space:nowrap;">: رقم هاتف العميل</td>
+                                <td style="width:34%; font-weight:bold; white-space:nowrap;">Customer Mobile:</td>
+                                <td style="width:28%; text-align:center;"><t t-out="o._akg_customer_phone()"/></td>
+                                <td style="width:38%; text-align:right; white-space:nowrap;" class="ar">: رقم هاتف العميل</td>
                             </tr>
                             <tr t-if="o.invoice_user_id">
                                 <td style="font-weight:bold; white-space:nowrap;">Salesperson:</td>
                                 <td style="text-align:center;"><t t-out="o.invoice_user_id.name"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: مندوب مبيعات</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: مندوب مبيعات</td>
                             </tr>
                             <tr t-if="o._akg_salesperson_phone()">
                                 <td style="font-weight:bold; white-space:nowrap;">Mobile:</td>
                                 <td style="text-align:center;"><t t-out="o._akg_salesperson_phone()"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: رقم الهاتف</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: رقم الهاتف</td>
                             </tr>
                             <tr t-if="o.partner_id.ref">
                                 <td style="font-weight:bold; white-space:nowrap;">Customer Code:</td>
                                 <td style="text-align:center;"><t t-out="o.partner_id.ref"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: كود العميل</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: كود العميل</td>
                             </tr>
                             <tr t-if="o._akg_customer_reference()">
                                 <td style="font-weight:bold; white-space:nowrap;">Customer Ref:</td>
                                 <td style="text-align:center;"><t t-out="o._akg_customer_reference()"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: مرجع العميل</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: مرجع العميل</td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width:50%; padding-left:14px;">
-                        <table class="akg-info">
+                    <td style="width:50%; padding-left:12px;">
+                        <table class="info">
                             <tr t-if="o.invoice_date">
-                                <td style="width:34%; font-weight:bold; white-space:nowrap;">Invoice Date:</td>
+                                <td style="width:32%; font-weight:bold; white-space:nowrap;">Invoice Date:</td>
                                 <td style="width:30%; text-align:center;"><span t-field="o.invoice_date"/></td>
-                                <td style="width:36%; text-align:right; font-weight:bold; white-space:nowrap;">: تاريخ الفاتورة</td>
+                                <td style="width:38%; text-align:right; white-space:nowrap;" class="ar">: تاريخ الفاتورة</td>
                             </tr>
                             <tr t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'">
                                 <td style="font-weight:bold; white-space:nowrap;">Due Date:</td>
                                 <td style="text-align:center;"><span t-field="o.invoice_date_due"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: تاريخ الاستحقاق</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: تاريخ الاستحقاق</td>
                             </tr>
                             <tr t-if="o.invoice_origin">
                                 <td style="font-weight:bold; white-space:nowrap;">Source:</td>
                                 <td style="text-align:center;"><t t-out="o.invoice_origin"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: المصدر</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: المصدر</td>
                             </tr>
                             <tr t-if="o.ref">
                                 <td style="font-weight:bold; white-space:nowrap;">Reference:</td>
                                 <td style="text-align:center;"><t t-out="o.ref"/></td>
-                                <td style="text-align:right; font-weight:bold; white-space:nowrap;">: رقم الإشارة</td>
+                                <td style="text-align:right; white-space:nowrap;" class="ar">: رقم الإشارة</td>
                             </tr>
                         </table>
                     </td>
@@ -154,17 +172,17 @@
 
             <!-- ============ Lines ============ -->
             <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
-            <table class="akg-lines">
+            <table class="lines">
                 <thead>
                     <tr>
-                        <th style="width:13%"><div>السعر الاجمالي</div><div>Total Price</div></th>
-                        <th style="width:10%"><div>قيمة الضريبة</div><div>VAT Amount</div></th>
-                        <th style="width:10%"><div>مبلغ</div><div>Amount</div></th>
-                        <th style="width:12%"><div>الضرائب</div><div>Taxes</div></th>
-                        <th t-if="display_discount" style="width:7%"><div>خصم %</div><div>Disc.%</div></th>
-                        <th style="width:11%"><div>سعر الوحدة</div><div>Unit Price</div></th>
-                        <th style="width:9%"><div>الكمية</div><div>Quantity</div></th>
-                        <th><div>الوصف</div><div>Description</div></th>
+                        <th style="width:14%"><span class="ar">السعر الاجمالي</span>Total Price</th>
+                        <th style="width:12%"><span class="ar">قيمة الضريبة</span>VAT Amount</th>
+                        <th style="width:10%"><span class="ar">مبلغ</span>Amount</th>
+                        <th style="width:12%"><span class="ar">الضرائب</span>Taxes</th>
+                        <th t-if="display_discount" style="width:8%"><span class="ar">خصم %</span>Disc.%</th>
+                        <th style="width:12%"><span class="ar">سعر الوحدة</span>Unit Price</th>
+                        <th style="width:10%"><span class="ar">الكمية</span>Quantity</th>
+                        <th><span class="ar">الوصف</span>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -175,14 +193,14 @@
                         <t t-if="line.display_type not in ('line_note', 'line_section')">
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
                             <tr>
-                                <td style="white-space:nowrap;"><span t-field="line.price_total"/></td>
+                                <td style="white-space:nowrap; border-left:none;"><span t-field="line.price_total"/></td>
                                 <td style="white-space:nowrap;">
                                     <span t-out="line.price_total - line.price_subtotal" t-options='{"widget": "float", "precision": digits}'/>
                                 </td>
                                 <td style="white-space:nowrap;">
                                     <span t-out="line.price_subtotal" t-options='{"widget": "float", "precision": digits}'/>
                                 </td>
-                                <td><span t-out="', '.join(x.description or x.name for x in line.tax_ids)"/></td>
+                                <td><span class="ar-n"><t t-out="', '.join(x.description or x.name for x in line.tax_ids)"/></span></td>
                                 <td t-if="display_discount"><span t-field="line.discount"/></td>
                                 <td style="white-space:nowrap;"><span t-field="line.price_unit"/></td>
                                 <td style="white-space:nowrap;">
@@ -193,7 +211,7 @@
                                     <t t-if="line.product_id">
                                         <t t-set="english_name" t-value="line.product_id.with_context(lang='en_US').display_name"/>
                                         <t t-set="arabic_name" t-value="line.product_id.with_context(lang='ar_001').display_name"/>
-                                        <div t-if="line.name and arabic_name not in line.name"><t t-out="arabic_name"/></div>
+                                        <div t-if="line.name and arabic_name not in line.name"><span class="ar-n"><t t-out="arabic_name"/></span></div>
                                         <div t-if="line.name and (english_name != arabic_name) and (english_name not in line.name)"><t t-out="english_name"/></div>
                                     </t>
                                     <div style="white-space: pre-line;"><t t-out="line.name"/></div>
@@ -203,15 +221,15 @@
                         <t t-if="line.display_type == 'line_section'">
                             <t t-set="current_section" t-value="line"/>
                             <t t-set="current_subtotal" t-value="0"/>
-                            <tr><td colspan="99" style="background:#eee; font-weight:bold;"><t t-out="line.name"/></td></tr>
+                            <tr><td colspan="99" style="background:#eee; font-weight:bold; border-left:none;"><t t-out="line.name"/></td></tr>
                         </t>
                         <t t-if="line.display_type == 'line_note'">
-                            <tr><td colspan="99" style="font-style:italic;"><t t-out="line.name"/></td></tr>
+                            <tr><td colspan="99" style="font-style:italic; border-left:none;"><t t-out="line.name"/></td></tr>
                         </t>
                         <t t-if="current_section and (line_last or lines[line_index + 1].display_type == 'line_section')">
                             <tr>
-                                <td colspan="99" style="font-weight:bold;">
-                                    Subtotal / الإجمالي الفرعي
+                                <td colspan="99" style="font-weight:bold; border-left:none;">
+                                    Subtotal / <span class="ar">الإجمالي الفرعي</span>
                                     <span t-out="current_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                 </td>
                             </tr>
@@ -221,38 +239,41 @@
             </table>
 
             <!-- ============ Totals ============ -->
-            <table style="width:100%; margin-top:18px; page-break-inside: avoid;">
+            <table style="width:100%; margin-top:24px; page-break-inside: avoid;">
                 <tr>
                     <td style="width:47%">
-                        <table class="akg-tot">
+                        <table class="tot">
                             <tr>
                                 <td style="width:50%"><span t-field="o.amount_untaxed"/></td>
-                                <td style="font-weight:bold;">Subtotal / الإجمالي الفرعي</td>
+                                <td class="lbl">Subtotal / الإجمالي الفرعي</td>
                             </tr>
                             <t t-foreach="o._akg_tax_group_lines()" t-as="tax_group">
                                 <tr>
                                     <td><span t-out="tax_group['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                    <td style="font-weight:bold;">
+                                    <td>
                                         <t t-out="tax_group['name']"/>
-                                        <t t-if="tax_group['name_ar']"> / <t t-out="tax_group['name_ar']"/></t>
+                                        <t t-if="tax_group['name_ar']"> <span class="ar-n"><t t-out="tax_group['name_ar']"/></span></t>
                                     </td>
                                 </tr>
                             </t>
                             <tr>
                                 <td><span t-field="o.amount_total"/></td>
-                                <td style="font-weight:bold;">Total / المجموع</td>
+                                <td class="lbl">Total / المجموع</td>
                             </tr>
                             <t t-if="print_with_payments">
                                 <t t-set="payments_vals" t-value="o._akg_payment_lines()"/>
                                 <t t-foreach="payments_vals" t-as="payment_vals">
                                     <tr>
                                         <td><span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                        <td style="font-style:italic;">Paid on/دفعت في: <t t-out="payment_vals['date']"/></td>
+                                        <td style="font-style:italic;">
+                                            <span class="ar-n" style="font-style:italic;">Paid on/دفعت في:</span>
+                                            <span style="margin-left:8px;"><t t-out="payment_vals['date']"/></span>
+                                        </td>
                                     </tr>
                                 </t>
                                 <tr t-if="payments_vals">
                                     <td><span t-field="o.amount_residual"/></td>
-                                    <td style="font-weight:bold;">Amount Due / المبلغ المستحق</td>
+                                    <td class="lbl">Amount Due / المبلغ المستحق</td>
                                 </tr>
                             </t>
                         </table>
@@ -263,53 +284,56 @@
 
             <!-- ============ Payment reference + notes ============ -->
             <table t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference"
-                   style="width:100%; margin-top:16px;">
+                   style="width:100%; margin-top:22px;">
                 <tr>
-                    <td style="width:25%; font-weight:bold; white-space:nowrap;">Payment Reference :</td>
+                    <td style="width:25%; white-space:nowrap;">Payment Reference :</td>
                     <td style="width:50%; text-align:center; font-weight:bold;"><t t-out="o.payment_reference"/></td>
-                    <td style="width:25%; text-align:right;">: رقم إشارة الدفعة</td>
+                    <td style="width:25%; text-align:right;" class="ar-n">: رقم إشارة الدفعة</td>
                 </tr>
             </table>
 
-            <table t-if="notes['term']['en']" style="width:100%; margin-top:8px;">
+            <table t-if="notes['term']['en']" style="width:100%; margin-top:10px;">
                 <tr>
                     <td style="width:50%;"><t t-out="notes['term']['en']"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><t t-if="notes['term']['ar']" t-out="notes['term']['ar']"/></td>
+                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['term']['ar']" t-out="notes['term']['ar']"/></span></td>
                 </tr>
             </table>
-            <table t-if="notes['narration']['en']" style="width:100%; margin-top:8px;">
+            <table t-if="notes['narration']['en']" style="width:100%; margin-top:10px;">
                 <tr>
                     <td style="width:50%;"><t t-out="notes['narration']['en']"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><t t-if="notes['narration']['ar']" t-out="notes['narration']['ar']"/></td>
+                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['narration']['ar']" t-out="notes['narration']['ar']"/></span></td>
                 </tr>
             </table>
-            <table t-if="notes['fiscal']['en']" style="width:100%; margin-top:8px;">
+            <table t-if="notes['fiscal']['en']" style="width:100%; margin-top:10px;">
                 <tr>
                     <td style="width:50%;"><t t-out="notes['fiscal']['en']"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><t t-if="notes['fiscal']['ar']" t-out="notes['fiscal']['ar']"/></td>
+                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['fiscal']['ar']" t-out="notes['fiscal']['ar']"/></span></td>
                 </tr>
             </table>
-            <table t-if="notes['incoterm_en']" style="width:100%; margin-top:8px;">
+            <table t-if="notes['incoterm_en']" style="width:100%; margin-top:10px;">
                 <tr>
                     <td style="width:50%;"><b>Incoterm:</b> <t t-out="notes['incoterm_en']"/></td>
-                    <td style="width:50%; text-align:right;"><b>شرط تجاري:</b> <t t-out="notes['incoterm_ar']"/></td>
+                    <td style="width:50%; text-align:right;"><span class="ar-n"><b>شرط تجاري:</b> <t t-out="notes['incoterm_ar']"/></span></td>
                 </tr>
             </table>
 
             <!-- ============ Bottom block, pinned to the bottom of every page ============ -->
-            <div style="position: fixed; bottom: 0; left: 0; right: 0; border-top: 2px solid #444; padding-top: 6px; background: #fff;">
+            <div style="position: fixed; bottom: 0; left: 0; right: 0; border-top: 2px solid #444; padding-top: 8px; background: #fff;">
                 <table style="width:100%">
                     <tr>
-                        <td style="width:28%; font-size:10px; line-height:1.6;">
+                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
                             <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
                             <div>Tax Card No. <t t-out="tax_card_no"/></div>
                             <div>CR. No. <t t-out="cr_no"/></div>
                         </td>
-                        <td style="width:50%; text-align:center; font-size:12px; font-weight:bold; line-height:1.6;">
-                            <t t-if="o._akg_company_footer()" t-out="o._akg_company_footer()"/>
+                        <td style="width:50%; text-align:center; padding-top:4px;">
+                            <div class="ar" style="color:#000; font-size:12px;"><t t-out="footer_ar_name"/></div>
+                            <div style="margin-top:14px; font-size:13px;">
+                                <t t-out="thank_you_en"/> <span class="ar" style="color:#000;"><t t-out="thank_you_ar"/></span>
+                            </div>
                         </td>
                         <td style="width:22%; text-align:right;">
-                            <img t-if="qr_uri" t-att-src="qr_uri" style="width:70px; height:70px;"/>
+                            <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
                         </td>
                     </tr>
                 </table>

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import base64
+import io
+
+from PIL import Image
 
 from odoo import models, _
 from odoo.tools import file_open
@@ -136,12 +139,29 @@ class AccountMove(models.Model):
         }
 
     def _akg_logo_uri(self):
-        """Company logo as data URI: no HTTP fetch needed by wkhtmltopdf."""
+        """Company logo as a PNG data URI.
+
+        The stored logo may be in a format the old WebKit inside wkhtmltopdf
+        cannot draw (e.g. WebP), so it is always re-encoded to PNG with PIL.
+        """
         self.ensure_one()
-        try:
-            return _b64_to_data_uri(self.company_id.logo)
-        except Exception:
+        raw = self.company_id.logo
+        if not raw:
             return False
+        try:
+            if isinstance(raw, str):
+                raw = raw.encode()
+            raw = bytes(raw)
+            if not raw.startswith((b'\x89PNG', b'\xff\xd8', b'GIF8', b'RIFF')):
+                raw = base64.b64decode(raw)  # stored as base64
+            img = Image.open(io.BytesIO(raw)).convert('RGBA')
+            if img.width > 480:
+                img = img.resize((480, max(1, int(img.height * 480 / img.width))))
+            out = io.BytesIO()
+            img.save(out, format='PNG')
+            return 'data:image/png;base64,' + base64.b64encode(out.getvalue()).decode()
+        except Exception:
+            return _b64_to_data_uri(self.company_id.logo)
 
     def _akg_qr_uri(self):
         """QR image embedded as data URI (shipped with this module; falls back
