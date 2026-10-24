@@ -21,11 +21,19 @@ class IrActionsReport(models.Model):
         install / upgrade of this module (after `-u account`, run
         `-u arabic_invoice_model` once more).
         """
+        paperformat = self.env.ref(
+            'arabic_invoice_model.paperformat_akg_invoice', raise_if_not_found=False)
         for xmlid, template in AKG_REPORTS.items():
             report = self.env.ref(xmlid, raise_if_not_found=False)
-            if report and report.report_name != template:
-                vals = {'report_name': template}
+            if not report:
+                continue
+            vals = {}
+            if report.report_name != template:
+                vals['report_name'] = template
                 if 'report_file' in report._fields:  # removed in Odoo 20
                     vals['report_file'] = template
+            if paperformat and report.paperformat_id != paperformat:
+                vals['paperformat_id'] = paperformat.id
+            if vals:
                 report.write(vals)
         return True

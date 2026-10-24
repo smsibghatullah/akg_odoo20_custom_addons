@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import base64
+
 from odoo import models, _
+from odoo.tools import file_open, image_data_uri
 
 LANG_EN = 'en_US'
 LANG_AR = 'ar_001'
@@ -109,3 +112,21 @@ class AccountMove(models.Model):
             'incoterm_ar': inco and "%s - %s" % (
                 inco.code, inco.with_context(lang=LANG_AR).name) or False,
         }
+
+    def _akg_logo_uri(self):
+        """Company logo as data URI: no HTTP fetch needed by wkhtmltopdf."""
+        self.ensure_one()
+        try:
+            logo = self.company_id.logo
+            return image_data_uri(logo) if logo else False
+        except Exception:
+            return False
+
+    def _akg_qr_uri(self):
+        """QR image shipped by bi_pos_customer_ref, embedded as data URI."""
+        self.ensure_one()
+        try:
+            with file_open('bi_pos_customer_ref/static/src/img/qr_code.png', 'rb') as f:
+                return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
+        except Exception:
+            return False

@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Small margins: header and footer are drawn inside the template itself -->
+    <record id="paperformat_akg_invoice" model="report.paperformat">
+        <field name="name">AKG Invoice (A4, no layout margins)</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">6</field>
+        <field name="margin_bottom">6</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
     <function model="ir.actions.report" name="_akg_apply_arabic_invoice_reports"/>
 </odoo>
