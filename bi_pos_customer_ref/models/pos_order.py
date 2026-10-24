@@ -3,6 +3,7 @@ import base64
 import logging
 import functools
 from io import BytesIO
+from odoo.exceptions import  UserError
 
 import qrcode
 
