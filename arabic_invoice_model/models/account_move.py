@@ -155,3 +155,28 @@ class AccountMove(models.Model):
             except Exception:
                 continue
         return False
+
+    @staticmethod
+    def _akg_first_value(records, fname):
+        """First non-empty value of `fname` among records that have that field."""
+        for rec in records:
+            if rec and fname in rec._fields and rec[fname]:
+                return rec[fname]
+        return False
+
+    def _akg_cr_no(self):
+        """Commercial registration number (field location differs by version)."""
+        self.ensure_one()
+        company = self.company_id
+        return (self._akg_first_value(
+            (company, company.partner_id), 'company_registry') or '1/02236/9')
+
+    def _akg_company_footer(self):
+        self.ensure_one()
+        return self._akg_first_value((self.company_id,), 'report_footer')
+
+    def _akg_vat_label(self):
+        self.ensure_one()
+        country = self._akg_first_value((self.company_id,), 'account_fiscal_country_id')
+        label = country and 'vat_label' in country._fields and country.vat_label
+        return label or 'Tax ID'
