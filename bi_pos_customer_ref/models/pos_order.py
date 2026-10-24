@@ -108,3 +108,16 @@ class SaleOrder(models.Model):
         allowed = self.env.user.has_group('bi_pos_customer_ref.group_can_edit_unit_price')
         for order in self:
             order.can_edit_unit_price = allowed
+
+class PosSession(models.Model):
+    _inherit = 'pos.session'
+
+    def close_session_from_ui(self, bank_payment_method_diff_pairs=None):
+        try:
+            with self.env.cr.savepoint():
+                return super().close_session_from_ui(bank_payment_method_diff_pairs)
+        except IndexError:
+            _logger.exception("POS close failed for session %s", self.name)
+            raise UserError(_(
+                "Session %s close nahi ho saka (IndexError). "
+                "Server log mein traceback check karein.", self.name))            
