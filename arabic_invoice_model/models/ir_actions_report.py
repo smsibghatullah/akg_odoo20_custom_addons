@@ -24,5 +24,8 @@ class IrActionsReport(models.Model):
         for xmlid, template in AKG_REPORTS.items():
             report = self.env.ref(xmlid, raise_if_not_found=False)
             if report and report.report_name != template:
-                report.write({'report_name': template, 'report_file': template})
+                vals = {'report_name': template}
+                if 'report_file' in report._fields:  # removed in Odoo 20
+                    vals['report_file'] = template
+                report.write(vals)
         return True
