@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
-
 from . import models
+
+REPORT_MAP = {
+    'account.account_invoices': 'account.report_invoice_with_payments',
+    'account.account_invoices_without_payment': 'account.report_invoice',
+}
+
+
+def uninstall_hook(env):
+    """Give the standard print actions back their original templates."""
+    for xmlid, original in REPORT_MAP.items():
+        report = env.ref(xmlid, raise_if_not_found=False)
+        if report:
+            report.write({'report_name': original, 'report_file': original})
