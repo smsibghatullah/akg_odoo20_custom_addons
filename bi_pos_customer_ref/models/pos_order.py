@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import base64
+import logging
 import functools
 from io import BytesIO
 
 import qrcode
 
 from odoo import _, api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 QR_LINK = "https://linktr.ee/akg_hardware"
 
