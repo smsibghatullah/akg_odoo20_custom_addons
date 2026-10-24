@@ -2,10 +2,32 @@
 import base64
 
 from odoo import models, _
-from odoo.tools import file_open, image_data_uri
+from odoo.tools import file_open
 
 LANG_EN = 'en_US'
 LANG_AR = 'ar_001'
+
+_MIME_BY_PREFIX = (
+    ('/9j/', 'image/jpeg'),
+    ('iVBOR', 'image/png'),
+    ('R0lGOD', 'image/gif'),
+    ('UklGR', 'image/webp'),
+    ('PHN2Zy', 'image/svg+xml'),
+    ('PD94b', 'image/svg+xml'),
+)
+
+
+def _b64_to_data_uri(value):
+    """base64 (bytes or str) -> data: URI. Own helper because
+    odoo.tools.image_data_uri is not importable from odoo.tools in Odoo 20."""
+    if not value:
+        return False
+    if isinstance(value, (bytes, bytearray)):
+        value = bytes(value).decode('ascii')
+    elif not isinstance(value, str):
+        value = str(value)
+    mime = next((m for prefix, m in _MIME_BY_PREFIX if value.startswith(prefix)), 'image/png')
+    return 'data:%s;base64,%s' % (mime, value)
 
 
 class AccountMove(models.Model):
@@ -117,16 +139,19 @@ class AccountMove(models.Model):
         """Company logo as data URI: no HTTP fetch needed by wkhtmltopdf."""
         self.ensure_one()
         try:
-            logo = self.company_id.logo
-            return image_data_uri(logo) if logo else False
+            return _b64_to_data_uri(self.company_id.logo)
         except Exception:
             return False
 
     def _akg_qr_uri(self):
-        """QR image shipped by bi_pos_customer_ref, embedded as data URI."""
+        """QR image embedded as data URI (shipped with this module; falls back
+        to the copy in bi_pos_customer_ref)."""
         self.ensure_one()
-        try:
-            with file_open('bi_pos_customer_ref/static/src/img/qr_code.png', 'rb') as f:
-                return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
-        except Exception:
-            return False
+        for path in ('arabic_invoice_model/static/src/img/qr_code.png',
+                     'bi_pos_customer_ref/static/src/img/qr_code.png'):
+            try:
+                with file_open(path, 'rb') as f:
+                    return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
+            except Exception:
+                continue
+        return False
