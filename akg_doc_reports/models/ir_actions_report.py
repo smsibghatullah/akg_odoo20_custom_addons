@@ -58,6 +58,25 @@ class IrActionsReport(models.Model):
                 if vals:
                     _logger.info('akg_doc_reports: %s (%s) -> %s', report.name, report.report_name, template)
                     report.write(vals)
+
+        # Every OTHER print action of sale.order (e.g. the rental app, custom
+        # actions, PDF quote ...) that is not ours and not a pro-forma.
+        others = self.search([
+            ('model', '=', 'sale.order'),
+            ('report_type', 'in', ('qweb-pdf', 'qweb-html')),
+            ('report_name', 'not like', 'akg_doc_reports.%'),
+            ('report_name', 'not ilike', 'pro_forma'),
+            ('report_name', 'not ilike', 'proforma'),
+        ])
+        for report in others:
+            _logger.warning('akg_doc_reports: extra sale.order action id=%s name=%r report_name=%s -> %s',
+                            report.id, report.name, report.report_name, AKGR_SALE_TEMPLATE)
+            vals = {'report_name': AKGR_SALE_TEMPLATE}
+            if 'report_file' in report._fields:
+                vals['report_file'] = AKGR_SALE_TEMPLATE
+            if paperformat:
+                vals['paperformat_id'] = paperformat.id
+            report.write(vals)
         return True
 
     # ------------------------------------------------------------------
@@ -74,7 +93,7 @@ class IrActionsReport(models.Model):
         if (isinstance(template, str) and len(self) == 1 and self.model == 'sale.order'
                 and not template.startswith('akg_doc_reports.')
                 and 'pro_forma' not in template and 'proforma' not in template):
-            _logger.info('akg_doc_reports: sale.order report %s -> %s', template, AKGR_SALE_TEMPLATE)
+            _logger.warning('akg_doc_reports: sale.order render %s -> %s', template, AKGR_SALE_TEMPLATE)
             return AKGR_SALE_TEMPLATE
         return template
 
