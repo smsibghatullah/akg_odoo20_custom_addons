@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_warehouse_delivery.TicketScreen" t-inherit="point_of_sale.TicketScreen" t-inherit-mode="extension">
+        <!-- inside <Orderline> of the refund panel, after the "Refunded" note -->
+        <xpath expr="//li[hasclass('refund-note')]" position="after">
+            <li t-if="this.whShowFor(line)"
+                class="pos-wh-wrapper w-100"
+                t-on-pointerdown="this.whStop"
+                t-on-pointerup="this.whStop"
+                t-on-click="this.whStop">
+
+                <t t-if="line.id === _selectedOrderlineId">
+                    <div class="pos-wh-field-row">
+                        <span class="pos-wh-field-label">Warehouse</span>
+                        <select class="pos-wh-select form-select form-select-sm"
+                                t-on-change="(ev) => this.onWhChange(line, ev)">
+                            <t t-foreach="this.whOptions" t-as="wh" t-key="wh.id">
+                                <option t-att-value="wh.id"
+                                        t-att-selected="this.whGet(line).warehouse_id === wh.id"
+                                        t-out="wh.name"/>
+                            </t>
+                        </select>
+                    </div>
+                    <t t-if="this.whAllowShipLater">
+                        <div class="pos-wh-field-row">
+                            <span class="pos-wh-field-label">Ship Later</span>
+                            <label class="pos-ship-later-inline-toggle">
+                                <input type="checkbox"
+                                       class="pos-ship-later-checkbox form-check-input m-0"
+                                       t-att-checked="this.whGet(line).ship_later"
+                                       t-on-change="(ev) => this.onWhShipLaterToggle(line, ev)"/>
+                                <span class="pos-ship-later-inline-text">Enable ship later</span>
+                            </label>
+                        </div>
+                        <div t-if="this.whGet(line).ship_later" class="pos-wh-field-row">
+                            <span class="pos-wh-field-label">Ship Date</span>
+                            <input type="datetime-local"
+                                   class="pos-wh-date-input form-control form-control-sm"
+                                   t-att-value="this.whDateValue(line)"
+                                   t-on-change="(ev) => this.onWhShipLaterDateChange(line, ev)"/>
+                        </div>
+                    </t>
+                </t>
+                <div t-else="" class="pos-wh-summary">
+                    <i class="fa fa-building-o me-1"/><t t-out="this.whName(line) or 'No warehouse'"/>
+                    <t t-if="this.whAllowShipLater and this.whGet(line).ship_later">
+                        <i class="fa fa-clock-o ms-2 me-1"/>Ship later
+                    </t>
+                </div>
+            </li>
+        </xpath>
+    </t>
+</templates>

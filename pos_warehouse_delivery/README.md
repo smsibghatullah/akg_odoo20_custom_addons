@@ -18,3 +18,8 @@ Point of Sale -> Configuration -> Point of Sale -> (shop) -> Configuration tab:
 - `pos.order.line` fields: `warehouse_id`, `ship_later`, `ship_later_date` (`_load_pos_data_fields` mein add)
 - Frontend: `patch(Orderline)` + template extension of `point_of_sale.Orderline`, `patch(PosStore)` for default warehouse
 - Assets bundle: `point_of_sale._assets_pos`
+
+## v20.0.1.1.0 - Refund screen (Orders)
+- Orders screen par refund panel ("Select the product(s) to refund") mein har refundable line par **Warehouse dropdown** + **Ship Later** checkbox (+ Ship Date).
+- Chuni hui warehouse refund order line mein copy hoti hai; refund ki return delivery usi warehouse se banti hai.
+- **Refund orders ki delivery hamesha Done** state mein banti hai (ship later ON ho tab bhi). Agar core validation fail ho to `stock.picking._akgr_force_done()` force-validate karta hai (fail ho to log warning).

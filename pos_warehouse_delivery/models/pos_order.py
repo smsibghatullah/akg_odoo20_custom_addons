@@ -34,7 +34,7 @@ class PosOrder(models.Model):
             warehouse = self._get_line_warehouse(line)
             if not warehouse:
                 continue
-            ship_later = bool(line.ship_later and line.qty > 0)
+            ship_later = bool(line.ship_later and line.qty > 0 and not self.is_refund)
             groups[(warehouse, ship_later)] |= line
 
         all_pickings = Picking
@@ -60,6 +60,11 @@ class PosOrder(models.Model):
             pickings.write(vals)
             pickings.backorder_ids.write(vals)
             all_pickings |= pickings
+        if self.is_refund:
+            # Refund orders: the delivery (return) is ALWAYS done, whatever the
+            # ship-later checkbox says.
+            all_pickings |= self.picking_ids
+            all_pickings._akgr_force_done()
         return all_pickings
 
     def _create_ship_later_picking(self, picking_type, destination_id, lines):

@@ -54,3 +54,32 @@ class StockPicking(models.Model):
             vals['name'] = self._get_unique_picking_name(
                 picking_type.sequence_id, company_id)
         return super().create(vals_list)
+
+    def _akgr_force_done(self):
+        """Validate pickings that are still open (used for POS refunds).
+
+        The core POS code swallows validation errors, which can leave a refund
+        delivery in draft / waiting / ready.  A refund must always end 'done'.
+        """
+        for picking in self.filtered(lambda p: p.state not in ('done', 'cancel')):
+            try:
+                with self.env.cr.savepoint():
+                    if picking.state == 'draft':
+                        picking.action_confirm()
+                    moves = picking.move_ids.filtered(lambda m: m.state not in ('done', 'cancel'))
+                    for move in moves:
+                        if not move.move_line_ids:
+                            move._action_assign()
+                        if not move.move_line_ids or move.quantity < move.product_uom_qty:
+                            move.quantity = move.product_uom_qty
+                    moves.picked = True
+                    picking.with_context(
+                        skip_backorder=True, skip_immediate=True, skip_sms=True,
+                        skip_expired=True, picking_ids_not_to_backorder=picking.ids,
+                    )._action_done()
+            except Exception as err:  # noqa: BLE001
+                _logger.warning('Refund picking %s could not be set to done: %s', picking.name, err)
+            if picking.state != 'done':
+                _logger.warning('Refund picking %s is still in state %s', picking.name, picking.state)
+        return True
+
