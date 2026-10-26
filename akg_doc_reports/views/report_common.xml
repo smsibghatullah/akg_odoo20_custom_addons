@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Shared CSS. Every extracted block (header / body / footer) is a separate
+    <!-- Shared CSS (no @font-face on purpose: a font file that fails to load makes the text
+         of the separate header/footer documents invisible in wkhtmltopdf). Every extracted block (header / body / footer) is a separate
          document for wkhtmltopdf, so each one calls this template. -->
     <template id="akgr_css">
         <style>
-            @font-face { font-family: 'Oswald'; font-weight: normal;
-                src: url('/akg_doc_reports/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
-            @font-face { font-family: 'Oswald'; font-weight: bold;
-                src: url('/akg_doc_reports/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
             .akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
             .akgr table { border-collapse: collapse; width: 100%; }
             .akgr td, .akgr th { vertical-align: top; }

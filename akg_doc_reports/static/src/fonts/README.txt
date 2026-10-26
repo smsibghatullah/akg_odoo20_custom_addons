@@ -1,8 +1,11 @@
-Optional: for the exact Odoo 16 look, copy the Oswald font files here:
+Optional - exact Odoo 16 font (Oswald)
+======================================
+Install Oswald as a SYSTEM font on the server (wkhtmltopdf then uses it everywhere,
+including header and footer):
 
-    Oswald-Regular.ttf
-    Oswald-Bold.ttf
+    mkdir -p /usr/local/share/fonts/oswald
+    cp Oswald-Regular.ttf Oswald-Bold.ttf /usr/local/share/fonts/oswald/
+    fc-cache -f -v
 
-(Get them from Google Fonts: https://fonts.google.com/specimen/Oswald - "Download family",
-use the static/ folder.)  The report picks them up automatically via @font-face.
-Without them it falls back to a condensed sans font (DejaVu Sans Condensed).
+(Download "Oswald" from https://fonts.google.com/specimen/Oswald - static/ folder.)
+Restart Odoo afterwards. Without it the reports fall back to a DejaVu / Liberation font.
