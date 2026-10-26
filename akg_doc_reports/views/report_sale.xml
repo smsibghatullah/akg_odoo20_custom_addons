@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="report_saleorder_akg">
+        <t t-set="akgr_receipt" t-value="False"/>
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="akg_doc_reports.saleorder_document_akg" t-lang="doc._akgr_lang()"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Own template names so every print action keeps its own PDF file name -->
+    <template id="report_saleorder_extra_akg">
+        <t t-set="akgr_receipt" t-value="False"/>
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="akg_doc_reports.saleorder_document_akg" t-lang="doc._akgr_lang()"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_saleorder_receipt_akg">
+        <t t-set="akgr_receipt" t-value="True"/>
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="akg_doc_reports.saleorder_document_akg" t-lang="doc._akgr_lang()"/>
@@ -42,7 +62,7 @@
                 </tr>
             </table>
 
-            <div class="title"><t t-out="doc._akgr_title()"/> <t t-out="doc.name"/></div>
+            <div class="title"><t t-if="akgr_receipt">Delivery or Return Receipt #</t><t t-else=""><t t-out="doc._akgr_title()"/></t> <t t-out="doc.name"/></div>
 
             <t t-call="akg_doc_reports.akgr_info"/>
 

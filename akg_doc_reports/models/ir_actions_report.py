@@ -19,6 +19,13 @@ AKGR_TARGETS = [
 
 
 AKGR_SALE_TEMPLATE = 'akg_doc_reports.report_saleorder_akg'
+AKGR_RECEIPT_TEMPLATE = 'akg_doc_reports.report_saleorder_receipt_akg'
+AKGR_EXTRA_TEMPLATE = 'akg_doc_reports.report_saleorder_extra_akg'
+AKGR_RECEIPT_WORDS = ('receipt', 'delivery', 'return', 'pickup', 'pick-up')
+# PDF file names: Quotation - S001 / Order - S001 / Delivery or Return Receipt - S001
+AKGR_NAME_ORDER = ("(object.state in ('draft', 'sent') and 'Quotation - %s' or 'Order - %s')"
+                   " % (object.name or '').replace('/', '_')")
+AKGR_NAME_RECEIPT = "'Delivery or Return Receipt - %s' % (object.name or '').replace('/', '_')"
 
 
 class IrActionsReport(models.Model):
@@ -34,6 +41,7 @@ class IrActionsReport(models.Model):
         Called from data/report_action.xml (every install / upgrade).
         """
         paperformat = self.env.ref('akg_doc_reports.paperformat_akgr', raise_if_not_found=False)
+        main_sale_reports = self.browse()
         for model, originals, xmlids, template in AKGR_TARGETS:
             reports = self.browse()
             for xmlid in xmlids:
@@ -47,6 +55,8 @@ class IrActionsReport(models.Model):
                     model, originals,
                     [(r.id, r.name, r.report_name) for r in self.search([('model', '=', model)])])
                 continue
+            if model == 'sale.order':
+                main_sale_reports |= reports
             for report in reports:
                 vals = {}
                 if report.report_name != template:
@@ -59,24 +69,42 @@ class IrActionsReport(models.Model):
                     _logger.info('akg_doc_reports: %s (%s) -> %s', report.name, report.report_name, template)
                     report.write(vals)
 
-        # Every OTHER print action of sale.order (e.g. the rental app, custom
-        # actions, PDF quote ...) that is not ours and not a pro-forma.
+        # ---- other sale.order print actions (rental receipt, custom ...) ----
+        # IMPORTANT: every action needs its OWN report_name. The download
+        # controller finds the action by report_name to build the PDF file name,
+        # so two actions sharing one report_name get the wrong file name.
+        so_main = main_sale_reports
+        if so_main:
+            main = self.env.ref('sale.action_report_saleorder', raise_if_not_found=False)
+            if main and main.print_report_name != AKGR_NAME_ORDER:
+                main.write({'print_report_name': AKGR_NAME_ORDER})
         others = self.search([
             ('model', '=', 'sale.order'),
             ('report_type', 'in', ('qweb-pdf', 'qweb-html')),
-            ('report_name', 'not like', 'akg_doc_reports.%'),
             ('report_name', 'not ilike', 'pro_forma'),
             ('report_name', 'not ilike', 'proforma'),
-        ])
+        ]) - so_main
         for report in others:
-            _logger.warning('akg_doc_reports: extra sale.order action id=%s name=%r report_name=%s -> %s',
-                            report.id, report.name, report.report_name, AKGR_SALE_TEMPLATE)
-            vals = {'report_name': AKGR_SALE_TEMPLATE}
-            if 'report_file' in report._fields:
-                vals['report_file'] = AKGR_SALE_TEMPLATE
-            if paperformat:
+            is_receipt = any(w in (report.name or '').lower() for w in AKGR_RECEIPT_WORDS)
+            _logger.warning('akg_doc_reports: extra sale.order action id=%s name=%r report_name=%s receipt=%s',
+                            report.id, report.name, report.report_name, is_receipt)
+            vals = {}
+            if is_receipt:
+                if report.report_name != AKGR_RECEIPT_TEMPLATE:
+                    vals['report_name'] = AKGR_RECEIPT_TEMPLATE
+                if report.print_report_name != AKGR_NAME_RECEIPT:
+                    vals['print_report_name'] = AKGR_NAME_RECEIPT
+            elif report.report_name == AKGR_SALE_TEMPLATE:
+                # was pointed to the main template by an earlier version of this module
+                vals['report_name'] = AKGR_EXTRA_TEMPLATE
+            elif not report.report_name.startswith('akg_doc_reports.'):
+                continue  # keeps its own name; rendered through the AKG template by the hook below
+            if 'report_name' in vals and 'report_file' in report._fields:
+                vals['report_file'] = vals['report_name']
+            if paperformat and report.paperformat_id != paperformat:
                 vals['paperformat_id'] = paperformat.id
-            report.write(vals)
+            if vals:
+                report.write(vals)
         return True
 
     # ------------------------------------------------------------------
@@ -93,8 +121,10 @@ class IrActionsReport(models.Model):
         if (isinstance(template, str) and len(self) == 1 and self.model == 'sale.order'
                 and not template.startswith('akg_doc_reports.')
                 and 'pro_forma' not in template and 'proforma' not in template):
-            _logger.warning('akg_doc_reports: sale.order render %s -> %s', template, AKGR_SALE_TEMPLATE)
-            return AKGR_SALE_TEMPLATE
+            is_receipt = any(w in (self.name or '').lower() for w in AKGR_RECEIPT_WORDS)
+            new = AKGR_RECEIPT_TEMPLATE if is_receipt else AKGR_SALE_TEMPLATE
+            _logger.warning('akg_doc_reports: sale.order render %s -> %s', template, new)
+            return new
         return template
 
     def _render_template(self, template, values=None):
