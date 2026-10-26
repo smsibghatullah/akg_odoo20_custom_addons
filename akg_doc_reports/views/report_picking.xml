@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picking_akg">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="akg_doc_reports.picking_document_akg" t-lang="doc._akgr_lang()"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="picking_document_akg">
+        <t t-set="company" t-value="doc.company_id"/>
+        <t t-set="info_rows" t-value="doc._akgr_info_rows()"/>
+        <t t-set="lines" t-value="doc._akgr_lines()"/>
+        <t t-set="code" t-value="doc._akgr_code()"/>
+        <t t-set="barcode_uri" t-value="doc._akgr_barcode_uri()"/>
+        <t t-set="wh_partner" t-value="doc._akgr_warehouse_partner()"/>
+        <t t-set="show_lots" t-value="any(l['lots'] for l in lines)"/>
+
+        <t t-call="akg_doc_reports.akgr_header"/>
+
+        <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
+             t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
+             t-att-data-oe-lang="doc.env.context.get('lang')">
+            <t t-call="akg_doc_reports.akgr_css"/>
+
+            <div t-if="barcode_uri" style="text-align:right; margin-top:4px;">
+                <img t-att-src="barcode_uri" style="width:300px; height:50px;"/>
+            </div>
+
+            <table style="margin-top:14px;">
+                <tr>
+                    <td style="width:50%; padding-right:20px;">
+                        <t t-if="wh_partner">
+                            <div class="lb">Warehouse Address:</div>
+                            <address t-field="wh_partner"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        </t>
+                    </td>
+                    <td style="width:50%;">
+                        <t t-if="doc.partner_id">
+                            <div class="lb"><t t-out="doc._akgr_partner_label()"/></div>
+                            <address t-field="doc.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="title" style="margin-bottom:6px;"><t t-out="doc.name"/></div>
+
+            <t t-call="akg_doc_reports.akgr_info"/>
+
+            <table class="lines">
+                <thead>
+                    <tr>
+                        <th class="l" style="text-align:center;">Product</th>
+                        <th class="l" style="text-align:center;">Quantity</th>
+                        <th t-if="show_lots" class="l" style="text-align:center;">Lot/Serial</th>
+                        <th t-if="code != 'incoming'" class="l" style="text-align:center;">From</th>
+                        <th t-if="code != 'outgoing'" class="l" style="text-align:center;">To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="lines" t-as="line">
+                        <td class="l first" style="white-space: pre-line;"><t t-out="line['name']"/></td>
+                        <td class="l" style="white-space:nowrap;">
+                            <span t-out="line['qty']" t-options='{"widget": "float", "precision": 2}'/>
+                            <t t-out="line['uom']"/>
+                        </td>
+                        <td t-if="show_lots" class="l"><t t-out="line['lots']"/></td>
+                        <td t-if="code != 'incoming'" class="l"><t t-out="line['from']"/></td>
+                        <td t-if="code != 'outgoing'" class="l"><t t-out="line['to']"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div t-if="doc._akgr_note()" style="margin-top:16px;"><t t-out="doc._akgr_note()"/></div>
+        </div>
+
+        <t t-call="akg_doc_reports.akgr_footer"/>
+    </template>
+</odoo>

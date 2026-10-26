@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Shared CSS. Every extracted block (header / body / footer) is a separate
+         document for wkhtmltopdf, so each one calls this template. -->
+    <template id="akgr_css">
+        <style>
+            @font-face { font-family: 'Oswald'; font-weight: normal;
+                src: url('/akg_doc_reports/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
+            @font-face { font-family: 'Oswald'; font-weight: bold;
+                src: url('/akg_doc_reports/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
+            .akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
+            .akgr table { border-collapse: collapse; width: 100%; }
+            .akgr td, .akgr th { vertical-align: top; }
+            .akgr address { font-style: normal; margin: 0; line-height: 1.55; font-size: 14px; }
+            .akgr a { color: #555; text-decoration: underline; }
+            .akgr .teal { color: #1ca3b8; }
+            .akgr .lb { color: #555; font-weight: bold; }
+            .akgr .title { font-size: 32px; color: #1ca3b8; margin: 22px 0 14px 0; }
+            .akgr .lines { border-bottom: 2px solid #444; }
+            .akgr .lines th { border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.5; }
+            .akgr .lines td { border-bottom: 1px solid #ccc; border-left: 1px solid #ddd; padding: 12px 8px; text-align: right; }
+            .akgr .lines th.l, .akgr .lines td.l { text-align: left; }
+            .akgr .lines td.first { border-left: none; }
+            .akgr .tot td { border: 1px solid #e3e3e3; padding: 13px 9px; text-align: right; }
+            .akgr .tot td.lb { text-align: left; }
+            .akgr .tot { border-bottom: 2px solid #444; }
+            .akgr .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #000; }
+        </style>
+    </template>
+
+    <!-- Real header: Odoo extracts div.header and repeats it on every page. Needs `company`. -->
+    <template id="akgr_header">
+        <t t-set="logo_uri" t-value="company._akgr_logo_uri()"/>
+        <div class="header" style="width:100%;" dir="ltr">
+            <t t-call="akg_doc_reports.akgr_css"/>
+            <div class="akgr">
+                <table>
+                    <tr>
+                        <td style="width:45%; text-align:left;">
+                            <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
+                        </td>
+                        <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
+                            <div style="font-weight:bold"><t t-out="company.name"/></div>
+                            <div t-if="company.vat">Tax ID: <t t-out="company.vat"/></div>
+                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <!-- Real footer: repeated on every page. Needs `company`. -->
+    <template id="akgr_footer">
+        <t t-set="fv" t-value="company._akgr_footer_vals()"/>
+        <t t-set="qr_uri" t-value="company._akgr_qr_uri()"/>
+        <div class="footer" style="width:100%;" dir="ltr">
+            <t t-call="akg_doc_reports.akgr_css"/>
+            <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
+                <table>
+                    <tr>
+                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
+                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
+                            <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
+                            <div>CR. No. <t t-out="fv['cr_no']"/></div>
+                        </td>
+                        <td style="width:50%; text-align:center; padding-top:4px;">
+                            <div class="ar" style="font-size:12px;"><t t-out="fv['ar_name']"/></div>
+                            <div style="margin-top:14px; font-size:13px;">
+                                <t t-out="fv['thank_en']"/> <span class="ar"><t t-out="fv['thank_ar']"/></span>
+                            </div>
+                        </td>
+                        <td style="width:22%; text-align:right;">
+                            <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <!-- Row(s) of "label / value" blocks. Needs `info_rows`. -->
+    <template id="akgr_info">
+        <t t-foreach="info_rows" t-as="info_row">
+            <table style="margin: 0 0 14px 0;">
+                <tr>
+                    <t t-foreach="info_row" t-as="item">
+                        <td style="width:25%; padding-right:10px;">
+                            <div class="lb"><t t-out="item[0]"/>:</div>
+                            <div>
+                                <t t-if="item[2] == 'date'"><span t-out="item[1]" t-options='{"widget": "date"}'/></t>
+                                <t t-elif="item[2] == 'datetime'"><span t-out="item[1]" t-options='{"widget": "datetime"}'/></t>
+                                <t t-else=""><t t-out="item[1]"/></t>
+                            </div>
+                        </td>
+                    </t>
+                </tr>
+            </table>
+        </t>
+    </template>
+
+    <!-- Totals box. Needs `totals` (untaxed, taxes, total, optional show_untaxed) and `cur`. -->
+    <template id="akgr_totals">
+        <table style="width:100%; margin-top:0; page-break-inside: avoid;">
+            <tr>
+                <td style="width:50%"/>
+                <td style="width:50%; padding:0;">
+                    <table class="tot">
+                        <t t-if="totals.get('show_untaxed', True)">
+                            <tr>
+                                <td class="lb" style="width:40%;">Untaxed Amount</td>
+                                <td><span t-out="totals['untaxed']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                            </tr>
+                            <tr t-foreach="totals['taxes']" t-as="tax_row">
+                                <td><t t-out="tax_row['name']"/></td>
+                                <td><span t-out="tax_row['amount']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td class="lb" style="width:40%;">Total</td>
+                            <td><span t-out="totals['total']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </template>
+
+</odoo>
