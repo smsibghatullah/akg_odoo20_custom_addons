@@ -41,8 +41,12 @@ class AccountMove(models.Model):
     # No fields are (re)defined here: `narration` must NOT be redefined on Odoo 20.
 
     def _akg_report_lang(self):
+        """Language used to render the page. The page is always left-to-right
+        (Arabic is printed side by side with English), so an Arabic partner
+        language must not flip the whole document to RTL."""
         self.ensure_one()
-        return self.partner_id.lang or self.env.lang or LANG_EN
+        lang = self.partner_id.lang or self.env.lang or LANG_EN
+        return LANG_EN if lang.startswith('ar') else lang
 
     def _akg_invoice_titles(self):
         """(english, arabic) document title."""
@@ -200,3 +204,65 @@ class AccountMove(models.Model):
         country = self._akg_first_value((self.company_id,), 'account_fiscal_country_id')
         label = country and 'vat_label' in country._fields and country.vat_label
         return label or 'Tax ID'
+
+    def _akg_terms(self):
+        """(english, arabic) Terms & Conditions line.
+
+        Uses the invoice `narration` when it has text; POS-created invoices often
+        have none, so then it is built from the company's invoice terms, or as
+        "Terms & Conditions: <company website>/terms" (same as the Odoo 16 print).
+        """
+        self.ensure_one()
+
+        def txt(lang):
+            if 'narration' in self._fields:
+                return self.with_context(lang=lang).narration or False
+            return False
+
+        en, ar = txt(LANG_EN), txt(LANG_AR)
+        if not (en or ar):
+            company = self.company_id
+            if getattr(company, 'terms_type', 'plain') != 'html' and \
+                    getattr(company, 'invoice_terms', False):
+                en = company.with_context(lang=LANG_EN).invoice_terms
+                ar = company.with_context(lang=LANG_AR).invoice_terms
+            else:
+                base = (company.website or
+                        self.env['ir.config_parameter'].sudo().get_param('web.base.url') or '')
+                if base and not base.startswith('http'):
+                    base = 'http://' + base
+                en = ar = "Terms & Conditions: %s/terms" % base.rstrip('/')
+        return en or ar, ar or en
+
+    def _akg_line_names(self, line):
+        """Description parts of an invoice line. Never empty: when the line has
+        no label (happens on some POS invoices) the product name is used."""
+        self.ensure_one()
+        name = line.name or ''
+        arabic = english = False
+        product = line.product_id
+        if product:
+            name_en = product.with_context(lang=LANG_EN).display_name or ''
+            name_ar = product.with_context(lang=LANG_AR).display_name or ''
+            if not name:
+                name = name_en or name_ar
+            if name_ar and name_ar not in name:
+                arabic = name_ar
+            if name_en and name_en != name_ar and name_en not in name:
+                english = name_en
+        if not name:
+            name = line.account_id.display_name or ''
+        return {'name': name, 'ar': arabic, 'en': english}
+
+    def action_akg_regenerate_pdf(self):
+        """Forget the PDF that Odoo stored when the invoice was posted, so the
+        next print / portal download is rendered again with the current layout."""
+        for move in self:
+            att = getattr(move, 'invoice_pdf_report_id', False)
+            if not att:
+                continue
+            try:
+                att.sudo().unlink()
+            except Exception:
+                move.sudo().write({'invoice_pdf_report_id': False})
+        return True

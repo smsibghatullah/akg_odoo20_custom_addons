@@ -42,17 +42,17 @@
         <t t-set="thank_you_en" t-value="'Thank you !'"/>
         <t t-set="thank_you_ar" t-value="'شكرًا لك'"/>
 
-        <div t-attf-class="article akg-doc o_company_#{company.id}_layout"
+        <div t-attf-class="article akg-doc o_company_#{company.id}_layout" dir="ltr"
              t-att-data-oe-model="o and o._name"
              t-att-data-oe-id="o and o.id"
              t-att-data-oe-lang="o and o.env.context.get('lang')"
-             style="padding-bottom: 120px;">
+             style="padding-bottom: 10px;">
             <style>
                 @font-face { font-family: 'Oswald'; font-weight: normal;
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
                 @font-face { font-family: 'Oswald'; font-weight: bold;
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
-                .akg-doc { font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
+                .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
                 .akg-doc table { border-collapse: collapse; width: 100%; }
                 .akg-doc td, .akg-doc th { vertical-align: top; }
                 .akg-doc .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
@@ -208,13 +208,10 @@
                                     <span t-if="line.product_uom_id" t-field="line.product_uom_id"/>
                                 </td>
                                 <td>
-                                    <t t-if="line.product_id">
-                                        <t t-set="english_name" t-value="line.product_id.with_context(lang='en_US').display_name"/>
-                                        <t t-set="arabic_name" t-value="line.product_id.with_context(lang='ar_001').display_name"/>
-                                        <div t-if="line.name and arabic_name not in line.name"><span class="ar-n"><t t-out="arabic_name"/></span></div>
-                                        <div t-if="line.name and (english_name != arabic_name) and (english_name not in line.name)"><t t-out="english_name"/></div>
-                                    </t>
-                                    <div style="white-space: pre-line;"><t t-out="line.name"/></div>
+                                    <t t-set="names" t-value="o._akg_line_names(line)"/>
+                                    <div t-if="names['ar']"><span class="ar-n"><t t-out="names['ar']"/></span></div>
+                                    <div t-if="names['en']"><t t-out="names['en']"/></div>
+                                    <div style="white-space: pre-line;"><t t-out="names['name']"/></div>
                                 </td>
                             </tr>
                         </t>
@@ -298,10 +295,11 @@
                     <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['term']['ar']" t-out="notes['term']['ar']"/></span></td>
                 </tr>
             </table>
-            <table t-if="notes['narration']['en']" style="width:100%; margin-top:10px;">
+            <t t-set="terms" t-value="o._akg_terms()"/>
+            <table t-if="terms[0]" style="width:100%; margin-top:14px;">
                 <tr>
-                    <td style="width:50%;"><t t-out="notes['narration']['en']"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['narration']['ar']" t-out="notes['narration']['ar']"/></span></td>
+                    <td style="width:50%;"><t t-out="terms[0]"/></td>
+                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-out="terms[1]"/></span></td>
                 </tr>
             </table>
             <table t-if="notes['fiscal']['en']" style="width:100%; margin-top:10px;">
@@ -317,9 +315,19 @@
                 </tr>
             </table>
 
-            <!-- ============ Bottom block, pinned to the bottom of every page ============ -->
-            <div style="position: fixed; bottom: 0; left: 0; right: 0; border-top: 2px solid #444; padding-top: 8px; background: #fff;">
-                <table style="width:100%">
+        </div>
+
+        <!-- Real footer: Odoo extracts div.footer and repeats it at the bottom of every page.
+             It is rendered as a separate document, so it carries its own <style>. -->
+        <div class="footer" style="width:100%;" dir="ltr">
+            <style>
+                .akg-ft { font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; color:#222; }
+                .akg-ft table { border-collapse: collapse; width: 100%; }
+                .akg-ft td { vertical-align: top; }
+                .akg-ft .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #000; }
+            </style>
+            <div class="akg-ft" style="border-top: 2px solid #444; padding-top: 8px;">
+                <table>
                     <tr>
                         <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
                             <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
@@ -327,9 +335,9 @@
                             <div>CR. No. <t t-out="cr_no"/></div>
                         </td>
                         <td style="width:50%; text-align:center; padding-top:4px;">
-                            <div class="ar" style="color:#000; font-size:12px;"><t t-out="footer_ar_name"/></div>
+                            <div class="ar" style="font-size:12px;"><t t-out="footer_ar_name"/></div>
                             <div style="margin-top:14px; font-size:13px;">
-                                <t t-out="thank_you_en"/> <span class="ar" style="color:#000;"><t t-out="thank_you_ar"/></span>
+                                <t t-out="thank_you_en"/> <span class="ar"><t t-out="thank_you_ar"/></span>
                             </div>
                         </td>
                         <td style="width:22%; text-align:right;">

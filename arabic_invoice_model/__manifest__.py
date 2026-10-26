@@ -19,6 +19,7 @@ Bilingual (Arabic / English) customer invoice, ported from the Odoo 16 module.
     'data': [
         'views/report_invoice.xml',
         'data/report_action.xml',
+        'data/server_action.xml',
     ],
     'uninstall_hook': 'uninstall_hook',
     'installable': True,
