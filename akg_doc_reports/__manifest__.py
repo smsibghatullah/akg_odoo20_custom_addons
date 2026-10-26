@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Quotation / Order / RFQ / Picking Reports (Odoo 16 look)',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.0.1',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Sales order/quotation, purchase order/RFQ and picking operations '

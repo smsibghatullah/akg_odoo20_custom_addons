@@ -18,6 +18,9 @@ AKGR_TARGETS = [
 ]
 
 
+AKGR_SALE_TEMPLATE = 'akg_doc_reports.report_saleorder_akg'
+
+
 class IrActionsReport(models.Model):
     _inherit = 'ir.actions.report'
 
@@ -56,3 +59,24 @@ class IrActionsReport(models.Model):
                     _logger.info('akg_doc_reports: %s (%s) -> %s', report.name, report.report_name, template)
                     report.write(vals)
         return True
+
+    # ------------------------------------------------------------------
+    # Safety net for the Sales Order / Quotation print.
+    #
+    # In Odoo 20 the sale order can be printed through more than one action
+    # (sale, sale_renting, sale_pdf_quote_builder, e-mail / portal ...).  Some
+    # of them still point to a standard template, so the print came out in the
+    # plain Odoo 20 layout.  Every PDF/HTML render goes through
+    # _render_template(), so we swap the template right there: whatever action
+    # prints a sale.order, the AKG template is the one rendered.
+    # ------------------------------------------------------------------
+    def _akgr_swap_template(self, template):
+        if (isinstance(template, str) and len(self) == 1 and self.model == 'sale.order'
+                and not template.startswith('akg_doc_reports.')
+                and 'pro_forma' not in template and 'proforma' not in template):
+            _logger.info('akg_doc_reports: sale.order report %s -> %s', template, AKGR_SALE_TEMPLATE)
+            return AKGR_SALE_TEMPLATE
+        return template
+
+    def _render_template(self, template, values=None):
+        return super()._render_template(self._akgr_swap_template(template), values=values)
