@@ -32,13 +32,11 @@
                     <td style="width:50%; padding-right:20px;">
                         <t t-if="ship_partner">
                             <div class="lb">Shipping address:</div>
-                            <address t-field="ship_partner"
-                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <address t-out="doc._akgr_addr(ship_partner)"/>
                         </t>
                     </td>
                     <td style="width:50%;">
-                        <address t-field="bill_partner"
-                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        <address t-out="doc._akgr_addr(bill_partner)"/>
                         <div t-if="bill_partner.vat" style="font-size:14px;">Tax ID: <t t-out="bill_partner.vat"/></div>
                     </td>
                 </tr>

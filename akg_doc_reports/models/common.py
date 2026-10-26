@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import re
 
+from markupsafe import Markup, escape
+
 from odoo import models
 
 LANG_EN = 'en_US'
@@ -84,3 +86,20 @@ class AkgrReportMixin(models.AbstractModel):
         partner = first_field(self, ['partner_id'])
         lang = (partner and partner.lang) or self.env.lang or LANG_EN
         return LANG_EN if lang.startswith('ar') else lang
+
+    def _akgr_addr(self, partner):
+        """Partner name + postal address as HTML (one block, <br/> separated).
+
+        Used instead of t-field/contact widget: Odoo 20 only accepts
+        t-field="record.field", not a bare variable.
+        """
+        if not partner:
+            return Markup('')
+        try:
+            address = partner._display_address(without_company=True) or ''
+        except Exception:
+            address = ', '.join(filter(None, [
+                partner.street, partner.street2, partner.city,
+                partner.country_id.name if partner.country_id else False]))
+        lines = [partner.display_name or ''] + [l.strip() for l in address.split('\n') if l.strip()]
+        return Markup('<br/>').join(escape(l) for l in lines if l)

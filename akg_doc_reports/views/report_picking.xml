@@ -33,15 +33,13 @@
                     <td style="width:50%; padding-right:20px;">
                         <t t-if="wh_partner">
                             <div class="lb">Warehouse Address:</div>
-                            <address t-field="wh_partner"
-                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <address t-out="doc._akgr_addr(wh_partner)"/>
                         </t>
                     </td>
                     <td style="width:50%;">
                         <t t-if="doc.partner_id">
                             <div class="lb"><t t-out="doc._akgr_partner_label()"/></div>
-                            <address t-field="doc.partner_id"
-                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <address t-out="doc._akgr_addr(doc.partner_id)"/>
                         </t>
                     </td>
                 </tr>
