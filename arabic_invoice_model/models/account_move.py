@@ -4,7 +4,7 @@ import io
 
 from PIL import Image
 
-from odoo import models, _
+from odoo import fields, models, _
 from odoo.tools import file_open
 
 LANG_EN = 'en_US'
@@ -93,9 +93,53 @@ class AccountMove(models.Model):
         widget = getattr(self.sudo(), 'invoice_payments_widget', False) or {}
         content = widget.get('content') if isinstance(widget, dict) else []
         return [
-            {'date': vals.get('date'), 'amount': vals.get('amount')}
+            {'date': vals.get('date'), 'amount': vals.get('amount'), 'method': False}
             for vals in (content or [])
         ]
+
+    def _akg_pos_payments(self):
+        """Payments of the POS order(s) behind this invoice, one line per method.
+
+        Only cash payments are reconciled with the invoice right away; bank /
+        card payments are reconciled when the POS session is closed, so the
+        invoice payments widget does not list them. The POS payment records do.
+        """
+        self.ensure_one()
+        if self.move_type != 'out_invoice' or 'pos_order_ids' not in self._fields:
+            return []
+        grouped = {}
+        for order in self.sudo().pos_order_ids:
+            for pay in order.payment_ids:
+                method = pay.payment_method_id
+                if 'type' in method._fields and method.type == 'pay_later':
+                    continue  # "Customer Account": not a payment
+                rec = grouped.setdefault(
+                    method.id, {'method': method.name, 'amount': 0.0, 'dt': False})
+                rec['amount'] += pay.amount  # change (negative cash line) nets out
+                dt = pay.payment_date if 'payment_date' in pay._fields else False
+                if dt and (not rec['dt'] or dt > rec['dt']):
+                    rec['dt'] = dt
+        lines = []
+        for rec in grouped.values():
+            if self.currency_id.is_zero(rec['amount']):
+                continue
+            date = (fields.Datetime.context_timestamp(self, rec['dt']).date()
+                    if rec['dt'] else self.invoice_date)
+            lines.append({'date': date, 'amount': rec['amount'], 'method': rec['method']})
+        return sorted(lines, key=lambda l: str(l['date']))
+
+    def _akg_payment_summary(self):
+        """{'lines': [...], 'due': amount} used by the report."""
+        self.ensure_one()
+        lines = self._akg_pos_payments()
+        if lines:
+            paid = sum(l['amount'] for l in lines)
+            due = min(self.amount_residual, max(self.amount_total - paid, 0.0))
+            due = self.currency_id.round(due)
+        else:
+            lines = self._akg_payment_lines()
+            due = self.amount_residual
+        return {'lines': lines, 'due': due}
 
     def _akg_tax_group_lines(self):
         """VAT summary computed from the tax lines (independent of the

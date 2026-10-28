@@ -268,18 +268,21 @@
                                 <td class="lbl">Total / المجموع</td>
                             </tr>
                             <t t-if="print_with_payments">
-                                <t t-set="payments_vals" t-value="o._akg_payment_lines()"/>
-                                <t t-foreach="payments_vals" t-as="payment_vals">
+                                <t t-set="pay" t-value="o._akg_payment_summary()"/>
+                                <t t-foreach="pay['lines']" t-as="payment_vals">
                                     <tr>
                                         <td><span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                                         <td style="font-style:italic;">
                                             <span class="ar-n" style="font-style:italic;">Paid on/دفعت في:</span>
                                             <span style="margin-left:8px;"><t t-out="payment_vals['date']"/></span>
+                                            <div t-if="payment_vals.get('method')" style="font-style:normal; color:#555;">
+                                                <t t-out="payment_vals['method']"/>
+                                            </div>
                                         </td>
                                     </tr>
                                 </t>
-                                <tr t-if="payments_vals">
-                                    <td><span t-field="o.amount_residual"/></td>
+                                <tr t-if="pay['lines']">
+                                    <td><span t-out="pay['due']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                                     <td class="lbl">Amount Due / المبلغ المستحق</td>
                                 </tr>
                             </t>
