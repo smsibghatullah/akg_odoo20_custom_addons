@@ -36,6 +36,20 @@ def _b64_to_data_uri(value):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    pos_note = fields.Text(string='POS Note', compute='_compute_pos_note')
+
+    def _compute_pos_note(self):
+        for move in self:
+            move.pos_note = move._akg_pos_note()
+
+    def _akg_pos_note(self):
+        """Notes typed on the POS screen for the order(s) of this invoice."""
+        self.ensure_one()
+        if 'pos_order_ids' not in self._fields:
+            return ''
+        notes = [o.akg_note for o in self.sudo().pos_order_ids if o.akg_note]
+        return '\n\n'.join(notes)
+
     # Helpers below only READ data and use getattr / _fields checks, so the
     # report keeps printing even if a field is renamed in a later version.
     # No fields are (re)defined here: `narration` must NOT be redefined on Odoo 20.

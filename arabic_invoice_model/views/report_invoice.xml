@@ -308,6 +308,14 @@
                     <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['term']['ar']" t-out="notes['term']['ar']"/></span></td>
                 </tr>
             </table>
+            <t t-set="pos_note" t-value="o._akg_pos_note()"/>
+            <table t-if="pos_note" style="width:100%; margin-top:14px;">
+                <tr>
+                    <td style="width:12%; white-space:nowrap; font-weight:bold;">Note:</td>
+                    <td style="width:76%; white-space: pre-line;"><t t-out="pos_note"/></td>
+                    <td style="width:12%; text-align:right;" class="ar-n">: ملاحظات</td>
+                </tr>
+            </table>
             <t t-set="terms" t-value="o._akg_terms()"/>
             <table t-if="terms[0]" style="width:100%; margin-top:14px;">
                 <tr>

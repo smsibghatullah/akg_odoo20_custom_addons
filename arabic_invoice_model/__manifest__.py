@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'GCC - Arabic/English Invoice (AKG)',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.1.0',
     'author': 'AKG Hardware',
     'category': 'Accounting/Localizations',
     'summary': 'Bilingual Arabic/English tax invoice & delivery note for Odoo 20',
@@ -15,11 +15,12 @@ Bilingual (Arabic / English) customer invoice, ported from the Odoo 16 module.
 * Works for invoices printed from the backend, e-mailed, and printed from the POS.
 """,
     'license': 'LGPL-3',
-    'depends': ['account', 'web'],
+    'depends': ['account', 'web', 'point_of_sale'],
     'data': [
         'views/report_invoice.xml',
         'data/report_action.xml',
         'data/server_action.xml',
+        'data/views_note.xml',
     ],
     'uninstall_hook': 'uninstall_hook',
     'installable': True,
