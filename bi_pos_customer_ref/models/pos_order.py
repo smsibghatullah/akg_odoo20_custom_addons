@@ -69,6 +69,19 @@ class PosOrder(models.Model):
     # Odoo 20: `_order_fields` and `_create_invoice(move_vals)` no longer exist. The invoice
     # values are built in `_prepare_invoice_vals`, so the reference is simply added there
     # (this also removes the 70-line copy of the core cash-rounding logic of Odoo 16).
+    def action_pos_order_paid(self):
+        for o in self:
+            _logger.warning(
+                "DEBUG_PAID %s total=%s paid=%s cur=%s rounding=%s payments=%s lines=%s",
+                o.pos_reference, o.amount_total, o.amount_paid,
+                o.currency_id.name, o.currency_id.rounding,
+                [(p.payment_method_id.name, p.amount) for p in o.payment_ids],
+                [(l.product_id.display_name, l.qty, l.price_unit, l.discount,
+                  l.price_subtotal, l.price_subtotal_incl, l.tax_ids_after_fiscal_position.mapped('name'))
+                 for l in o.lines],
+            )
+        return super().action_pos_order_paid()
+        
     def _prepare_invoice_vals(self):
         vals = super()._prepare_invoice_vals()
         reference = next((o.customer_reference for o in self if o.customer_reference), False)
