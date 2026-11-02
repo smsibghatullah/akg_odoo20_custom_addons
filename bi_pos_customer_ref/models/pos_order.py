@@ -116,14 +116,14 @@ class SaleOrder(models.Model):
 class PosSession(models.Model):
     _inherit = 'pos.session'
 
-    def close_session_from_ui(self, bank_payment_method_diff_pairs=None):
+    def close_session_from_ui(self, *args, **kwargs):
         try:
             with self.env.cr.savepoint():
-                return super().close_session_from_ui(bank_payment_method_diff_pairs)
+                return super().close_session_from_ui(*args, **kwargs)
         except IndexError:
             _logger.exception("POS close failed for session %s, force closing", self.name)
             self.write({
                 'state': 'closed',
                 'stop_at': fields.Datetime.now(),
             })
-            return {'successful': True}          
+            return {'successful': True}
