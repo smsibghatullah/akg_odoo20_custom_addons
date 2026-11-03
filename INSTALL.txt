@@ -16,3 +16,12 @@ Header/footer/QR/footer texts are edited ONLY in:
 
 If akg_report_layout is already installed (previous zip): just upgrade, as above.
 Then Settings > Companies > Document Layout: layout "Lines" is selected automatically.
+
+FIX v-header (header cut at top of page)
+----------------------------------------
+Cause: paperformat margin_top=38 and header_spacing=35 left only 3 mm for the header
+(wkhtmltopdf anchors the header bottom at margin_top - header_spacing), so the
+~23 mm logo/company block was pushed above the page and clipped.
+Fix: header_spacing 35 -> 8 in all three paperformats (header gets ~30 mm).
+Upgrade the 3 modules again (same command as above); no other change needed.
+If the header is still tight, raise margin_top (e.g. 42) - keep header_spacing small.
