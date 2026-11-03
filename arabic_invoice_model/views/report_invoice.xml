@@ -65,10 +65,10 @@
             </style>
 
             <!-- ============ Customer address (right) ============ -->
-            <table style="width:100%; margin-top:4px;">
-                <tr>
-                    <td style="width:50%"/>
-                    <td style="width:50%; text-align:right; font-size:14px; line-height:1.55;">
+            <table style="width:100%; margin-top:4px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%;border:0 none !important"/>
+                    <td style="width:50%; text-align:right; font-size:14px; line-height:1.55;border:0 none !important">
                         <address t-field="o.partner_id"
                                  t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
                                  style="margin:0; text-align:right;"/>
@@ -80,73 +80,73 @@
             </table>
 
             <!-- ============ Title row ============ -->
-            <table style="width:100%; margin-top:14px;">
-                <tr>
-                    <td style="width:38%; text-align:left; font-size:21px;" class="teal">
+            <table style="width:100%; margin-top:14px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:38%; text-align:left; font-size:21px;border:0 none !important" class="teal">
                         <t t-out="titles[0]"/>
                     </td>
-                    <td style="width:26%; text-align:center; font-size:21px; font-weight:bold;" class="teal">
+                    <td style="width:26%; text-align:center; font-size:21px; font-weight:bold;border:0 none !important" class="teal">
                         <t t-if="o.name and o.name != '/'" t-out="o.name"/>
                     </td>
-                    <td style="width:36%; text-align:right; font-size:21px;" class="teal">
+                    <td style="width:36%; text-align:right; font-size:21px;border:0 none !important" class="teal">
                         <span class="ar teal"><t t-out="titles[1]"/></span>
                     </td>
                 </tr>
             </table>
 
             <!-- ============ Information block ============ -->
-            <table style="width:100%; margin:10px 0 18px 0;">
-                <tr>
-                    <td style="width:50%; padding-right:12px;">
-                        <table class="info">
-                            <tr t-if="o._akg_customer_phone()">
-                                <td style="width:34%; font-weight:bold; white-space:nowrap;">Customer Mobile:</td>
-                                <td style="width:28%; text-align:center;"><t t-out="o._akg_customer_phone()"/></td>
-                                <td style="width:38%; text-align:right; white-space:nowrap;" class="ar">: رقم هاتف العميل</td>
+            <table style="width:100%; margin:10px 0 18px 0;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%; padding-right:12px;border:0 none !important">
+                        <table class="info" style="border:0 none !important">
+                            <tr t-if="o._akg_customer_phone()" style="border:0 none !important">
+                                <td style="width:34%; font-weight:bold; white-space:nowrap;border:0 none !important">Customer Mobile:</td>
+                                <td style="width:28%; text-align:center;border:0 none !important"><t t-out="o._akg_customer_phone()"/></td>
+                                <td style="width:38%; text-align:right; white-space:nowrap;border:0 none !important" class="ar">: رقم هاتف العميل</td>
                             </tr>
-                            <tr t-if="o.invoice_user_id">
-                                <td style="font-weight:bold; white-space:nowrap;">Salesperson:</td>
-                                <td style="text-align:center;"><t t-out="o.invoice_user_id.name"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: مندوب مبيعات</td>
+                            <tr t-if="o.invoice_user_id" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Salesperson:</td>
+                                <td style="text-align:center;border:0 none !important"><t t-out="o.invoice_user_id.name"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: مندوب مبيعات</td>
                             </tr>
-                            <tr t-if="o._akg_salesperson_phone()">
-                                <td style="font-weight:bold; white-space:nowrap;">Mobile:</td>
-                                <td style="text-align:center;"><t t-out="o._akg_salesperson_phone()"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: رقم الهاتف</td>
+                            <tr t-if="o._akg_salesperson_phone()" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Mobile:</td>
+                                <td style="text-align:center;border:0 none !important"><t t-out="o._akg_salesperson_phone()"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: رقم الهاتف</td>
                             </tr>
-                            <tr t-if="o.partner_id.ref">
-                                <td style="font-weight:bold; white-space:nowrap;">Customer Code:</td>
-                                <td style="text-align:center;"><t t-out="o.partner_id.ref"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: كود العميل</td>
+                            <tr t-if="o.partner_id.ref" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Customer Code:</td>
+                                <td style="text-align:center;border:0 none !important"><t t-out="o.partner_id.ref"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: كود العميل</td>
                             </tr>
-                            <tr t-if="o._akg_customer_reference()">
-                                <td style="font-weight:bold; white-space:nowrap;">Customer Ref:</td>
-                                <td style="text-align:center;"><t t-out="o._akg_customer_reference()"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: مرجع العميل</td>
+                            <tr t-if="o._akg_customer_reference()" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Customer Ref:</td>
+                                <td style="text-align:center;border:0 none !important"><t t-out="o._akg_customer_reference()"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: مرجع العميل</td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width:50%; padding-left:12px;">
-                        <table class="info">
-                            <tr t-if="o.invoice_date">
-                                <td style="width:32%; font-weight:bold; white-space:nowrap;">Invoice Date:</td>
-                                <td style="width:30%; text-align:center;"><span t-field="o.invoice_date"/></td>
-                                <td style="width:38%; text-align:right; white-space:nowrap;" class="ar">: تاريخ الفاتورة</td>
+                    <td style="width:50%; padding-left:12px;border:0 none !important">
+                        <table class="info" style="border:0 none !important">
+                            <tr t-if="o.invoice_date" style="border:0 none !important">
+                                <td style="width:32%; font-weight:bold; white-space:nowrap;border:0 none !important">Invoice Date:</td>
+                                <td style="width:30%; text-align:center;border:0 none !important"><span t-field="o.invoice_date"/></td>
+                                <td style="width:38%; text-align:right; white-space:nowrap;border:0 none !important" class="ar">: تاريخ الفاتورة</td>
                             </tr>
-                            <tr t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'">
-                                <td style="font-weight:bold; white-space:nowrap;">Due Date:</td>
-                                <td style="text-align:center;"><span t-field="o.invoice_date_due"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: تاريخ الاستحقاق</td>
+                            <tr t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Due Date:</td>
+                                <td style="text-align:center;border:0 none !important"><span t-field="o.invoice_date_due"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: تاريخ الاستحقاق</td>
                             </tr>
-                            <tr t-if="o.invoice_origin">
-                                <td style="font-weight:bold; white-space:nowrap;">Source:</td>
-                                <td style="text-align:center;"><t t-out="o.invoice_origin"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: المصدر</td>
+                            <tr t-if="o.invoice_origin" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Source:</td>
+                                <td style="text-align:center;border:0 none !important"><t t-out="o.invoice_origin"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: المصدر</td>
                             </tr>
-                            <tr t-if="o.ref">
-                                <td style="font-weight:bold; white-space:nowrap;">Reference:</td>
-                                <td style="text-align:center;"><t t-out="o.ref"/></td>
-                                <td style="text-align:right; white-space:nowrap;" class="ar">: رقم الإشارة</td>
+                            <tr t-if="o.ref" style="border:0 none !important">
+                                <td style="font-weight:bold; white-space:nowrap;border:0 none !important">Reference:</td>
+                                <td style="text-align:center;border:0 none !important"><t t-out="o.ref"/></td>
+                                <td style="text-align:right; white-space:nowrap;border:0 none !important" class="ar">: رقم الإشارة</td>
                             </tr>
                         </table>
                     </td>
@@ -155,42 +155,42 @@
 
             <!-- ============ Lines ============ -->
             <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
-            <table class="lines">
-                <thead>
-                    <tr>
-                        <th style="width:14%"><span class="ar">السعر الاجمالي</span>Total Price</th>
-                        <th style="width:12%"><span class="ar">قيمة الضريبة</span>VAT Amount</th>
-                        <th style="width:10%"><span class="ar">مبلغ</span>Amount</th>
-                        <th style="width:12%"><span class="ar">الضرائب</span>Taxes</th>
-                        <th t-if="display_discount" style="width:8%"><span class="ar">خصم %</span>Disc.%</th>
-                        <th style="width:12%"><span class="ar">سعر الوحدة</span>Unit Price</th>
-                        <th style="width:10%"><span class="ar">الكمية</span>Quantity</th>
-                        <th><span class="ar">الوصف</span>Description</th>
+            <table class="lines" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                <thead style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <th style="width:14%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">السعر الاجمالي</span>Total Price</th>
+                        <th style="width:12%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">قيمة الضريبة</span>VAT Amount</th>
+                        <th style="width:10%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">مبلغ</span>Amount</th>
+                        <th style="width:12%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">الضرائب</span>Taxes</th>
+                        <th t-if="display_discount" style="width:8%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">خصم %</span>Disc.%</th>
+                        <th style="width:12%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">سعر الوحدة</span>Unit Price</th>
+                        <th style="width:10%;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">الكمية</span>Quantity</th>
+                        <th style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important"><span class="ar">الوصف</span>Description</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="border:0 none !important">
                     <t t-set="current_subtotal" t-value="0"/>
                     <t t-set="current_section" t-value="False"/>
                     <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (l.sequence, l.id))"/>
                     <t t-foreach="lines" t-as="line">
                         <t t-if="line.display_type not in ('line_note', 'line_section')">
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
-                            <tr>
-                                <td style="white-space:nowrap; border-left:none;"><span t-field="line.price_total"/></td>
-                                <td style="white-space:nowrap;">
+                            <tr style="border:0 none !important">
+                                <td style="white-space:nowrap; border-left:none;border:0 none !important;border-bottom:1px solid #ccc !important"><span t-field="line.price_total"/></td>
+                                <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                     <span t-out="line.price_total - line.price_subtotal" t-options='{"widget": "float", "precision": digits}'/>
                                 </td>
-                                <td style="white-space:nowrap;">
+                                <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                     <span t-out="line.price_subtotal" t-options='{"widget": "float", "precision": digits}'/>
                                 </td>
-                                <td><span class="ar-n"><t t-out="', '.join(x.description or x.name for x in line.tax_ids)"/></span></td>
-                                <td t-if="display_discount"><span t-field="line.discount"/></td>
-                                <td style="white-space:nowrap;"><span t-field="line.price_unit"/></td>
-                                <td style="white-space:nowrap;">
+                                <td style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span class="ar-n"><t t-out="', '.join(x.description or x.name for x in line.tax_ids)"/></span></td>
+                                <td t-if="display_discount" style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-field="line.discount"/></td>
+                                <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-field="line.price_unit"/></td>
+                                <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                     <span t-field="line.quantity"/>
                                     <span t-if="line.product_uom_id" t-field="line.product_uom_id"/>
                                 </td>
-                                <td>
+                                <td style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                     <t t-set="names" t-value="o._akg_line_names(line)"/>
                                     <div t-if="names['ar']"><span class="ar-n"><t t-out="names['ar']"/></span></div>
                                     <div t-if="names['en']"><t t-out="names['en']"/></div>
@@ -201,14 +201,14 @@
                         <t t-if="line.display_type == 'line_section'">
                             <t t-set="current_section" t-value="line"/>
                             <t t-set="current_subtotal" t-value="0"/>
-                            <tr><td colspan="99" style="background:#eee; font-weight:bold; border-left:none;"><t t-out="line.name"/></td></tr>
+                            <tr style="border:0 none !important"><td colspan="99" style="background:#eee; font-weight:bold; border-left:none;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line.name"/></td></tr>
                         </t>
                         <t t-if="line.display_type == 'line_note'">
-                            <tr><td colspan="99" style="font-style:italic; border-left:none;"><t t-out="line.name"/></td></tr>
+                            <tr style="border:0 none !important"><td colspan="99" style="font-style:italic; border-left:none;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line.name"/></td></tr>
                         </t>
                         <t t-if="current_section and (line_last or lines[line_index + 1].display_type == 'line_section')">
-                            <tr>
-                                <td colspan="99" style="font-weight:bold; border-left:none;">
+                            <tr style="border:0 none !important">
+                                <td colspan="99" style="font-weight:bold; border-left:none;border:0 none !important;border-bottom:1px solid #ccc !important">
                                     Subtotal / <span class="ar">الإجمالي الفرعي</span>
                                     <span t-out="current_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                 </td>
@@ -219,33 +219,33 @@
             </table>
 
             <!-- ============ Totals ============ -->
-            <table style="width:100%; margin-top:24px; page-break-inside: avoid;">
-                <tr>
-                    <td style="width:47%">
-                        <table class="tot">
-                            <tr>
-                                <td style="width:50%"><span t-field="o.amount_untaxed"/></td>
-                                <td class="lbl">Subtotal / الإجمالي الفرعي</td>
+            <table style="width:100%; margin-top:24px; page-break-inside: avoid;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:47%;border:0 none !important">
+                        <table class="tot" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                            <tr style="border:0 none !important">
+                                <td style="width:50%;border:1px solid #e3e3e3 !important"><span t-field="o.amount_untaxed"/></td>
+                                <td class="lbl" style="border:1px solid #e3e3e3 !important">Subtotal / الإجمالي الفرعي</td>
                             </tr>
                             <t t-foreach="o._akg_tax_group_lines()" t-as="tax_group">
-                                <tr>
-                                    <td><span t-out="tax_group['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                    <td>
+                                <tr style="border:0 none !important">
+                                    <td style="border:1px solid #e3e3e3 !important"><span t-out="tax_group['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td style="border:1px solid #e3e3e3 !important">
                                         <t t-out="tax_group['name']"/>
                                         <t t-if="tax_group['name_ar']"> <span class="ar-n"><t t-out="tax_group['name_ar']"/></span></t>
                                     </td>
                                 </tr>
                             </t>
-                            <tr>
-                                <td><span t-field="o.amount_total"/></td>
-                                <td class="lbl">Total / المجموع</td>
+                            <tr style="border:0 none !important">
+                                <td style="border:1px solid #e3e3e3 !important"><span t-field="o.amount_total"/></td>
+                                <td class="lbl" style="border:1px solid #e3e3e3 !important">Total / المجموع</td>
                             </tr>
                             <t t-if="print_with_payments">
                                 <t t-set="pay" t-value="o._akg_payment_summary()"/>
                                 <t t-foreach="pay['lines']" t-as="payment_vals">
-                                    <tr>
-                                        <td><span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                        <td style="font-style:italic;">
+                                    <tr style="border:0 none !important">
+                                        <td style="border:1px solid #e3e3e3 !important"><span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        <td style="font-style:italic;border:1px solid #e3e3e3 !important">
                                             <div style="font-style:italic;"><span class="ar-n" style="font-style:italic;">Paid on/دفعت في:</span></div>
                                             <div dir="ltr" style="text-align:left;"><t t-out="payment_vals['date']"/></div>
                                             <div t-if="payment_vals.get('method')" style="font-style:normal; color:#555;">
@@ -254,58 +254,58 @@
                                         </td>
                                     </tr>
                                 </t>
-                                <tr t-if="pay['lines']">
-                                    <td><span t-out="pay['due']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                    <td class="lbl">Amount Due / المبلغ المستحق</td>
+                                <tr t-if="pay['lines']" style="border:0 none !important">
+                                    <td style="border:1px solid #e3e3e3 !important"><span t-out="pay['due']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td class="lbl" style="border:1px solid #e3e3e3 !important">Amount Due / المبلغ المستحق</td>
                                 </tr>
                             </t>
                         </table>
                     </td>
-                    <td style="width:53%"/>
+                    <td style="width:53%;border:0 none !important"/>
                 </tr>
             </table>
 
             <!-- ============ Payment reference + notes ============ -->
             <table t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference"
-                   style="width:100%; margin-top:22px;">
-                <tr>
-                    <td style="width:25%; white-space:nowrap;">Payment Reference :</td>
-                    <td style="width:50%; text-align:center; font-weight:bold;"><t t-out="o.payment_reference"/></td>
-                    <td style="width:25%; text-align:right;" class="ar-n">: رقم إشارة الدفعة</td>
+                   style="width:100%; margin-top:22px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:25%; white-space:nowrap;border:0 none !important">Payment Reference :</td>
+                    <td style="width:50%; text-align:center; font-weight:bold;border:0 none !important"><t t-out="o.payment_reference"/></td>
+                    <td style="width:25%; text-align:right;border:0 none !important" class="ar-n">: رقم إشارة الدفعة</td>
                 </tr>
             </table>
 
-            <table t-if="notes['term']['en']" style="width:100%; margin-top:10px;">
-                <tr>
-                    <td style="width:50%;"><t t-out="notes['term']['en']"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['term']['ar']" t-out="notes['term']['ar']"/></span></td>
+            <table t-if="notes['term']['en']" style="width:100%; margin-top:10px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%;border:0 none !important"><t t-out="notes['term']['en']"/></td>
+                    <td style="width:50%; text-align:right;border:0 none !important" dir="rtl"><span class="ar-n"><t t-if="notes['term']['ar']" t-out="notes['term']['ar']"/></span></td>
                 </tr>
             </table>
             <t t-set="pos_note" t-value="o._akg_pos_note()"/>
-            <table t-if="pos_note" style="width:100%; margin-top:14px;">
-                <tr>
-                    <td style="width:12%; white-space:nowrap; font-weight:bold;">Note:</td>
-                    <td style="width:76%; white-space: pre-line;"><t t-out="pos_note"/></td>
-                    <td style="width:12%; text-align:right;" class="ar-n">: ملاحظات</td>
+            <table t-if="pos_note" style="width:100%; margin-top:14px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:12%; white-space:nowrap; font-weight:bold;border:0 none !important">Note:</td>
+                    <td style="width:76%; white-space: pre-line;border:0 none !important"><t t-out="pos_note"/></td>
+                    <td style="width:12%; text-align:right;border:0 none !important" class="ar-n">: ملاحظات</td>
                 </tr>
             </table>
             <t t-set="terms" t-value="o._akg_terms()"/>
-            <table t-if="terms[0]" style="width:100%; margin-top:14px;">
-                <tr>
-                    <td style="width:50%;"><t t-out="terms[0]"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-out="terms[1]"/></span></td>
+            <table t-if="terms[0]" style="width:100%; margin-top:14px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%;border:0 none !important"><t t-out="terms[0]"/></td>
+                    <td style="width:50%; text-align:right;border:0 none !important" dir="rtl"><span class="ar-n"><t t-out="terms[1]"/></span></td>
                 </tr>
             </table>
-            <table t-if="notes['fiscal']['en']" style="width:100%; margin-top:10px;">
-                <tr>
-                    <td style="width:50%;"><t t-out="notes['fiscal']['en']"/></td>
-                    <td style="width:50%; text-align:right;" dir="rtl"><span class="ar-n"><t t-if="notes['fiscal']['ar']" t-out="notes['fiscal']['ar']"/></span></td>
+            <table t-if="notes['fiscal']['en']" style="width:100%; margin-top:10px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%;border:0 none !important"><t t-out="notes['fiscal']['en']"/></td>
+                    <td style="width:50%; text-align:right;border:0 none !important" dir="rtl"><span class="ar-n"><t t-if="notes['fiscal']['ar']" t-out="notes['fiscal']['ar']"/></span></td>
                 </tr>
             </table>
-            <table t-if="notes['incoterm_en']" style="width:100%; margin-top:10px;">
-                <tr>
-                    <td style="width:50%;"><b>Incoterm:</b> <t t-out="notes['incoterm_en']"/></td>
-                    <td style="width:50%; text-align:right;"><span class="ar-n"><b>شرط تجاري:</b> <t t-out="notes['incoterm_ar']"/></span></td>
+            <table t-if="notes['incoterm_en']" style="width:100%; margin-top:10px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%;border:0 none !important"><b>Incoterm:</b> <t t-out="notes['incoterm_en']"/></td>
+                    <td style="width:50%; text-align:right;border:0 none !important"><span class="ar-n"><b>شرط تجاري:</b> <t t-out="notes['incoterm_ar']"/></span></td>
                 </tr>
             </table>
 

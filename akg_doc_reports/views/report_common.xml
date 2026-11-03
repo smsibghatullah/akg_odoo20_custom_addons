@@ -18,10 +18,10 @@
     <!-- Row(s) of "label / value" blocks. Needs `info_rows`. -->
     <template id="akgr_info">
         <t t-foreach="info_rows" t-as="info_row">
-            <table style="margin: 0 0 14px 0;">
-                <tr>
+            <table style="margin: 0 0 14px 0;border:0 none !important">
+                <tr style="border:0 none !important">
                     <t t-foreach="info_row" t-as="item">
-                        <td style="width:25%; padding-right:10px;">
+                        <td style="width:25%; padding-right:10px;border:0 none !important">
                             <div class="lb"><t t-out="item[0]"/>:</div>
                             <div>
                                 <t t-if="item[2] == 'date'"><span t-out="item[1]" t-options='{"widget": "date"}'/></t>
@@ -37,24 +37,24 @@
 
     <!-- Totals box. Needs `totals` (untaxed, taxes, total, optional show_untaxed) and `cur`. -->
     <template id="akgr_totals">
-        <table style="width:100%; margin-top:0; page-break-inside: avoid;">
-            <tr>
-                <td style="width:50%"/>
-                <td style="width:50%; padding:0;">
-                    <table class="tot">
+        <table style="width:100%; margin-top:0; page-break-inside: avoid;border:0 none !important">
+            <tr style="border:0 none !important">
+                <td style="width:50%;border:0 none !important"/>
+                <td style="width:50%; padding:0;border:0 none !important">
+                    <table class="tot" style="border:0 none !important;border-bottom:2px solid #444 !important">
                         <t t-if="totals.get('show_untaxed', True)">
-                            <tr>
-                                <td class="lb" style="width:40%;">Untaxed Amount</td>
-                                <td><span t-out="totals['untaxed']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                            <tr style="border:0 none !important">
+                                <td class="lb" style="width:40%;border:1px solid #e3e3e3 !important">Untaxed Amount</td>
+                                <td style="border:1px solid #e3e3e3 !important"><span t-out="totals['untaxed']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
                             </tr>
-                            <tr t-foreach="totals['taxes']" t-as="tax_row">
-                                <td><t t-out="tax_row['name']"/></td>
-                                <td><span t-out="tax_row['amount']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                            <tr t-foreach="totals['taxes']" t-as="tax_row" style="border:0 none !important">
+                                <td style="border:1px solid #e3e3e3 !important"><t t-out="tax_row['name']"/></td>
+                                <td style="border:1px solid #e3e3e3 !important"><span t-out="tax_row['amount']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
                             </tr>
                         </t>
-                        <tr>
-                            <td class="lb" style="width:40%;">Total</td>
-                            <td><span t-out="totals['total']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                        <tr style="border:0 none !important">
+                            <td class="lb" style="width:40%;border:1px solid #e3e3e3 !important">Total</td>
+                            <td style="border:1px solid #e3e3e3 !important"><span t-out="totals['total']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
                         </tr>
                     </table>
                 </td>

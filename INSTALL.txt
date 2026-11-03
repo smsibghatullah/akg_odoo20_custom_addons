@@ -1,0 +1,18 @@
+AKG reports - Odoo 20 (shared header/footer)
+============================================
+Folders (copy ALL THREE into your addons path):
+  akg_report_layout     NEW  - one header/footer, inherits web.external_layout_lines
+  akg_doc_reports       Quotation / SO, PO / RFQ, Picking   (uses akg_report_layout)
+  arabic_invoice_model  Invoice / Vendor Bill / Credit Note  (uses akg_report_layout)
+
+Install / upgrade (order matters, first run installs the new module):
+  ./odoo-bin -c <conf> -d <db> -u akg_report_layout,akg_doc_reports,arabic_invoice_model --stop-after-init
+
+Then: Invoices > Action > "Regenerate PDF (new layout)" for already-posted invoices.
+
+Header/footer/QR/footer texts are edited ONLY in:
+  akg_report_layout/models/res_company.py -> _akgr_footer_vals()
+  akg_report_layout/views/layout.xml      -> akg_header / akg_footer
+
+If akg_report_layout is already installed (previous zip): just upgrade, as above.
+Then Settings > Companies > Document Layout: layout "Lines" is selected automatically.

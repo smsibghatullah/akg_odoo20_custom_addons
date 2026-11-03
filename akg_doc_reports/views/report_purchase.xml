@@ -38,15 +38,15 @@
              t-att-data-oe-lang="doc.env.context.get('lang')">
             <t t-call="akg_doc_reports.akgr_css"/>
 
-            <table style="margin-top:4px;">
-                <tr>
-                    <td style="width:50%; padding-right:20px;">
+            <table style="margin-top:4px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%; padding-right:20px;border:0 none !important">
                         <t t-if="ship_partner">
                             <div class="lb">Shipping address:</div>
                             <address t-out="doc._akgr_addr(ship_partner)"/>
                         </t>
                     </td>
-                    <td style="width:50%;">
+                    <td style="width:50%;border:0 none !important">
                         <address t-out="doc._akgr_addr(doc.partner_id)"/>
                         <div t-if="doc.partner_id.vat" style="font-size:14px;">VAT: <t t-out="doc.partner_id.vat"/></div>
                     </td>
@@ -57,37 +57,37 @@
 
             <t t-call="akg_doc_reports.akgr_info"/>
 
-            <table class="lines">
-                <thead>
-                    <tr>
-                        <th class="l">Description</th>
-                        <th>Taxes</th>
-                        <th>Date Req.</th>
-                        <th t-if="show_discount">Disc.%</th>
-                        <th>Qty</th>
-                        <th>Unit Price</th>
-                        <th>Amount</th>
+            <table class="lines" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                <thead style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <th class="l" style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Description</th>
+                        <th style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Taxes</th>
+                        <th style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Date Req.</th>
+                        <th t-if="show_discount" style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Disc.%</th>
+                        <th style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Qty</th>
+                        <th style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Unit Price</th>
+                        <th style="border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Amount</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="border:0 none !important">
                     <t t-foreach="lines" t-as="line">
-                        <tr t-if="line['type'] == 'line'">
-                            <td class="l first" style="white-space: pre-line;"><t t-out="line['name']"/></td>
-                            <td><t t-out="line['taxes']"/></td>
-                            <td><span t-if="line['date_planned']" t-out="line['date_planned']" t-options='{"widget": "datetime"}'/></td>
-                            <td t-if="show_discount"><span t-out="line['discount']" t-options='{"widget": "float", "precision": 2}'/>%</td>
-                            <td style="white-space:nowrap;">
+                        <tr t-if="line['type'] == 'line'" style="border:0 none !important">
+                            <td class="l first" style="white-space: pre-line;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['name']"/></td>
+                            <td style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><t t-out="line['taxes']"/></td>
+                            <td style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-if="line['date_planned']" t-out="line['date_planned']" t-options='{"widget": "datetime"}'/></td>
+                            <td t-if="show_discount" style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-out="line['discount']" t-options='{"widget": "float", "precision": 2}'/>%</td>
+                            <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                 <span t-out="line['qty']" t-options='{"widget": "float", "precision": 2}'/>
                                 <t t-out="line['uom']"/>
                             </td>
-                            <td style="white-space:nowrap;"><span t-out="line['price_unit']" t-options='{"widget": "float", "precision": digits}'/></td>
-                            <td style="white-space:nowrap;"><span t-out="line['subtotal']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
+                            <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-out="line['price_unit']" t-options='{"widget": "float", "precision": digits}'/></td>
+                            <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-out="line['subtotal']" t-options='{"widget": "monetary", "display_currency": cur}'/></td>
                         </tr>
-                        <tr t-elif="line['type'] == 'line_section'">
-                            <td colspan="99" class="l first" style="background:#eee; font-weight:bold;"><t t-out="line['name']"/></td>
+                        <tr t-elif="line['type'] == 'line_section'" style="border:0 none !important">
+                            <td colspan="99" class="l first" style="background:#eee; font-weight:bold;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['name']"/></td>
                         </tr>
-                        <tr t-else="">
-                            <td colspan="99" class="l first" style="font-style:italic;"><t t-out="line['name']"/></td>
+                        <tr t-else="" style="border:0 none !important">
+                            <td colspan="99" class="l first" style="font-style:italic;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['name']"/></td>
                         </tr>
                     </t>
                 </tbody>

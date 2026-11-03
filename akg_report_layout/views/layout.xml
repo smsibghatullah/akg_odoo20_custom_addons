@@ -35,12 +35,12 @@
         <div class="header" style="width:100%;" dir="ltr">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr">
-                <table>
-                    <tr>
-                        <td style="width:45%; text-align:left;">
+                <table style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <td style="width:45%; text-align:left;border:0 none !important">
                             <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
                         </td>
-                        <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
+                        <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;border:0 none !important">
                             <div style="font-weight:bold"><t t-out="co.name"/></div>
                             <div t-if="co.vat">Tax ID: <t t-out="co.vat"/></div>
                             <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
@@ -60,20 +60,20 @@
         <div class="footer" style="width:100%;" dir="ltr">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
-                <table>
-                    <tr>
-                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
+                <table style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;border:0 none !important">
                             <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
                             <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
                             <div>CR. No. <t t-out="fv['cr_no']"/></div>
                         </td>
-                        <td style="width:50%; text-align:center; padding-top:4px;">
+                        <td style="width:50%; text-align:center; padding-top:4px;border:0 none !important">
                             <div class="ar" style="font-size:12px;"><t t-out="fv['ar_name']"/></div>
                             <div style="margin-top:14px; font-size:13px;">
                                 <t t-out="fv['thank_en']"/> <span class="ar"><t t-out="fv['thank_ar']"/></span>
                             </div>
                         </td>
-                        <td style="width:22%; text-align:right;">
+                        <td style="width:22%; text-align:right;border:0 none !important">
                             <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
                         </td>
                     </tr>

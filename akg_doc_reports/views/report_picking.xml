@@ -28,15 +28,15 @@
                 <img t-att-src="barcode_uri" style="width:300px; height:50px;"/>
             </div>
 
-            <table style="margin-top:14px;">
-                <tr>
-                    <td style="width:50%; padding-right:20px;">
+            <table style="margin-top:14px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%; padding-right:20px;border:0 none !important">
                         <t t-if="wh_partner">
                             <div class="lb">Warehouse Address:</div>
                             <address t-out="doc._akgr_addr(wh_partner)"/>
                         </t>
                     </td>
-                    <td style="width:50%;">
+                    <td style="width:50%;border:0 none !important">
                         <t t-if="doc.partner_id">
                             <div class="lb"><t t-out="doc._akgr_partner_label()"/></div>
                             <address t-out="doc._akgr_addr(doc.partner_id)"/>
@@ -49,26 +49,26 @@
 
             <t t-call="akg_doc_reports.akgr_info"/>
 
-            <table class="lines">
-                <thead>
-                    <tr>
-                        <th class="l" style="text-align:center;">Product</th>
-                        <th class="l" style="text-align:center;">Quantity</th>
-                        <th t-if="show_lots" class="l" style="text-align:center;">Lot/Serial</th>
-                        <th t-if="code != 'incoming'" class="l" style="text-align:center;">From</th>
-                        <th t-if="code != 'outgoing'" class="l" style="text-align:center;">To</th>
+            <table class="lines" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                <thead style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <th class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Product</th>
+                        <th class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Quantity</th>
+                        <th t-if="show_lots" class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Lot/Serial</th>
+                        <th t-if="code != 'incoming'" class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">From</th>
+                        <th t-if="code != 'outgoing'" class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">To</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr t-foreach="lines" t-as="line">
-                        <td class="l first" style="white-space: pre-line;"><t t-out="line['name']"/></td>
-                        <td class="l" style="white-space:nowrap;">
+                <tbody style="border:0 none !important">
+                    <tr t-foreach="lines" t-as="line" style="border:0 none !important">
+                        <td class="l first" style="white-space: pre-line;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['name']"/></td>
+                        <td class="l" style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                             <span t-out="line['qty']" t-options='{"widget": "float", "precision": 2}'/>
                             <t t-out="line['uom']"/>
                         </td>
-                        <td t-if="show_lots" class="l"><t t-out="line['lots']"/></td>
-                        <td t-if="code != 'incoming'" class="l"><t t-out="line['from']"/></td>
-                        <td t-if="code != 'outgoing'" class="l"><t t-out="line['to']"/></td>
+                        <td t-if="show_lots" class="l" style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><t t-out="line['lots']"/></td>
+                        <td t-if="code != 'incoming'" class="l" style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><t t-out="line['from']"/></td>
+                        <td t-if="code != 'outgoing'" class="l" style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><t t-out="line['to']"/></td>
                     </tr>
                 </tbody>
             </table>
