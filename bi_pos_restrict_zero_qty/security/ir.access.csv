@@ -1,3 +1,3 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_account_journal_internal,account.journal internal,account.model_account_journal,base.group_user,1,1,1,0
-access_iap_account_internal,iap.account internal,iap.model_iap_account,base.group_user,1,1,1,0
+id,name,model_id,group_id/id,operation,domain
+access_account_journal_internal,account.journal internal,account.journal,base.group_user,cru,
+access_iap_account_internal,iap.account internal,iap.account,base.group_user,cru,
