@@ -27,62 +27,52 @@
         </style>
     </template>
 
-    <!-- THE header. Needs `company`.
-         akg_fixed=True (our own reports): a position:fixed block that wkhtmltopdf repeats on every page
-         (same technique as the Odoo 20 Lines layout); html view: plain block at the top.
-         akg_fixed unset (inherited Odoo layouts): classic div.header extracted by Odoo. -->
+    <!-- THE header: div.header is extracted by Odoo and repeated on every page by wkhtmltopdf.
+         Built from divs (display:table) - NOT <table> - so no report CSS can draw borders on it.
+         Needs `company`. -->
     <template id="akg_header">
         <!-- In the Document Layout preview `company` is a base.document.layout wizard record -->
         <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
         <t t-set="logo_uri" t-value="co._akgr_logo_uri()"/>
-        <div t-att-class="'akgh' if akg_fixed else 'header'" dir="ltr"
-             t-att-style="'width:100%;' + ('position:fixed;top:-35mm;left:0;right:0;' if (akg_fixed and report_type == 'pdf') else '')">
+        <div class="header" dir="ltr" style="width:100%; margin:0; padding:0;">
             <t t-call="akg_report_layout.akg_css"/>
-            <div class="akgr">
-                <table style="border:0 none !important">
-                    <tr style="border:0 none !important">
-                        <td style="width:45%; text-align:left;border:0 none !important">
-                            <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
-                        </td>
-                        <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;border:0 none !important">
-                            <div style="font-weight:bold"><t t-out="co.name"/></div>
-                            <div t-if="co.vat">Tax ID: <t t-out="co.vat"/></div>
-                            <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
-                        </td>
-                    </tr>
-                </table>
+            <div class="akgr" style="display:table; width:100%;">
+                <div style="display:table-cell; width:45%; vertical-align:top; text-align:left;">
+                    <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
+                </div>
+                <div style="display:table-cell; width:55%; vertical-align:top; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
+                    <div style="font-weight:bold"><t t-out="co.name"/></div>
+                    <div t-if="co.vat">Tax ID: <t t-out="co.vat"/></div>
+                    <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
+                </div>
             </div>
         </div>
     </template>
 
-    <!-- THE footer (div.footer is repeated on every page). Needs `company`. -->
+    <!-- THE footer: div.footer, same technique. Needs `company`. -->
     <template id="akg_footer">
-        <!-- In the Document Layout preview `company` is a base.document.layout wizard record -->
         <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
         <t t-set="fv" t-value="co._akgr_footer_vals()"/>
         <t t-set="qr_uri" t-value="co._akgr_qr_uri()"/>
-        <div t-att-class="'akgf' if akg_fixed else 'footer'" dir="ltr"
-             t-att-style="'width:100%;' + ('position:fixed;bottom:-24mm;left:0;right:0;' if (akg_fixed and report_type == 'pdf') else '')">
+        <div class="footer" dir="ltr" style="width:100%; margin:0; padding:0;">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
-                <table style="border:0 none !important">
-                    <tr style="border:0 none !important">
-                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;border:0 none !important">
-                            <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
-                            <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
-                            <div>CR. No. <t t-out="fv['cr_no']"/></div>
-                        </td>
-                        <td style="width:50%; text-align:center; padding-top:4px;border:0 none !important">
-                            <div class="ar" style="font-size:12px;"><t t-out="fv['ar_name']"/></div>
-                            <div style="margin-top:14px; font-size:13px;">
-                                <t t-out="fv['thank_en']"/> <span class="ar"><t t-out="fv['thank_ar']"/></span>
-                            </div>
-                        </td>
-                        <td style="width:22%; text-align:right;border:0 none !important">
-                            <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
-                        </td>
-                    </tr>
-                </table>
+                <div style="display:table; width:100%;">
+                    <div style="display:table-cell; width:28%; vertical-align:top; font-size:11px; line-height:1.9; padding-top:10px;">
+                        <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
+                        <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
+                        <div>CR. No. <t t-out="fv['cr_no']"/></div>
+                    </div>
+                    <div style="display:table-cell; width:50%; vertical-align:top; text-align:center; padding-top:4px;">
+                        <div class="ar" style="font-size:12px;"><t t-out="fv['ar_name']"/></div>
+                        <div style="margin-top:14px; font-size:13px;">
+                            <t t-out="fv['thank_en']"/> <span class="ar"><t t-out="fv['thank_ar']"/></span>
+                        </div>
+                    </div>
+                    <div style="display:table-cell; width:22%; vertical-align:top; text-align:right;">
+                        <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
+                    </div>
+                </div>
             </div>
         </div>
     </template>

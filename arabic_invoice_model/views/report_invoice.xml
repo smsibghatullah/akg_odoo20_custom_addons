@@ -36,7 +36,6 @@
         <!-- Footer texts (Tax card, CR no., Arabic name, Thank you) are edited in akg_report_layout -->
 
         <!-- Shared header (akg_report_layout) -->
-        <t t-set="akg_fixed" t-value="True"/>
         <t t-call="akg_report_layout.akg_header"/>
 
         <div t-attf-class="article akg-doc o_company_#{company.id}_layout" dir="ltr"
@@ -313,7 +312,6 @@
         </div>
 
         <!-- Shared footer (akg_report_layout) -->
-        <t t-set="akg_fixed" t-value="True"/>
         <t t-call="akg_report_layout.akg_footer"/>
     </template>
 </odoo>
