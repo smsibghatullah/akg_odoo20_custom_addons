@@ -5,24 +5,24 @@
          so each block calls this template. No @font-face on purpose. -->
     <template id="akg_css">
         <style>
-            .akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
-            .akgr table { border-collapse: collapse; width: 100%; }
-            .akgr table, .akgr table td, .akgr table th { border: 0 none; background: transparent; box-shadow: none; }
-            .akgr table td, .akgr table th { padding: 0; }
-            .akgr td, .akgr th { vertical-align: top; }
+            html .akgr.akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
+            /* Odoo 20 report css draws borders on every table: switch them all off ... */
+            html .akgr.akgr table { border-collapse: collapse; width: 100%; border: 0 none !important; }
+            html .akgr.akgr table td, html .akgr.akgr table th { border: 0 none !important; background: transparent; box-shadow: none; padding: 0; vertical-align: top; }
+            /* ... and draw only the borders the AKG design wants */
+            html .akgr.akgr table.lines { border-bottom: 2px solid #444 !important; }
+            html .akgr.akgr table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.5; }
+            html .akgr.akgr table.lines td { border-bottom: 1px solid #ccc !important; border-left: 1px solid #ddd !important; padding: 12px 8px; text-align: right; }
+            html .akgr.akgr table.lines th.l, html .akgr.akgr table.lines td.l { text-align: left; }
+            html .akgr.akgr table.lines td.first, html .akgr.akgr table.lines td:first-child { border-left: 0 none !important; }
+            html .akgr.akgr table.tot { border-bottom: 2px solid #444 !important; }
+            html .akgr.akgr table.tot td { border: 1px solid #e3e3e3 !important; padding: 13px 9px; text-align: right; }
+            html .akgr.akgr table.tot td.lb { text-align: left; }
             .akgr address { font-style: normal; margin: 0; line-height: 1.55; font-size: 14px; }
             .akgr a { color: #555; text-decoration: underline; }
             .akgr .teal { color: #1ca3b8; }
             .akgr .lb { color: #555; font-weight: bold; }
             .akgr .title { font-size: 32px; color: #1ca3b8; margin: 22px 0 14px 0; }
-            .akgr .lines { border-bottom: 2px solid #444; }
-            .akgr .lines th { border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.5; }
-            .akgr .lines td { border-bottom: 1px solid #ccc; border-left: 1px solid #ddd; padding: 12px 8px; text-align: right; }
-            .akgr .lines th.l, .akgr .lines td.l { text-align: left; }
-            .akgr .lines td.first { border-left: none; }
-            .akgr .tot td { border: 1px solid #e3e3e3; padding: 13px 9px; text-align: right; }
-            .akgr .tot td.lb { text-align: left; }
-            .akgr .tot { border-bottom: 2px solid #444; }
             .akgr .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #000; }
         </style>
     </template>

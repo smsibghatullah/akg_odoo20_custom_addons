@@ -49,20 +49,19 @@
                 @font-face { font-family: 'Oswald'; font-weight: bold;
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
                 .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
-                .akg-doc table { border-collapse: collapse; width: 100%; }
-                .akg-doc table, .akg-doc table td, .akg-doc table th { border: 0 none; background: transparent; box-shadow: none; }
-                .akg-doc table td, .akg-doc table th { padding: 0; }
-                .akg-doc td, .akg-doc th { vertical-align: top; }
+                html .akg-doc.akg-doc table { border-collapse: collapse; width: 100%; border: 0 none !important; }
+                html .akg-doc.akg-doc table td, html .akg-doc.akg-doc table th { border: 0 none !important; background: transparent; box-shadow: none; padding: 0; vertical-align: top; }
+                html .akg-doc.akg-doc table.lines { border-bottom: 2px solid #444 !important; }
+                html .akg-doc.akg-doc table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: normal; text-transform: uppercase; line-height: 1.5; }
+                html .akg-doc.akg-doc table.lines td { border-bottom: 1px solid #ccc !important; border-left: 1px solid #ddd !important; padding: 14px 8px; text-align: right; }
+                html .akg-doc.akg-doc table.lines td:first-child { border-left: 0 none !important; }
+                html .akg-doc.akg-doc table.tot td { border: 1px solid #e3e3e3 !important; padding: 15px 9px; text-align: right; }
+                html .akg-doc.akg-doc table.info td { padding: 3px 0; font-size: 13px; }
                 .akg-doc .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
                 .akg-doc .ar-n { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: normal; color: #222; }
                 .akg-doc .teal { color: #1ca3b8; }
-                .akg-doc .lines th { border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: normal; text-transform: uppercase; line-height: 1.5; }
                 .akg-doc .lines th .ar { font-size: 12px; text-transform: none; display: block; }
-                .akg-doc .lines td { border-bottom: 1px solid #ccc; border-left: 1px solid #ddd; padding: 14px 8px; text-align: right; }
-                .akg-doc .lines { border-bottom: 2px solid #444; }
-                .akg-doc .tot td { border: 1px solid #e3e3e3; padding: 15px 9px; text-align: right; }
                 .akg-doc .tot .lbl { font-family: 'DejaVu Sans', sans-serif; font-weight: bold; color: #555; font-size: 12px; }
-                .akg-doc .info td { padding: 3px 0; font-size: 13px; }
             </style>
 
             <!-- ============ Customer address (right) ============ -->
