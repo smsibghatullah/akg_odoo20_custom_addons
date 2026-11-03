@@ -6,7 +6,8 @@ from odoo import api, models
 _logger = logging.getLogger(__name__)
 
 AKGPF_TEMPLATE = 'akg_proforma_report.report_proforma_akg'
-AKGPF_XMLIDS = ['sale.action_report_pro_forma_invoice']
+AKGPF_ACTION = 'akg_proforma_report.action_report_proforma_akg'
+AKGPF_STANDARD = 'sale.action_report_pro_forma_invoice'
 
 
 class IrActionsReport(models.Model):
@@ -14,41 +15,26 @@ class IrActionsReport(models.Model):
 
     @api.model
     def _akgpf_apply_report(self):
-        """Point every sale.order Pro-Forma print action to the AKG template.
+        """Make sure our Pro-Forma action is bound to Sales Orders (Print menu).
 
-        Found by xml id AND by report name (anything containing pro_forma /
-        proforma), so it still works if another module added its own action.
-        Called from data/report_action.xml (every install / upgrade).
+        Called from data/report_action.xml on every install / upgrade.
+        * our own action (data/report_action.xml) is the Print-menu entry;
+        * the standard Pro-Forma action is un-bound from the menu (so there is no
+          duplicate entry) but kept for e-mail templates - the template swap
+          below renders the AKG layout for it too.
         """
-        paperformat = self.env.ref('akg_doc_reports.paperformat_akgr', raise_if_not_found=False)
-        reports = self.browse()
-        for xmlid in AKGPF_XMLIDS:
-            report = self.env.ref(xmlid, raise_if_not_found=False)
-            if report:
-                reports |= report
-        reports |= self.search([
-            ('model', '=', 'sale.order'),
-            ('report_type', 'in', ('qweb-pdf', 'qweb-html')),
-            '|', ('report_name', 'ilike', 'pro_forma'), ('report_name', 'ilike', 'proforma'),
-        ])
-        if not reports:
-            _logger.warning(
-                'akg_proforma_report: no Pro-Forma print action found. Enable '
-                'Settings > Sales > Pro-Forma Invoice, then upgrade this module. '
-                'sale.order reports: %s',
-                [(r.id, r.name, r.report_name) for r in self.search([('model', '=', 'sale.order')])])
+        ours = self.env.ref(AKGPF_ACTION, raise_if_not_found=False)
+        if not ours:
+            _logger.warning('akg_proforma_report: action %s not found', AKGPF_ACTION)
             return True
-        for report in reports:
-            vals = {}
-            if report.report_name != AKGPF_TEMPLATE:
-                vals['report_name'] = AKGPF_TEMPLATE
-                if 'report_file' in report._fields:  # removed in Odoo 20
-                    vals['report_file'] = AKGPF_TEMPLATE
-            if paperformat and report.paperformat_id != paperformat:
-                vals['paperformat_id'] = paperformat.id
-            if vals:
-                _logger.info('akg_proforma_report: %s (%s) -> %s', report.name, report.report_name, AKGPF_TEMPLATE)
-                report.write(vals)
+        if not ours.binding_model_id:
+            ours.write({
+                'binding_model_id': self.env['ir.model']._get_id('sale.order'),
+                'binding_type': 'report',
+            })
+        std = self.env.ref(AKGPF_STANDARD, raise_if_not_found=False)
+        if std and std.binding_model_id:
+            std.write({'binding_model_id': False})
         return True
 
     # Safety net: whatever action prints a sale.order through a standard

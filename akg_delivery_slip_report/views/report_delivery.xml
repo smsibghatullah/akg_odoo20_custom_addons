@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_deliveryslip_akg">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="akg_delivery_slip_report.deliveryslip_document_akg" t-lang="doc._akgr_lang()"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="deliveryslip_document_akg">
+        <t t-set="company" t-value="doc.company_id"/>
+        <t t-set="info_rows" t-value="doc._akgd_info_rows()"/>
+        <t t-set="lines" t-value="doc._akgd_lines()"/>
+        <t t-set="customer" t-value="doc._akgd_customer()"/>
+        <t t-set="delivery" t-value="doc._akgd_delivery_partner()"/>
+        <t t-set="delivery_phone" t-value="doc._akgd_phone(delivery)"/>
+        <t t-set="show_lots" t-value="any(l['lots'] for l in lines)"/>
+        <t t-set="th_style" t-value="'text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important'"/>
+        <t t-set="td_style" t-value="'text-align:center;white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important'"/>
+
+        <t t-call="akg_doc_reports.akgr_header"/>
+
+        <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
+             t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
+             t-att-data-oe-lang="doc.env.context.get('lang')">
+            <t t-call="akg_doc_reports.akgr_css"/>
+
+            <table style="margin-top:4px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:50%; padding-right:20px;border:0 none !important">
+                        <t t-if="customer">
+                            <div class="lb">Customer Address:</div>
+                            <address t-out="doc._akgr_addr(customer)"/>
+                            <div t-if="customer.vat" style="font-size:14px;"><t t-out="doc._akgd_vat_label()"/>: <t t-out="customer.vat"/></div>
+                        </t>
+                    </td>
+                    <td style="width:50%;border:0 none !important">
+                        <t t-if="delivery">
+                            <div class="lb">Delivery Address:</div>
+                            <address t-out="doc._akgr_addr(delivery)"/>
+                            <div t-if="delivery_phone" style="font-size:14px;"><t t-out="delivery_phone"/></div>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="title"><t t-out="doc.name"/></div>
+
+            <t t-call="akg_doc_reports.akgr_info"/>
+
+            <table class="lines" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                <thead style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <th class="l" t-att-style="th_style">Product</th>
+                        <th t-if="show_lots" t-att-style="th_style">Lot/Serial Number</th>
+                        <th t-att-style="th_style + ';width:16%'">Ordered</th>
+                        <th t-att-style="th_style + ';width:16%'">Delivered</th>
+                    </tr>
+                </thead>
+                <tbody style="border:0 none !important">
+                    <tr t-foreach="lines" t-as="line" style="border:0 none !important">
+                        <td class="l first" style="white-space: pre-line;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['name']"/></td>
+                        <td t-if="show_lots" t-att-style="td_style"><t t-out="line['lots']"/></td>
+                        <td t-att-style="td_style">
+                            <span t-out="line['ordered']" t-options='{"widget": "float", "precision": 2}'/>
+                            <t t-out="line['uom']"/>
+                        </td>
+                        <td t-att-style="td_style">
+                            <span t-out="line['delivered']" t-options='{"widget": "float", "precision": 2}'/>
+                            <t t-out="line['uom']"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <t t-call="akg_doc_reports.akgr_footer"/>
+    </template>
+</odoo>
