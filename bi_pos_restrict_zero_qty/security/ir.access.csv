@@ -1,3 +1,4 @@
 id,name,model_id,group_id/id,operation,domain
 access_account_journal_internal,account.journal internal,account.journal,base.group_user,cru,
 access_iap_account_internal,iap.account internal,iap.account,base.group_user,cru,
+access_mail_mail_internal,mail.mail internal,mail.mail,base.group_user,cru,
