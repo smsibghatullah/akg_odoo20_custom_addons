@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Quotation / Order / RFQ / Picking Reports (Odoo 16 look)',
-    'version': '20.0.1.0.3',
+    'version': '20.0.1.1.0',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Sales order/quotation, purchase order/RFQ and picking operations '
@@ -19,7 +19,7 @@ The picking barcode is drawn as SVG, so the report works even when reportlab's
 PNG backend (rlPyCairo / _rl_renderPM) is not installed.
 """,
     'license': 'LGPL-3',
-    'depends': ['web', 'sale', 'purchase', 'stock'],
+    'depends': ['web', 'akg_report_layout', 'sale', 'purchase', 'stock'],
     'data': [
         'data/paperformat.xml',
         'views/report_common.xml',

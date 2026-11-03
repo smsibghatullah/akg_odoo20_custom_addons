@@ -32,39 +32,11 @@
         <t t-set="titles" t-value="o._akg_invoice_titles()"/>
         <t t-set="notes" t-value="o._akg_notes()"/>
         <t t-set="digits" t-value="o.currency_id.decimal_places"/>
-        <t t-set="logo_uri" t-value="o._akg_logo_uri()"/>
-        <t t-set="qr_uri" t-value="o._akg_qr_uri()"/>
 
-        <!-- ===== Edit these values if they change ===== -->
-        <t t-set="tax_card_no" t-value="'8458551'"/>
-        <t t-set="cr_no" t-value="o._akg_cr_no()"/>
-        <t t-set="footer_ar_name" t-value="'روابي بوشر للتجارة والمقاولات ش ش و'"/>
-        <t t-set="thank_you_en" t-value="'Thank you !'"/>
-        <t t-set="thank_you_ar" t-value="'شكرًا لك'"/>
+        <!-- Footer texts (Tax card, CR no., Arabic name, Thank you) are edited in akg_report_layout -->
 
-        <!-- Real header: Odoo extracts div.header and repeats it at the top of every page.
-             Separate document -> it carries its own <style>. -->
-        <div class="header" style="width:100%;" dir="ltr">
-            <style>
-                .akg-hd { direction: ltr; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; color:#222; }
-                .akg-hd table { border-collapse: collapse; width: 100%; }
-                .akg-hd td { vertical-align: top; }
-            </style>
-            <div class="akg-hd">
-                <table>
-                    <tr>
-                        <td style="width:45%; text-align:left;">
-                            <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
-                        </td>
-                        <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
-                            <div style="font-weight:bold"><t t-out="company.name"/></div>
-                            <div t-if="company.vat">Tax ID: <t t-out="company.vat"/></div>
-                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <!-- Shared header (akg_report_layout) -->
+        <t t-call="akg_report_layout.akg_header"/>
 
         <div t-attf-class="article akg-doc o_company_#{company.id}_layout" dir="ltr"
              t-att-data-oe-model="o and o._name"
@@ -338,35 +310,7 @@
 
         </div>
 
-        <!-- Real footer: Odoo extracts div.footer and repeats it at the bottom of every page.
-             It is rendered as a separate document, so it carries its own <style>. -->
-        <div class="footer" style="width:100%;" dir="ltr">
-            <style>
-                .akg-ft { font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; color:#222; }
-                .akg-ft table { border-collapse: collapse; width: 100%; }
-                .akg-ft td { vertical-align: top; }
-                .akg-ft .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #000; }
-            </style>
-            <div class="akg-ft" style="border-top: 2px solid #444; padding-top: 8px;">
-                <table>
-                    <tr>
-                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
-                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
-                            <div>Tax Card No. <t t-out="tax_card_no"/></div>
-                            <div>CR. No. <t t-out="cr_no"/></div>
-                        </td>
-                        <td style="width:50%; text-align:center; padding-top:4px;">
-                            <div class="ar" style="font-size:12px;"><t t-out="footer_ar_name"/></div>
-                            <div style="margin-top:14px; font-size:13px;">
-                                <t t-out="thank_you_en"/> <span class="ar"><t t-out="thank_you_ar"/></span>
-                            </div>
-                        </td>
-                        <td style="width:22%; text-align:right;">
-                            <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <!-- Shared footer (akg_report_layout) -->
+        <t t-call="akg_report_layout.akg_footer"/>
     </template>
 </odoo>

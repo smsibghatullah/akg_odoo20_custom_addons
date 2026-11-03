@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import base64
 import io
+import logging
 
 from PIL import Image
 
-from odoo import models
+from odoo import api, models
 from odoo.tools import file_open
 
-from .common import first_field
+_logger = logging.getLogger(__name__)
 
 
 class ResCompany(models.Model):
@@ -36,7 +37,8 @@ class ResCompany(models.Model):
 
     def _akgr_qr_uri(self):
         self.ensure_one()
-        for path in ('akg_doc_reports/static/src/img/qr_code.png',
+        for path in ('akg_report_layout/static/src/img/qr_code.png',
+                     'akg_doc_reports/static/src/img/qr_code.png',
                      'arabic_invoice_model/static/src/img/qr_code.png',
                      'bi_pos_customer_ref/static/src/img/qr_code.png'):
             try:
@@ -47,11 +49,12 @@ class ResCompany(models.Model):
         return False
 
     def _akgr_footer_vals(self):
-        """Texts of the footer. Edit here if they change."""
+        """Texts of the footer (ONE place for all reports). Edit here if they change."""
         self.ensure_one()
         cr = False
         for rec in (self, self.partner_id):
-            cr = cr or first_field(rec, ['company_registry'])
+            if 'company_registry' in rec._fields and rec.company_registry:
+                cr = cr or rec.company_registry
         return {
             'tax_card': '8458551',
             'cr_no': cr or '1/02236/9',
@@ -59,3 +62,21 @@ class ResCompany(models.Model):
             'thank_en': 'Thank you !',
             'thank_ar': 'شكرًا لك',
         }
+
+    @api.model
+    def _akg_apply_company_layout(self):
+        """Make 'Lines' the document layout of every company, so standard
+        reports (delivery slip, etc.) use the inherited AKG header/footer too."""
+        try:
+            layout = self.env.ref('web.report_layout_lines', raise_if_not_found=False)
+            if not layout and 'report.layout' in self.env:
+                layout = self.env['report.layout'].search(
+                    [('view_id.key', '=', 'web.external_layout_lines')], limit=1)
+            if layout and 'external_report_layout_id' in self._fields:
+                self.sudo().search([]).write({'external_report_layout_id': layout.id})
+            else:
+                _logger.warning('akg_report_layout: Lines layout record not found; '
+                                'select it in Settings > Companies > Document Layout.')
+        except Exception:
+            _logger.warning('akg_report_layout: could not set the company layout', exc_info=True)
+        return True

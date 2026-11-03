@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Shared CSS. Header, body and footer are separate documents for wkhtmltopdf,
+         so each block calls this template. No @font-face on purpose. -->
+    <template id="akg_css">
+        <style>
+            .akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
+            .akgr table { border-collapse: collapse; width: 100%; }
+            .akgr td, .akgr th { vertical-align: top; }
+            .akgr address { font-style: normal; margin: 0; line-height: 1.55; font-size: 14px; }
+            .akgr a { color: #555; text-decoration: underline; }
+            .akgr .teal { color: #1ca3b8; }
+            .akgr .lb { color: #555; font-weight: bold; }
+            .akgr .title { font-size: 32px; color: #1ca3b8; margin: 22px 0 14px 0; }
+            .akgr .lines { border-bottom: 2px solid #444; }
+            .akgr .lines th { border-top: 2px solid #444; border-bottom: 2px solid #444; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.5; }
+            .akgr .lines td { border-bottom: 1px solid #ccc; border-left: 1px solid #ddd; padding: 12px 8px; text-align: right; }
+            .akgr .lines th.l, .akgr .lines td.l { text-align: left; }
+            .akgr .lines td.first { border-left: none; }
+            .akgr .tot td { border: 1px solid #e3e3e3; padding: 13px 9px; text-align: right; }
+            .akgr .tot td.lb { text-align: left; }
+            .akgr .tot { border-bottom: 2px solid #444; }
+            .akgr .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #000; }
+        </style>
+    </template>
+
+    <!-- THE header (div.header is repeated on every page). Needs `company`. -->
+    <template id="akg_header">
+        <t t-set="logo_uri" t-value="company._akgr_logo_uri()"/>
+        <div class="header" style="width:100%;" dir="ltr">
+            <t t-call="akg_report_layout.akg_css"/>
+            <div class="akgr">
+                <table>
+                    <tr>
+                        <td style="width:45%; text-align:left;">
+                            <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
+                        </td>
+                        <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
+                            <div style="font-weight:bold"><t t-out="company.name"/></div>
+                            <div t-if="company.vat">Tax ID: <t t-out="company.vat"/></div>
+                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <!-- THE footer (div.footer is repeated on every page). Needs `company`. -->
+    <template id="akg_footer">
+        <t t-set="fv" t-value="company._akgr_footer_vals()"/>
+        <t t-set="qr_uri" t-value="company._akgr_qr_uri()"/>
+        <div class="footer" style="width:100%;" dir="ltr">
+            <t t-call="akg_report_layout.akg_css"/>
+            <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
+                <table>
+                    <tr>
+                        <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
+                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
+                            <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
+                            <div>CR. No. <t t-out="fv['cr_no']"/></div>
+                        </td>
+                        <td style="width:50%; text-align:center; padding-top:4px;">
+                            <div class="ar" style="font-size:12px;"><t t-out="fv['ar_name']"/></div>
+                            <div style="margin-top:14px; font-size:13px;">
+                                <t t-out="fv['thank_en']"/> <span class="ar"><t t-out="fv['thank_ar']"/></span>
+                            </div>
+                        </td>
+                        <td style="width:22%; text-align:right;">
+                            <img t-if="qr_uri" t-att-src="qr_uri" style="width:72px; height:72px;"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <!-- Inherit the Odoo 20 "Lines" layout: replace its decorative header/footer
+         (SVG lines, address list, logo) with the AKG header/footer. -->
+    <template id="external_layout_lines_akg" inherit_id="web.external_layout_lines" priority="99">
+        <xpath expr="//div[contains(@t-attf-class, 'o_layout_lines_header')]" position="replace">
+            <t t-call="akg_report_layout.akg_header"/>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'footer')]" position="replace">
+            <t t-call="akg_report_layout.akg_footer"/>
+        </xpath>
+    </template>
+
+</odoo>

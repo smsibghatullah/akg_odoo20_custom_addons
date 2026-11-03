@@ -11,3 +11,6 @@ Update:   ./odoo-bin -c <conf> -d <db> -u akg_doc_reports
 Editable values: models/res_company.py -> _akgr_footer_vals()
                  (Tax card no., CR no., Arabic company name, "Thank you" text)
 Font:     put Oswald-Regular.ttf / Oswald-Bold.ttf in static/src/fonts/ (see README there).
+
+Header / footer / CSS / QR / footer texts now live in module akg_report_layout
+(edit models/res_company.py -> _akgr_footer_vals() THERE). Install order: akg_report_layout first.
