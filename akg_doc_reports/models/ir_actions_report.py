@@ -98,7 +98,7 @@ class IrActionsReport(models.Model):
                 # was pointed to the main template by an earlier version of this module
                 vals['report_name'] = AKGR_EXTRA_TEMPLATE
             elif not report.report_name.startswith('akg_doc_reports.'):
-                continue  # keeps its own name; rendered through the AKG template by the hook below
+                pass  # keeps its own name (rendered through the AKG template by the hook below), but gets our paperformat
             if 'report_name' in vals and 'report_file' in report._fields:
                 vals['report_file'] = vals['report_name']
             if paperformat and report.paperformat_id != paperformat:

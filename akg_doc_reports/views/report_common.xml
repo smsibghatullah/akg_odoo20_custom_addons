@@ -8,10 +8,12 @@
     </template>
 
     <template id="akgr_header">
+        <t t-set="akg_fixed" t-value="True"/>
         <t t-call="akg_report_layout.akg_header"/>
     </template>
 
     <template id="akgr_footer">
+        <t t-set="akg_fixed" t-value="True"/>
         <t t-call="akg_report_layout.akg_footer"/>
     </template>
 

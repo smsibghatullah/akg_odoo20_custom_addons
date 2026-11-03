@@ -27,12 +27,16 @@
         </style>
     </template>
 
-    <!-- THE header (div.header is repeated on every page). Needs `company`. -->
+    <!-- THE header. Needs `company`.
+         akg_fixed=True (our own reports): a position:fixed block that wkhtmltopdf repeats on every page
+         (same technique as the Odoo 20 Lines layout); html view: plain block at the top.
+         akg_fixed unset (inherited Odoo layouts): classic div.header extracted by Odoo. -->
     <template id="akg_header">
         <!-- In the Document Layout preview `company` is a base.document.layout wizard record -->
         <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
         <t t-set="logo_uri" t-value="co._akgr_logo_uri()"/>
-        <div class="header" style="width:100%;" dir="ltr">
+        <div t-att-class="'akgh' if akg_fixed else 'header'" dir="ltr"
+             t-att-style="'width:100%;' + ('position:fixed;top:-35mm;left:0;right:0;' if (akg_fixed and report_type == 'pdf') else '')">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr">
                 <table style="border:0 none !important">
@@ -57,7 +61,8 @@
         <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
         <t t-set="fv" t-value="co._akgr_footer_vals()"/>
         <t t-set="qr_uri" t-value="co._akgr_qr_uri()"/>
-        <div class="footer" style="width:100%;" dir="ltr">
+        <div t-att-class="'akgf' if akg_fixed else 'footer'" dir="ltr"
+             t-att-style="'width:100%;' + ('position:fixed;bottom:-24mm;left:0;right:0;' if (akg_fixed and report_type == 'pdf') else '')">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
                 <table style="border:0 none !important">
