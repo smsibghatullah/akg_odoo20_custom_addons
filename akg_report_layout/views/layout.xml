@@ -7,6 +7,8 @@
         <style>
             .akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
             .akgr table { border-collapse: collapse; width: 100%; }
+            .akgr table, .akgr table td, .akgr table th { border: 0 none; background: transparent; box-shadow: none; }
+            .akgr table td, .akgr table th { padding: 0; }
             .akgr td, .akgr th { vertical-align: top; }
             .akgr address { font-style: normal; margin: 0; line-height: 1.55; font-size: 14px; }
             .akgr a { color: #555; text-decoration: underline; }
@@ -27,7 +29,9 @@
 
     <!-- THE header (div.header is repeated on every page). Needs `company`. -->
     <template id="akg_header">
-        <t t-set="logo_uri" t-value="company._akgr_logo_uri()"/>
+        <!-- In the Document Layout preview `company` is a base.document.layout wizard record -->
+        <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
+        <t t-set="logo_uri" t-value="co._akgr_logo_uri()"/>
         <div class="header" style="width:100%;" dir="ltr">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr">
@@ -37,9 +41,9 @@
                             <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
                         </td>
                         <td style="width:55%; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
-                            <div style="font-weight:bold"><t t-out="company.name"/></div>
-                            <div t-if="company.vat">Tax ID: <t t-out="company.vat"/></div>
-                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
+                            <div style="font-weight:bold"><t t-out="co.name"/></div>
+                            <div t-if="co.vat">Tax ID: <t t-out="co.vat"/></div>
+                            <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
                         </td>
                     </tr>
                 </table>
@@ -49,15 +53,17 @@
 
     <!-- THE footer (div.footer is repeated on every page). Needs `company`. -->
     <template id="akg_footer">
-        <t t-set="fv" t-value="company._akgr_footer_vals()"/>
-        <t t-set="qr_uri" t-value="company._akgr_qr_uri()"/>
+        <!-- In the Document Layout preview `company` is a base.document.layout wizard record -->
+        <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
+        <t t-set="fv" t-value="co._akgr_footer_vals()"/>
+        <t t-set="qr_uri" t-value="co._akgr_qr_uri()"/>
         <div class="footer" style="width:100%;" dir="ltr">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
                 <table>
                     <tr>
                         <td style="width:28%; font-size:11px; line-height:1.9; padding-top:10px;">
-                            <div t-if="company.website" style="color:#1a73e8;"><t t-out="company.website"/></div>
+                            <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
                             <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
                             <div>CR. No. <t t-out="fv['cr_no']"/></div>
                         </td>

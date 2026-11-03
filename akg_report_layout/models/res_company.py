@@ -65,18 +65,19 @@ class ResCompany(models.Model):
 
     @api.model
     def _akg_apply_company_layout(self):
-        """Make 'Lines' the document layout of every company, so standard
-        reports (delivery slip, etc.) use the inherited AKG header/footer too."""
+        """Select the 'Lines' document layout for every company.
+
+        company.external_report_layout_id is a Many2one to **ir.ui.view**
+        (the layout template itself), so the id written must be the view id of
+        web.external_layout_lines - NOT a report.layout id.
+        """
         try:
-            layout = self.env.ref('web.report_layout_lines', raise_if_not_found=False)
-            if not layout and 'report.layout' in self.env:
-                layout = self.env['report.layout'].search(
-                    [('view_id.key', '=', 'web.external_layout_lines')], limit=1)
-            if layout and 'external_report_layout_id' in self._fields:
-                self.sudo().search([]).write({'external_report_layout_id': layout.id})
+            view = self.env.ref('web.external_layout_lines', raise_if_not_found=False)
+            if view and view._name == 'ir.ui.view' and 'external_report_layout_id' in self._fields:
+                self.sudo().search([]).write({'external_report_layout_id': view.id})
             else:
-                _logger.warning('akg_report_layout: Lines layout record not found; '
-                                'select it in Settings > Companies > Document Layout.')
+                _logger.warning('akg_report_layout: web.external_layout_lines not found; '
+                                'select the layout in Settings > Companies > Document Layout.')
         except Exception:
             _logger.warning('akg_report_layout: could not set the company layout', exc_info=True)
         return True

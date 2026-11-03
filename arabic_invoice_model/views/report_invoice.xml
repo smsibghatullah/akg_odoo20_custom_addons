@@ -50,6 +50,8 @@
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
                 .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
                 .akg-doc table { border-collapse: collapse; width: 100%; }
+                .akg-doc table, .akg-doc table td, .akg-doc table th { border: 0 none; background: transparent; box-shadow: none; }
+                .akg-doc table td, .akg-doc table th { padding: 0; }
                 .akg-doc td, .akg-doc th { vertical-align: top; }
                 .akg-doc .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
                 .akg-doc .ar-n { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: normal; color: #222; }
@@ -245,8 +247,8 @@
                                     <tr>
                                         <td><span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                                         <td style="font-style:italic;">
-                                            <span class="ar-n" style="font-style:italic;">Paid on/دفعت في:</span>
-                                            <span style="margin-left:8px;"><t t-out="payment_vals['date']"/></span>
+                                            <div style="font-style:italic;"><span class="ar-n" style="font-style:italic;">Paid on/دفعت في:</span></div>
+                                            <div dir="ltr" style="text-align:left;"><t t-out="payment_vals['date']"/></div>
                                             <div t-if="payment_vals.get('method')" style="font-style:normal; color:#555;">
                                                 <t t-out="payment_vals['method']"/>
                                             </div>

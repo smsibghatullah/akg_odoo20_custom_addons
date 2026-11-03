@@ -117,15 +117,35 @@ class IrActionsReport(models.Model):
     # _render_template(), so we swap the template right there: whatever action
     # prints a sale.order, the AKG template is the one rendered.
     # ------------------------------------------------------------------
-    def _akgr_swap_template(self, template):
-        if (isinstance(template, str) and len(self) == 1 and self.model == 'sale.order'
-                and not template.startswith('akg_doc_reports.')
-                and 'pro_forma' not in template and 'proforma' not in template):
-            is_receipt = any(w in (self.name or '').lower() for w in AKGR_RECEIPT_WORDS)
-            new = AKGR_RECEIPT_TEMPLATE if is_receipt else AKGR_SALE_TEMPLATE
-            _logger.warning('akg_doc_reports: sale.order render %s -> %s', template, new)
-            return new
-        return template
+    def _akgr_swap_template(self, template, values=None):
+        """Return the AKG template for the standard sale / purchase / picking ones.
+
+        In Odoo 20 `_render_template` is called on the whole ir.actions.report
+        model (not on the single action), so `self.model` is empty there. The
+        record model is read from the rendering values (`doc_model`) instead.
+        """
+        if not isinstance(template, str) or template.startswith('akg_doc_reports.'):
+            return template
+        low = template.lower()
+        if 'pro_forma' in low or 'proforma' in low:
+            return template
+        model = (values or {}).get('doc_model') or (self.model if len(self) == 1 else False)
+        new = template
+        if model == 'sale.order':
+            if any(w in low for w in AKGR_RECEIPT_WORDS):
+                new = AKGR_RECEIPT_TEMPLATE
+            else:
+                new = AKGR_SALE_TEMPLATE
+        elif model == 'purchase.order':
+            if template == 'purchase.report_purchasequotation':
+                new = 'akg_doc_reports.report_purchasequotation_akg'
+            elif template == 'purchase.report_purchaseorder':
+                new = 'akg_doc_reports.report_purchaseorder_akg'
+        elif model == 'stock.picking' and template == 'stock.report_picking':
+            new = 'akg_doc_reports.report_picking_akg'
+        if new != template:
+            _logger.info('akg_doc_reports: %s render %s -> %s', model, template, new)
+        return new
 
     def _render_template(self, template, values=None):
-        return super()._render_template(self._akgr_swap_template(template), values=values)
+        return super()._render_template(self._akgr_swap_template(template, values), values=values)
