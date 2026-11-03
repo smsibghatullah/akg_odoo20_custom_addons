@@ -2,118 +2,75 @@
 <!-- Copyright 2018-2019 ForgeFlow, S.L.
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
 <odoo>
+    <!-- AKG look: header / footer / css come from akg_report_layout (same as
+         Quotation, PO, Picking and Invoice). Header and footer are div.header /
+         div.footer, so wkhtmltopdf repeats them on every page. -->
     <template id="report_purchase_request">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <div id="oe_structure_report_request_1" class="oe_structure" />
-                        <h2>
-                            Purchase Request
-                            <span t-field="o.name" />
-                        </h2>
-                        <div class="row mt32 mb32">
-                            <div class="col-2">
-                                <strong>Request Reference:</strong>
-                                <br />
-                                <span t-field="o.name" />
-                            </div>
-                            <div class="col-2">
-                                <strong>Creation Date:</strong>
-                                <br />
-                                <span t-field="o.date_start" />
-                            </div>
-                            <div class="col-2">
-                                <strong>Source:</strong>
-                                <br />
-                                <span t-field="o.origin" />
-                            </div>
-                            <div class="col-2">
-                                <strong>Requested by:</strong>
-                                <br />
-                                <span t-field="o.requested_by" />
-                            </div>
-                            <div class="col-2">
-                                <strong>Assigned to:</strong>
-                                <br />
-                                <span t-field="o.assigned_to" />
-                            </div>
-                            <div class="col-2">
-                                <strong>Picking Type:</strong>
-                                <br />
-                                <span t-field="o.picking_type_id" />
-                            </div>
-                        </div>
-                        <div class="row mt32 mb32">
-                            <div class="col-12">
-                                <strong>Description:</strong>
-                                <br />
-                                <span t-field="o.description" />
-                            </div>
-                        </div>
-                        <t t-if="o.line_ids">
-                            <h3>Products</h3>
-                            <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Description</strong>
-                                        </th>
-                                        <th groups="analytic.group_analytic_accounting">
-                                            <strong>Analytic Distribution</strong>
-                                        </th>
-                                        <th class="text-right">
-                                            <strong>Qty</strong>
-                                        </th>
-                                        <th class="text-center" groups="uom.group_uom">
-                                            <strong>Product UoM</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Estimated Cost</strong>
-                                        </th>
-                                        <th class="text-right">
-                                            <strong>Requested Date</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Specifications</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr t-foreach="o.line_ids" t-as="line_id">
-                                        <td>
-                                            <span t-field="line_id.name" />
-                                        </td>
-                                        <td groups="analytic.group_analytic_accounting">
-                                            <span
-                                                t-field="line_id.analytic_distribution"
-                                            />
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-field="line_id.product_qty" />
-                                        </td>
-                                        <t>
-                                            <td
-                                                class="text-center"
-                                                groups="uom.group_uom"
-                                            />
-                                        </t>
-                                        <td>
-                                            <span t-field="line_id.estimated_cost" />
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-field="line_id.date_required" />
-                                        </td>
-                                        <td>
-                                            <span t-field="line_id.specifications" />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </t>
-                        <div id="oe_structure_report_request_2" class="oe_structure" />
+                <t t-set="company" t-value="o.company_id or env.company"/>
+
+                <t t-call="akg_report_layout.akg_header"/>
+
+                <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
+                     t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+                    <t t-call="akg_report_layout.akg_css"/>
+
+                    <div class="title" style="margin:6px 0 18px 0;">
+                        Purchase Request <t t-out="o.name"/>
                     </div>
-                </t>
+
+                    <table style="margin: 0 0 18px 0;">
+                        <tr>
+                            <td style="padding-right:10px;"><div class="lb">Request Reference:</div></td>
+                            <td style="padding-right:10px;"><div class="lb">Creation Date:</div></td>
+                            <td style="padding-right:10px;"><div class="lb">Source:</div></td>
+                            <td style="padding-right:10px;"><div class="lb">Description:</div></td>
+                            <td style="padding-right:10px;"><div class="lb">Requested by:</div></td>
+                            <td style="padding-right:10px;"><div class="lb">Assigned to:</div></td>
+                            <td><div class="lb">Picking Type:</div></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-right:10px;"><span t-field="o.name"/></td>
+                            <td style="padding-right:10px;"><span t-field="o.date_start"/></td>
+                            <td style="padding-right:10px;"><span t-field="o.origin"/></td>
+                            <td style="padding-right:10px;"><span t-field="o.description"/></td>
+                            <td style="padding-right:10px;"><span t-field="o.requested_by"/></td>
+                            <td style="padding-right:10px;"><span t-field="o.assigned_to"/></td>
+                            <td><span t-field="o.picking_type_id"/></td>
+                        </tr>
+                    </table>
+
+                    <t t-if="o.line_ids">
+                        <div class="teal" style="font-size:26px; margin:6px 0 12px 0;">Products</div>
+                        <table class="lines">
+                            <thead>
+                                <tr>
+                                    <th class="l" style="text-align:center;">Description</th>
+                                    <th class="l" style="text-align:center;" groups="analytic.group_analytic_accounting">Analytic Distribution</th>
+                                    <th class="l" style="text-align:center;">Qty</th>
+                                    <th class="l" style="text-align:center;" groups="uom.group_uom">Product UoM</th>
+                                    <th class="l" style="text-align:center;">Estimated Cost</th>
+                                    <th class="l" style="text-align:center;">Requested Date</th>
+                                    <th class="l" style="text-align:center;">Specifications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line_id">
+                                    <td class="l first" style="white-space: pre-line;"><t t-out="line_id.name"/></td>
+                                    <td class="l" groups="analytic.group_analytic_accounting"><span t-field="line_id.analytic_distribution"/></td>
+                                    <td class="l" style="white-space:nowrap;"><span t-field="line_id.product_qty"/></td>
+                                    <td class="l" style="text-align:center;" groups="uom.group_uom"><t t-out="line_id.product_uom_id.name"/></td>
+                                    <td class="l" style="white-space:nowrap;"><span t-field="line_id.estimated_cost"/></td>
+                                    <td class="l" style="white-space:nowrap;"><span t-field="line_id.date_required"/></td>
+                                    <td class="l" style="white-space: pre-line;"><t t-out="line_id.specifications"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+
+                <t t-call="akg_report_layout.akg_footer"/>
             </t>
         </t>
     </template>
