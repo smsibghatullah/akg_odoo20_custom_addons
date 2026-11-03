@@ -1,0 +1,79 @@
+$o-uia-height: 34px;
+
+body.o_uia_active {
+    padding-top: $o-uia-height;
+
+    // dialogs (full screen on a phone) start below the banner, so their title stays visible
+    .modal {
+        top: $o-uia-height;
+        height: calc(100% - #{$o-uia-height});
+    }
+}
+
+.o_uia_banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $o-uia-height;
+    z-index: 1100;
+    padding: 0 12px;
+    background-color: #b45309;
+    color: #fff;
+    font-size: 13px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // on a phone the text gives way, the Return button always stays visible
+    .o_uia_banner_text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .btn {
+        flex-shrink: 0;
+    }
+    @media (max-width: 575.98px) {
+        .o_uia_banner_real, .o_uia_banner_prefix {
+            display: none !important;
+        }
+    }
+
+    &.o_uia_warning {
+        background-color: #b3261e;
+        animation: o_uia_pulse 1.6s ease-in-out infinite;
+    }
+    .btn {
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+    .o_uia_read_only {
+        background-color: #fff;
+        color: #7c2d12;
+        font-weight: 700;
+    }
+    .o_uia_return_form {
+        display: inline;
+        margin: 0;
+    }
+}
+
+@keyframes o_uia_pulse {
+    50% { background-color: #d3453c; }
+}
+
+.o_uia_picker_menu {
+    width: 340px;
+}
+
+.o_uia_picker_list {
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.o_uia_picker_avatar {
+    width: 28px;
+    height: 28px;
+}

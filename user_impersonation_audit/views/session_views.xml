@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- activity -->
+    <record id="view_impersonation_activity_list" model="ir.ui.view">
+        <field name="name">user.impersonation.activity.list</field>
+        <field name="model">user.impersonation.activity</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="impersonator_id" widget="many2one_avatar_user"/>
+                <field name="target_id" widget="many2one_avatar_user"/>
+                <field name="operation" widget="badge" decoration-success="operation == 'create'"
+                       decoration-warning="operation == 'write'" decoration-danger="operation == 'unlink'"
+                       decoration-info="operation == 'action'"/>
+                <field name="model_description"/>
+                <field name="record_name"/>
+                <field name="summary"/>
+                <field name="change_count"/>
+                <field name="session_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_impersonation_activity_form" model="ir.ui.view">
+        <field name="name">user.impersonation.activity.form</field>
+        <field name="model">user.impersonation.activity</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0" duplicate="0">
+                <header>
+                    <button name="action_open_record" type="object" string="Open record" class="btn-primary"
+                            invisible="not res_id or operation in ('unlink', 'action')"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id"/>
+                            <field name="impersonator_id" widget="many2one_avatar_user"/>
+                            <field name="target_id" widget="many2one_avatar_user"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="operation"/>
+                            <field name="model_description"/>
+                            <field name="model" groups="base.group_no_one"/>
+                            <field name="record_name"/>
+                            <field name="res_id" groups="base.group_no_one"/>
+                            <field name="summary"/>
+                        </group>
+                    </group>
+                    <field name="change_ids" invisible="not change_ids">
+                        <list>
+                            <field name="field_description"/>
+                            <field name="old_value"/>
+                            <field name="new_value"/>
+                            <field name="field_name" optional="hide"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_impersonation_activity_search" model="ir.ui.view">
+        <field name="name">user.impersonation.activity.search</field>
+        <field name="model">user.impersonation.activity</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="session_id"/>
+                <field name="impersonator_id"/>
+                <field name="target_id"/>
+                <field name="record_name"/>
+                <field name="model_description"/>
+                <filter name="filter_changes" string="Changes" domain="[('operation', 'in', ('create', 'write', 'unlink'))]"/>
+                <filter name="filter_actions" string="Opened menus" domain="[('operation', '=', 'action')]"/>
+                <filter name="filter_messages" string="Messages" domain="[('operation', '=', 'message')]"/>
+                <filter name="filter_date" string="Date" date="date"/>
+                <group>
+                    <filter name="group_session" string="Session" context="{'group_by': 'session_id'}"/>
+                    <filter name="group_operation" string="Operation" context="{'group_by': 'operation'}"/>
+                    <filter name="group_model" string="Document type" context="{'group_by': 'model_description'}"/>
+                    <filter name="group_impersonator" string="Impersonator" context="{'group_by': 'impersonator_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_impersonation_activity_pivot" model="ir.ui.view">
+        <field name="name">user.impersonation.activity.pivot</field>
+        <field name="model">user.impersonation.activity</field>
+        <field name="arch" type="xml">
+            <pivot string="Impersonation activity">
+                <field name="model_description" type="row"/>
+                <field name="operation" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_impersonation_activity" model="ir.actions.act_window">
+        <field name="name">Impersonation activity</field>
+        <field name="res_model">user.impersonation.activity</field>
+        <field name="view_mode">list,form,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No activity recorded yet</p>
+            <p>Records created, changed and deleted, messages posted and menus opened while logged in as another user appear here.</p>
+        </field>
+    </record>
+    <record id="view_impersonation_session_list" model="ir.ui.view">
+        <field name="name">user.impersonation.session.list</field>
+        <field name="model">user.impersonation.session</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-success="state == 'active'" sample="1">
+                <field name="start_date"/>
+                <field name="impersonator_id" widget="many2one_avatar_user"/>
+                <field name="target_id" widget="many2one_avatar_user"/>
+                <field name="target_share" optional="hide"/>
+                <field name="reason_category"/>
+                <field name="reason" optional="show"/>
+                <field name="reference" optional="show"/>
+                <field name="read_only" widget="boolean_toggle" readonly="1" optional="show"/>
+                <field name="duration" sum="Total" optional="show"/>
+                <field name="end_reason" optional="show"/>
+                <field name="extended" optional="hide"/>
+                <field name="ip_address" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-muted="state == 'ended'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_impersonation_session_form" model="ir.ui.view">
+        <field name="name">user.impersonation.session.form</field>
+        <field name="model">user.impersonation.session</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0" duplicate="0">
+                <header>
+                    <button name="action_force_end" type="object" string="End session now" class="btn-danger"
+                            invisible="state != 'active'" groups="user_impersonation_audit.group_impersonation_manager"
+                            confirm="End this session now? The browser is sent back to the real user on its next request."/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="schedule" name="%(action_impersonation_activity)d" type="action"
+                                context="{'search_default_session_id': id}">
+                            <field name="activity_count" widget="statinfo" string="Activity"/>
+                        </button>
+                        <button class="oe_stat_button" icon="edit" name="%(action_impersonation_activity)d" type="action"
+                                context="{'search_default_session_id': id, 'search_default_filter_changes': 1}">
+                            <field name="change_count" widget="statinfo" string="Records changed"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Read-only" bg_color="text-bg-info" invisible="not read_only"/>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Who">
+                            <field name="impersonator_id" widget="many2one_avatar_user"/>
+                            <field name="target_id" widget="many2one_avatar_user"/>
+                            <field name="target_share"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="policy_id"/>
+                            <field name="consent_id" invisible="not consent_id"/>
+                        </group>
+                        <group string="When">
+                            <field name="start_date"/>
+                            <field name="planned_end_date"/>
+                            <field name="end_date"/>
+                            <field name="duration"/>
+                            <field name="end_reason"/>
+                            <field name="ended_by_id" invisible="not ended_by_id"/>
+                        </group>
+                        <group string="Why">
+                            <field name="reason_category"/>
+                            <field name="reference"/>
+                            <field name="reason"/>
+                            <field name="read_only"/>
+                        </group>
+                        <group string="Where from">
+                            <field name="ip_address"/>
+                            <field name="user_agent"/>
+                            <field name="session_hash"/>
+                            <field name="landing_url"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Activity" name="activity">
+                            <field name="activity_ids">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="operation" widget="badge" decoration-success="operation == 'create'"
+                                           decoration-warning="operation == 'write'" decoration-danger="operation == 'unlink'"
+                                           decoration-info="operation == 'action'"/>
+                                    <field name="model_description"/>
+                                    <field name="record_name"/>
+                                    <field name="summary"/>
+                                    <field name="change_count"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Extension" name="extension" invisible="not extended">
+                            <group>
+                                <field name="extended"/>
+                                <field name="extension_reason"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_impersonation_session_search" model="ir.ui.view">
+        <field name="name">user.impersonation.session.search</field>
+        <field name="model">user.impersonation.session</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="impersonator_id"/>
+                <field name="target_id"/>
+                <field name="reason"/>
+                <field name="reference"/>
+                <field name="ip_address"/>
+                <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_mine" string="My sessions" domain="[('impersonator_id', '=', uid)]"/>
+                <filter name="filter_today" string="Today" domain="[('start_date', '&gt;=', 'today'), ('start_date', '&lt;', 'today +1d')]"/>
+                <filter name="filter_start" string="Started" date="start_date"/>
+                <separator/>
+                <filter name="filter_read_only" string="Read-only" domain="[('read_only', '=', True)]"/>
+                <filter name="filter_extended" string="Extended" domain="[('extended', '=', True)]"/>
+                <filter name="filter_portal" string="Portal users" domain="[('target_share', '=', True)]"/>
+                <filter name="filter_forced" string="Ended by a manager" domain="[('end_reason', '=', 'forced')]"/>
+                <group>
+                    <filter name="group_impersonator" string="Impersonator" context="{'group_by': 'impersonator_id'}"/>
+                    <filter name="group_target" string="Logged in as" context="{'group_by': 'target_id'}"/>
+                    <filter name="group_category" string="Category" context="{'group_by': 'reason_category'}"/>
+                    <filter name="group_end_reason" string="End reason" context="{'group_by': 'end_reason'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'start_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_impersonation_session_pivot" model="ir.ui.view">
+        <field name="name">user.impersonation.session.pivot</field>
+        <field name="model">user.impersonation.session</field>
+        <field name="arch" type="xml">
+            <pivot string="Impersonation sessions" sample="1">
+                <field name="impersonator_id" type="row"/>
+                <field name="reason_category" type="col"/>
+                <field name="duration" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_impersonation_session_graph" model="ir.ui.view">
+        <field name="name">user.impersonation.session.graph</field>
+        <field name="model">user.impersonation.session</field>
+        <field name="arch" type="xml">
+            <graph string="Impersonation sessions" type="bar" stacked="1" sample="1">
+                <field name="start_date" interval="month"/>
+                <field name="reason_category"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_impersonation_session" model="ir.actions.act_window">
+        <field name="name">Impersonation sessions</field>
+        <field name="res_model">user.impersonation.session</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No impersonation session yet</p>
+            <p>Every time someone logs in as another user, the session is recorded here with the reason, times, network address and every change made.</p>
+        </field>
+    </record>
+
+</odoo>

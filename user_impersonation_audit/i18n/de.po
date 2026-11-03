@@ -1,0 +1,2417 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* user_impersonation_audit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-09 16:39+0000\n"
+"PO-Revision-Date: 2026-10-09 00:00+0000\n"
+"Last-Translator: Viyug Infotech\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: user_impersonation_audit
+#: model:ir.module.module,description:base.module_user_impersonation_audit
+msgid ""
+"\n"
+"Login As User with Audit Trail\n"
+"==============================\n"
+"\n"
+"Authorised staff log in as another user to reproduce an issue, with a complete audit trail.\n"
+"\n"
+"* Start from the user form, the Users list (Action menu) or a searchable picker in the top bar.\n"
+"* Mandatory reason with category and reference, shown target companies and groups, confirmation.\n"
+"* Dedicated group, empty by default. Every check runs on the server.\n"
+"* Hard blocks: superuser, self, archived, public user, nested sessions, users with more rights,\n"
+"  administrators (unless allowed), protected users and groups, other companies.\n"
+"* Policies: members of group A may impersonate users of groups B in companies C, with their own\n"
+"  time limit and forced read-only.\n"
+"* Read-only mode: create, write and delete are refused while impersonating.\n"
+"* Time limit with automatic return, idle timeout, one extension with a new reason, hard maximum.\n"
+"* Banner on backend and portal pages with live countdown and a Return to my account button.\n"
+"* Target consent per user: never ask, notify only or require approval. Self-service access grant.\n"
+"* Optional password re-entry before starting, IP allowlist and allowed hours.\n"
+"* Append-only session log with IP, browser, duration and end reason; field-level change audit,\n"
+"  opened actions, messages posted as the real user; graph and pivot views; force end.\n"
+"* Silent chatter note on the target, optional emails to the target and managers, end-of-session\n"
+"  summary, retention with scheduled purge.\n"
+msgstr ""
+"\n"
+"Als Benutzer anmelden mit Prüfprotokoll\n"
+"=======================================\n"
+"\n"
+"Berechtigte Mitarbeiter melden sich als anderer Benutzer an, um ein Problem nachzustellen, mit vollständigem Prüfprotokoll.\n"
+"\n"
+"* Start über das Benutzerformular, die Benutzerliste (Aktionsmenü) oder eine durchsuchbare Auswahl in der oberen Leiste.\n"
+"* Pflichtgrund mit Kategorie und Referenz, Anzeige der Zielunternehmen und -gruppen, Bestätigung.\n"
+"* Eigene Gruppe, standardmäßig leer. Jede Prüfung läuft auf dem Server.\n"
+"* Harte Sperren: Superuser, man selbst, archivierte und öffentliche Benutzer, verschachtelte Sitzungen, Benutzer mit mehr Rechten,\n"
+"  Administratoren (sofern nicht erlaubt), geschützte Benutzer und Gruppen, andere Unternehmen.\n"
+"* Richtlinien: Mitglieder der Gruppe A dürfen Benutzer der Gruppen B in den Unternehmen C imitieren, mit eigenem\n"
+"  Zeitlimit und erzwungenem Schreibschutz.\n"
+"* Schreibgeschützter Modus: Erstellen, Schreiben und Löschen werden während der Imitation abgelehnt.\n"
+"* Zeitlimit mit automatischer Rückkehr, Inaktivitäts-Timeout, eine Verlängerung mit neuem Grund, hartes Maximum.\n"
+"* Banner auf Backend- und Portalseiten mit Live-Countdown und der Schaltfläche Zurück zu meinem Konto.\n"
+"* Zustimmung des Zielbenutzers: nie fragen, nur benachrichtigen oder Genehmigung verlangen. Selbstbedienungs-Zugriffsfreigabe.\n"
+"* Optionale erneute Passworteingabe vor dem Start, IP-Whitelist und erlaubte Zeiten.\n"
+"* Nur anhängendes Sitzungsprotokoll mit IP, Browser, Dauer und Endgrund; Änderungsprotokoll auf Feldebene,\n"
+"  geöffnete Aktionen, als echter Benutzer gesendete Nachrichten; Diagramm- und Pivot-Ansichten; Beenden erzwingen.\n"
+"* Stille Chatter-Notiz beim Zielbenutzer, optionale E-Mails an Zielbenutzer und Manager, Zusammenfassung am Sitzungsende,\n"
+"  Aufbewahrung mit geplanter Bereinigung.\n"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid ""
+"%(user)s also works in companies you have no access to (%(companies)s)."
+msgstr ""
+"%(user)s arbeitet auch in Unternehmen, auf die Sie keinen Zugriff haben "
+"(%(companies)s)."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid ""
+"%(user)s has rights you do not have (%(groups)s). You can only log in as "
+"users with the same or fewer rights."
+msgstr ""
+"%(user)s hat Rechte, die Sie nicht haben (%(groups)s). Sie können sich nur "
+"als Benutzer mit gleichen oder weniger Rechten anmelden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%(who)s as %(whom)s"
+msgstr "%(who)s als %(whom)s"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "%(who)s asks to log in as %(whom)s"
+msgstr "%(who)s bittet darum, sich als %(whom)s anzumelden"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%(who)s logged in as this user. Reason: %(reason)s"
+msgstr "%(who)s hat sich als dieser Benutzer angemeldet. Grund: %(reason)s"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%(who)s returned to their own account (%(why)s, %(minutes)s min)."
+msgstr ""
+"%(who)s ist zum eigenen Konto zurückgekehrt (%(why)s, %(minutes)s Min.)."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/base.py:0
+msgid "%s (list)"
+msgstr "%s (Liste)"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/base.py:0
+msgid "%s (record)"
+msgstr "%s (Datensatz)"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "%s allowed access to their account."
+msgstr "%s hat den Zugriff auf das Konto erlaubt."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "%s asks to log in to your account to help you."
+msgstr "%s bittet darum, sich in Ihrem Konto anzumelden, um Ihnen zu helfen."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid "%s has been asked. Open this dialog again once they approve."
+msgstr ""
+"%s wurde angefragt. Öffnen Sie diesen Dialog erneut, sobald die Genehmigung "
+"vorliegt."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%s is an administrator. Administrators cannot be impersonated."
+msgstr ""
+"%s ist ein Administrator. Administratoren können nicht imitiert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%s is archived and cannot be impersonated."
+msgstr "%s ist archiviert und kann nicht imitiert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%s is protected and can never be impersonated."
+msgstr "%s ist geschützt und kann nie imitiert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "%s must approve before you can log in as them. Ask for consent first."
+msgstr ""
+"%s muss genehmigen, bevor Sie sich als diese Person anmelden können. Fragen "
+"Sie zuerst nach der Zustimmung."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "%s refused access to their account."
+msgstr "%s hat den Zugriff auf das Konto verweigert."
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.frontend_layout_impersonation_banner
+msgid "(you are"
+msgstr "(Sie sind"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.return_confirm
+msgid ") and end this session?"
+msgstr ") und diese Sitzung beenden?"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.return_confirm
+msgid ""
+". Return to your own account\n"
+"                            ("
+msgstr ""
+". Zurück zum eigenen Konto\n"
+"                            ("
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_policy__time_limit
+msgid "0 uses the time limit from Settings. Never above the hard maximum."
+msgstr ""
+"0 verwendet das Zeitlimit aus den Einstellungen. Nie über dem harten "
+"Maximum."
+
+#. module: user_impersonation_audit
+#: model:mail.template,body_html:user_impersonation_audit.mail_template_session_started
+msgid ""
+"<div style=\"margin: 0; padding: 0; font-size: 14px;\">\n"
+"    <p><t t-out=\"object.impersonator_id.name or ''\">Admin</t> logged in as <t t-out=\"object.target_id.name or ''\">User</t> to help.</p>\n"
+"    <table style=\"border-collapse: collapse;\">\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Reason</td><td style=\"padding: 3px 0;\"><t t-out=\"object.reason or ''\">Reason</t></td></tr>\n"
+"        <tr t-if=\"object.reference\"><td style=\"padding: 3px 12px 3px 0; color: #666;\">Reference</td><td style=\"padding: 3px 0;\"><t t-out=\"object.reference or ''\">TCK-1</t></td></tr>\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Started</td><td style=\"padding: 3px 0;\"><t t-out=\"format_datetime(object.start_date, tz=object.target_id.tz, dt_format='short')\">now</t></td></tr>\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Ends at the latest</td><td style=\"padding: 3px 0;\"><t t-out=\"format_datetime(object.planned_end_date, tz=object.target_id.tz, dt_format='short')\">later</t></td></tr>\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Mode</td><td style=\"padding: 3px 0;\"><t t-if=\"object.read_only\">Read-only</t><t t-else=\"\">Full access, every change is recorded</t></td></tr>\n"
+"    </table>\n"
+"    <p style=\"color: #666;\">You do not need to do anything. If you did not expect this, contact your administrator.</p>\n"
+"</div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0; padding: 0; font-size: 14px;\">\n"
+"    <p><t t-out=\"object.impersonator_id.name or ''\">Admin</t> hat sich als <t t-out=\"object.target_id.name or ''\">User</t> angemeldet, um zu helfen.</p>\n"
+"    <table style=\"border-collapse: collapse;\">\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Grund</td><td style=\"padding: 3px 0;\"><t t-out=\"object.reason or ''\">Reason</t></td></tr>\n"
+"        <tr t-if=\"object.reference\"><td style=\"padding: 3px 12px 3px 0; color: #666;\">Referenz</td><td style=\"padding: 3px 0;\"><t t-out=\"object.reference or ''\">TCK-1</t></td></tr>\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Gestartet</td><td style=\"padding: 3px 0;\"><t t-out=\"format_datetime(object.start_date, tz=object.target_id.tz, dt_format='short')\">now</t></td></tr>\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Endet spätestens</td><td style=\"padding: 3px 0;\"><t t-out=\"format_datetime(object.planned_end_date, tz=object.target_id.tz, dt_format='short')\">later</t></td></tr>\n"
+"        <tr><td style=\"padding: 3px 12px 3px 0; color: #666;\">Modus</td><td style=\"padding: 3px 0;\"><t t-if=\"object.read_only\">Schreibgeschützt</t><t t-else=\"\">Vollzugriff, jede Änderung wird protokolliert</t></td></tr>\n"
+"    </table>\n"
+"    <p style=\"color: #666;\">Sie müssen nichts tun. Falls Sie dies nicht erwartet haben, wenden Sie sich an Ihren Administrator.</p>\n"
+"</div>\n"
+"            "
+
+#. module: user_impersonation_audit
+#: model:mail.template,body_html:user_impersonation_audit.mail_template_session_summary
+msgid ""
+"<div style=\"margin: 0; padding: 0; font-size: 14px;\">\n"
+"    <p><t t-out=\"object.impersonator_id.name or ''\">Admin</t> was logged in as you for <t t-out=\"object.duration\">10</t> minutes.</p>\n"
+"    <p><strong>Reason:</strong> <t t-out=\"object.reason or ''\">Reason</t></p>\n"
+"    <t t-set=\"changes\" t-value=\"object.uia_changed_activities()\"/>\n"
+"    <p t-if=\"not changes\">Nothing was created, changed or deleted.</p>\n"
+"    <t t-else=\"\">\n"
+"        <p>Records created, changed or deleted:</p>\n"
+"        <ul>\n"
+"            <li t-foreach=\"changes[:50]\" t-as=\"act\">\n"
+"                <t t-out=\"act.model_description or act.model or ''\">Contact</t>:\n"
+"                <t t-out=\"act.record_name or ''\">Name</t>\n"
+"                (<t t-out=\"act.operation_label\">Changed</t><t t-if=\"act.summary and act.operation == 'write'\">: <t t-out=\"act.summary\"/></t>)\n"
+"            </li>\n"
+"        </ul>\n"
+"    </t>\n"
+"</div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0; padding: 0; font-size: 14px;\">\n"
+"    <p><t t-out=\"object.impersonator_id.name or ''\">Admin</t> war für <t t-out=\"object.duration\">10</t> Minuten als Sie angemeldet.</p>\n"
+"    <p><strong>Grund:</strong> <t t-out=\"object.reason or ''\">Reason</t></p>\n"
+"    <t t-set=\"changes\" t-value=\"object.uia_changed_activities()\"/>\n"
+"    <p t-if=\"not changes\">Es wurde nichts erstellt, geändert oder gelöscht.</p>\n"
+"    <t t-else=\"\">\n"
+"        <p>Erstellte, geänderte oder gelöschte Datensätze:</p>\n"
+"        <ul>\n"
+"            <li t-foreach=\"changes[:50]\" t-as=\"act\">\n"
+"                <t t-out=\"act.model_description or act.model or ''\">Contact</t>:\n"
+"                <t t-out=\"act.record_name or ''\">Name</t>\n"
+"                (<t t-out=\"act.operation_label\">Changed</t><t t-if=\"act.summary and act.operation == 'write'\">: <t t-out=\"act.summary\"/></t>)\n"
+"            </li>\n"
+"        </ul>\n"
+"    </t>\n"
+"</div>\n"
+"            "
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid ""
+"<i class=\"oi oi-filled me-1\" data-icon=\"back_hand\" title=\"Consent\"/>\n"
+"                    <span invisible=\"consent_state != 'missing'\">This user requires consent. Send a request; they approve it from their inbox or email.</span>\n"
+"                    <span invisible=\"consent_state != 'pending'\">A request was sent and is waiting for the user's answer.</span>"
+msgstr ""
+"<i class=\"oi oi-filled me-1\" data-icon=\"back_hand\" title=\"Consent\"/>\n"
+"                    <span invisible=\"consent_state != 'missing'\">Dieser Benutzer verlangt eine Zustimmung. Senden Sie eine Anfrage; er genehmigt sie über sein Postfach oder per E-Mail.</span>\n"
+"                    <span invisible=\"consent_state != 'pending'\">Eine Anfrage wurde gesendet und wartet auf die Antwort des Benutzers.</span>"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "<i class=\"oi oi-filled me-1\" data-icon=\"block\" title=\"Blocked\"/>"
+msgstr "<i class=\"oi oi-filled me-1\" data-icon=\"block\" title=\"Blocked\"/>"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.frontend_layout_impersonation_banner
+msgid ""
+"<i class=\"oi oi-filled me-1\" data-icon=\"person\" role=\"img\" aria-label=\"Impersonation\" title=\"Impersonation\"/>\n"
+"                    <span class=\"o_uia_banner_prefix\">Logged in as</span>"
+msgstr ""
+"<i class=\"oi oi-filled me-1\" data-icon=\"person\" role=\"img\" aria-label=\"Impersonation\" title=\"Impersonation\"/>\n"
+"                    <span class=\"o_uia_banner_prefix\">Angemeldet als</span>"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid ""
+"<i class=\"oi oi-filled me-1\" data-icon=\"videocam\" title=\"Recorded\"/>\n"
+"                    This session will be recorded: who you are, the reason, start and end, your network address and browser,\n"
+"                    the menus you open and every record you create, change or delete.\n"
+"                    The user gets a note on their profile."
+msgstr ""
+"<i class=\"oi oi-filled me-1\" data-icon=\"videocam\" title=\"Recorded\"/>\n"
+"                    Diese Sitzung wird aufgezeichnet: wer Sie sind, der Grund, Beginn und Ende, Ihre Netzwerkadresse und Ihr Browser,\n"
+"                    die geöffneten Menüs und jeder Datensatz, den Sie erstellen, ändern oder löschen.\n"
+"                    Der Benutzer erhält eine Notiz in seinem Profil."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.return_confirm
+msgid ""
+"<i class=\"oi oi-filled me-2\" data-icon=\"person\" role=\"img\" aria-"
+"label=\"Impersonation\" title=\"Impersonation\"/>Return to your account"
+msgstr ""
+"<i class=\"oi oi-filled me-2\" data-icon=\"person\" role=\"img\" aria-"
+"label=\"Impersonation\" title=\"Impersonation\"/>Zurück zu Ihrem Konto"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.consent_result
+msgid ""
+"<i class=\"oi oi-filled text-danger me-2\" data-icon=\"cancel\" role=\"img\""
+" aria-label=\"Refused\" title=\"Refused\"/>Access refused"
+msgstr ""
+"<i class=\"oi oi-filled text-danger me-2\" data-icon=\"cancel\" role=\"img\""
+" aria-label=\"Refused\" title=\"Refused\"/>Zugriff verweigert"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.consent_result
+msgid ""
+"<i class=\"oi oi-filled text-success me-2\" data-icon=\"check_circle\" "
+"role=\"img\" aria-label=\"Allowed\" title=\"Allowed\"/>Access allowed"
+msgstr ""
+"<i class=\"oi oi-filled text-success me-2\" data-icon=\"check_circle\" "
+"role=\"img\" aria-label=\"Allowed\" title=\"Allowed\"/>Zugriff erlaubt"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.consent_result
+msgid ""
+"<i class=\"oi oi-filled text-warning me-2\" data-icon=\"warning\" "
+"role=\"img\" aria-label=\"Warning\" title=\"Warning\"/>Nothing changed"
+msgstr ""
+"<i class=\"oi oi-filled text-warning me-2\" data-icon=\"warning\" "
+"role=\"img\" aria-label=\"Warning\" title=\"Warning\"/>Nichts geändert"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.frontend_layout_impersonation_banner
+msgid ""
+"<span class=\"ms-2\"><span class=\"o_uia_banner_prefix\">Ends in</span> <b "
+"class=\"o_uia_countdown\">--:--</b></span>"
+msgstr ""
+"<span class=\"ms-2\"><span class=\"o_uia_banner_prefix\">Endet in</span> <b "
+"class=\"o_uia_countdown\">--:--</b></span>"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_res_groups
+msgid "Access Groups"
+msgstr "Zugriffsgruppen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__access_token
+msgid "Access Token"
+msgstr "Zugriffstoken"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__consent_state__granted
+msgid "Access granted by the user"
+msgstr "Zugriff vom Benutzer gewährt"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "Access request to your account"
+msgstr "Zugriffsanfrage für Ihr Konto"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__target_groups
+msgid "Access rights"
+msgstr "Zugriffsrechte"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "Access rights of this user"
+msgstr "Zugriffsrechte dieses Benutzers"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__reason_category__access_test
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__reason_category__access_test
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__reason_category__access_test
+msgid "Access test"
+msgstr "Zugriffstest"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_needaction
+msgid "Action Needed"
+msgstr "Aktion erforderlich"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__active
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__state__active
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Active"
+msgstr "Aktiv"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__activity_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__activity_ids
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_activity
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "Activity"
+msgstr "Aktivität"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__activity_count
+msgid "Activity Count"
+msgstr "Anzahl Aktivitäten"
+
+#. module: user_impersonation_audit
+#: model:ir.module.module,shortdesc:base.module_user_impersonation_audit
+msgid "Admin Login As User: Impersonate Users Safely with Audit Trail"
+msgstr ""
+"Admin-Anmeldung als Benutzer: Benutzer sicher imitieren mit Prüfprotokoll"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Administrators"
+msgstr "Administratoren"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid "All companies"
+msgstr "Alle Unternehmen"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "All groups"
+msgstr "Alle Gruppen"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_consent_form
+msgid "Allow access"
+msgstr "Zugriff erlauben"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_allow_extension
+msgid "Allow one extension per session"
+msgstr "Eine Verlängerung pro Sitzung erlauben"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__impersonation_grant_until
+msgid "Allow support access until"
+msgstr "Support-Zugriff erlauben bis"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__target_company_ids
+msgid "Allowed companies"
+msgstr "Erlaubte Unternehmen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_hours_from
+msgid "Allowed from"
+msgstr "Erlaubt ab"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Allowed hours"
+msgstr "Erlaubte Zeiten"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/res_config_settings.py:0
+msgid "Allowed hours must be between 00:00 and 23:59."
+msgstr "Erlaubte Zeiten müssen zwischen 00:00 und 23:59 liegen."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_ip_allowlist
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Allowed networks"
+msgstr "Erlaubte Netzwerke"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_hours_to
+msgid "Allowed until"
+msgstr "Erlaubt bis"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_consent__valid_until
+msgid "An approval must be used before this time."
+msgstr "Eine Genehmigung muss vor diesem Zeitpunkt verwendet werden."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid "Any user"
+msgstr "Beliebiger Benutzer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__state__approved
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__consent_state__approved
+msgid "Approved"
+msgstr "Genehmigt"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_search
+msgid "Archived"
+msgstr "Archiviert"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid ""
+"As soon as one policy is active, a session can only start if a policy matches (first match by sequence).\n"
+"                        Without any policy, members of \"Log in as other users\" may impersonate anyone the safety rules allow."
+msgstr ""
+"Sobald eine Richtlinie aktiv ist, kann eine Sitzung nur starten, wenn eine Richtlinie zutrifft (erster Treffer nach Reihenfolge).\n"
+"                        Ohne Richtlinie dürfen Mitglieder von \"Als andere Benutzer anmelden\" jeden imitieren, den die Sicherheitsregeln zulassen."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "Ask for consent"
+msgstr "Zustimmung anfragen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_require_password
+msgid "Ask for my password before starting"
+msgstr "Vor dem Start nach meinem Passwort fragen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Ask the impersonator for their own password before starting (re-asked after "
+"10 minutes)."
+msgstr ""
+"Den Imitierenden vor dem Start nach dem eigenen Passwort fragen (erneut nach"
+" 10 Minuten)."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_consent_list
+msgid "Asked on"
+msgstr "Angefragt am"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_consent_search
+msgid "Asked to me"
+msgstr "An mich gerichtet"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "At least"
+msgstr "Mindestens"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_attachment_count
+msgid "Attachment Count"
+msgstr "Anzahl Anhänge"
+
+#. module: user_impersonation_audit
+#: model:res.groups,name:user_impersonation_audit.group_impersonation_manager
+msgid "Audit and end sessions"
+msgstr "Prüfen und Sitzungen beenden"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Audit trail"
+msgstr "Änderungsprotokoll"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_base
+msgid "Base"
+msgstr "Basis"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__blocked_message
+msgid "Blocked Message"
+msgstr "Sperrmeldung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__user_agent
+msgid "Browser"
+msgstr "Browser"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"By default nobody can log in as an administrator. Allow system "
+"administrators to do it."
+msgstr ""
+"Standardmäßig kann sich niemand als Administrator anmelden. Erlauben Sie "
+"Systemadministratoren dies."
+
+#. module: user_impersonation_audit
+#: model:res.groups,comment:user_impersonation_audit.group_impersonation_user
+msgid ""
+"Can log in as other users, within the policies and safety rules. Sees their "
+"own sessions."
+msgstr ""
+"Kann sich im Rahmen der Richtlinien und Sicherheitsregeln als andere "
+"Benutzer anmelden. Sieht die eigenen Sitzungen."
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__reason_category
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__reason_category
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__reason_category
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Category"
+msgstr "Kategorie"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_activity__operation__write
+msgid "Changed"
+msgstr "Geändert"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+msgid "Changes"
+msgstr "Änderungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__company_ids
+msgid "Companies"
+msgstr "Unternehmen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__company_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__company_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__company_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__company_id
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Company"
+msgstr "Unternehmen"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_res_config_settings
+msgid "Config Settings"
+msgstr "Konfigurationseinstellungen"
+
+#. module: user_impersonation_audit
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_config
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__consent_id
+msgid "Consent"
+msgstr "Zustimmung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__consent_mode
+msgid "Consent Mode"
+msgstr "Zustimmungsmodus"
+
+#. module: user_impersonation_audit
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_consent
+msgid "Consent Requests"
+msgstr "Zustimmungsanfragen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__consent_state
+msgid "Consent State"
+msgstr "Zustimmungsstatus"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Consent and notifications"
+msgstr "Zustimmung und Benachrichtigungen"
+
+#. module: user_impersonation_audit
+#: model:ir.actions.act_window,name:user_impersonation_audit.action_impersonation_consent
+msgid "Consent requests"
+msgstr "Zustimmungsanfragen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__consent_state__missing
+msgid "Consent required"
+msgstr "Zustimmung erforderlich"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__impersonation_consent
+msgid "Consent to be impersonated"
+msgstr "Zustimmung zur Imitation"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.consent_result
+msgid "Continue"
+msgstr "Fortsetzen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_policy
+msgid "Create your first policy"
+msgstr "Erstellen Sie Ihre erste Richtlinie"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_wizard__read_only
+msgid ""
+"Create, change and delete are refused while you are logged in as this user."
+msgstr ""
+"Erstellen, Ändern und Löschen werden abgelehnt, solange Sie als dieser "
+"Benutzer angemeldet sind."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_activity__operation__create
+msgid "Created"
+msgstr "Erstellt"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__create_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__create_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__create_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__create_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__create_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__create_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__create_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__create_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__create_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__create_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__create_date
+msgid "Created on"
+msgstr "Erstellt am"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__date
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Date"
+msgstr "Datum"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__decision_date
+msgid "Decided on"
+msgstr "Entschieden am"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_default_consent
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Default consent"
+msgstr "Standardzustimmung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_activity__operation__unlink
+msgid "Deleted"
+msgstr "Gelöscht"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_ir_http__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_groups__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__display_name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__model_description
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+msgid "Document type"
+msgstr "Dokumenttyp"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__duration
+msgid "Duration (min)"
+msgstr "Dauer (Min.)"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/res_config_settings.py:0
+msgid "Durations and lengths cannot be negative."
+msgstr "Dauern und Längen dürfen nicht negativ sein."
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_mail_thread
+msgid "Email Thread"
+msgstr "E-Mail-Thread"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_notify_managers
+msgid "Email impersonation managers when a session starts"
+msgstr "Imitations-Manager per E-Mail informieren, wenn eine Sitzung startet"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Email the impersonation managers of the company when a session starts."
+msgstr ""
+"Die Imitations-Manager des Unternehmens per E-Mail informieren, wenn eine "
+"Sitzung startet."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Email the user the reason, duration and the records changed when the session"
+" ends."
+msgstr ""
+"Dem Benutzer am Sitzungsende Grund, Dauer und geänderte Datensätze per "
+"E-Mail senden."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_notify_target
+msgid "Email the user when a session starts"
+msgstr "Benutzer per E-Mail informieren, wenn eine Sitzung startet"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Email the user when someone logs in as them."
+msgstr ""
+"Den Benutzer per E-Mail informieren, wenn sich jemand als er anmeldet."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__end_reason
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "End reason"
+msgstr "Endgrund"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "End session now"
+msgstr "Sitzung jetzt beenden"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid ""
+"End this session now? The browser is sent back to the real user on its next "
+"request."
+msgstr ""
+"Diese Sitzung jetzt beenden? Der Browser wird bei der nächsten Anfrage zum "
+"echten Benutzer zurückgeschickt."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "End-of-session summary"
+msgstr "Zusammenfassung am Sitzungsende"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__end_date
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__state__ended
+msgid "Ended"
+msgstr "Beendet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__ended_by_id
+msgid "Ended by"
+msgstr "Beendet von"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__end_reason__forced
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Ended by a manager"
+msgstr "Von einem Manager beendet"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Ended sessions older than this are deleted by a scheduled job. 0 = keep "
+"forever."
+msgstr ""
+"Beendete Sitzungen, die älter sind, werden von einem geplanten Job gelöscht."
+" 0 = für immer behalten."
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "Ends in"
+msgstr "Endet in"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_session
+msgid ""
+"Every time someone logs in as another user, the session is recorded here "
+"with the reason, times, network address and every change made."
+msgstr ""
+"Jedes Mal, wenn sich jemand als anderer Benutzer anmeldet, wird die Sitzung "
+"hier mit Grund, Zeiten, Netzwerkadresse und jeder vorgenommenen Änderung "
+"aufgezeichnet."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_policy
+msgid ""
+"Example: members of Helpdesk may log in as portal users for 15 minutes, "
+"read-only; administrators get 60 minutes with full access."
+msgstr ""
+"Beispiel: Mitglieder des Helpdesks dürfen sich 15 Minuten lang "
+"schreibgeschützt als Portalbenutzer anmelden; Administratoren erhalten 60 "
+"Minuten mit Vollzugriff."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__state__expired
+msgid "Expired"
+msgstr "Abgelaufen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__end_reason__expired
+msgid "Expired (browser closed)"
+msgstr "Abgelaufen (Browser geschlossen)"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "Extend"
+msgstr "Verlängern"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "Extend this session"
+msgstr "Diese Sitzung verlängern"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__extended
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Extended"
+msgstr "Verlängert"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "Extension"
+msgstr "Verlängerung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_extension_minutes
+msgid "Extension (min)"
+msgstr "Verlängerung (Min.)"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__extension_reason
+msgid "Extension Reason"
+msgstr "Verlängerungsgrund"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_wizard__target_share
+msgid ""
+"External user with limited access, created only for the purpose of sharing "
+"data."
+msgstr ""
+"Externer Benutzer mit eingeschränktem Zugriff, der nur zum Zweck der "
+"gemeinsamen Nutzung von Daten erstellt wurde."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__impersonation_favorite_ids
+msgid "Favourite impersonation targets"
+msgstr "Bevorzugte Imitationsziele"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__field_description
+msgid "Field"
+msgstr "Feld"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__change_ids
+msgid "Field changes"
+msgstr "Feldänderungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__change_count
+msgid "Fields"
+msgstr "Felder"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_follower_ids
+msgid "Followers"
+msgstr "Follower"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Follower (Partner)"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__force_read_only
+msgid "Force read-only"
+msgstr "Schreibschutz erzwingen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_search
+msgid "Forced read-only"
+msgstr "Schreibschutz erzwungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP-Routing"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_max_time_limit
+msgid "Hard maximum (min)"
+msgstr "Hartes Maximum (Min.)"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__has_message
+msgid "Has Message"
+msgstr "Hat eine Nachricht"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_ir_http__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_mail_thread__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_groups__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__ip_address
+msgid "IP address"
+msgstr "IP-Adresse"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"IP addresses or networks (CIDR) allowed to start a session, separated by "
+"commas. Empty = any."
+msgstr ""
+"IP-Adressen oder Netzwerke (CIDR), die eine Sitzung starten dürfen, durch "
+"Kommas getrennt. Leer = beliebig."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__end_reason__idle
+msgid "Idle timeout"
+msgstr "Inaktivitäts-Timeout"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_idle_timeout
+msgid "Idle timeout (min)"
+msgstr "Inaktivitäts-Timeout (Min.)"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Idle timeout 0 = off. The hard maximum also caps extensions and policies."
+msgstr ""
+"Inaktivitäts-Timeout 0 = aus. Das harte Maximum begrenzt auch Verlängerungen"
+" und Richtlinien."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_consent__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Falls markiert, erfordern neue Nachrichten Ihre Aufmerksamkeit."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_consent__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+"Falls markiert, weisen einige Nachrichten einen Zustellungsfehler auf."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid ""
+"If you allow it, the approval is valid for %s minutes. Everything done in "
+"your account is recorded and you will see a note on your profile."
+msgstr ""
+"Wenn Sie es erlauben, gilt die Genehmigung für %s Minuten. Alles, was in "
+"Ihrem Konto getan wird, wird aufgezeichnet, und Sie sehen eine Notiz in "
+"Ihrem Profil."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_users_form_impersonation
+msgid "Impersonated"
+msgstr "Imitiert"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_user_impersonation_activity
+msgid "Impersonation Activity"
+msgstr "Imitationsaktivität"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__impersonation_can_login_as
+msgid "Impersonation Can Login As"
+msgstr "Imitation: kann anmelden als"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_user_impersonation_consent
+msgid "Impersonation Consent Request"
+msgstr "Imitations-Zustimmungsanfrage"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_user_impersonation_change
+msgid "Impersonation Field Change"
+msgstr "Imitation: Feldänderung"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_user_impersonation_policy
+msgid "Impersonation Policy"
+msgstr "Imitationsrichtlinie"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_user_impersonation_session
+msgid "Impersonation Session"
+msgstr "Imitationssitzung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__impersonation_session_count
+msgid "Impersonation Session Count"
+msgstr "Anzahl Imitationssitzungen"
+
+#. module: user_impersonation_audit
+#: model:ir.actions.act_window,name:user_impersonation_audit.action_impersonation_activity
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_pivot
+msgid "Impersonation activity"
+msgstr "Imitationsaktivität"
+
+#. module: user_impersonation_audit
+#: model:ir.actions.act_window,name:user_impersonation_audit.action_impersonation_policy
+msgid "Impersonation policies"
+msgstr "Imitationsrichtlinien"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_activity.py:0
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid ""
+"Impersonation records are written by the application only; they cannot be "
+"created, changed or deleted by hand."
+msgstr ""
+"Imitationsdatensätze werden nur von der Anwendung geschrieben; sie können "
+"nicht von Hand erstellt, geändert oder gelöscht werden."
+
+#. module: user_impersonation_audit
+#: model:ir.actions.act_window,name:user_impersonation_audit.action_impersonation_session
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_graph
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_pivot
+msgid "Impersonation sessions"
+msgstr "Imitationssitzungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__impersonator_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__impersonator_id
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Impersonator"
+msgstr "Imitierender"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "In the impersonator's time zone. Same value twice = any time."
+msgstr "In der Zeitzone des Imitierenden. Zweimal derselbe Wert = jederzeit."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_policy__target_type__all
+msgid "Internal and portal users"
+msgstr "Interne und Portalbenutzer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_policy__target_type__internal
+msgid "Internal users only"
+msgstr "Nur interne Benutzer"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/res_config_settings.py:0
+msgid "Invalid network in the allowlist: %s"
+msgstr "Ungültiges Netzwerk in der Whitelist: %s"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_is_follower
+msgid "Is Follower"
+msgstr "Ist Follower"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_retention_days
+msgid "Keep logs for (days)"
+msgstr "Protokolle behalten für (Tage)"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__landing_url
+msgid "Landing Url"
+msgstr "Ziel-URL"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__landing_url
+msgid "Landing page"
+msgstr "Zielseite"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__write_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__write_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__write_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__write_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__write_uid
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__write_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__write_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__write_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__write_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__write_date
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_user_impersonation_wizard
+msgid "Log In As User"
+msgstr "Als Benutzer anmelden"
+
+#. module: user_impersonation_audit
+#: model:ir.actions.act_window,name:user_impersonation_audit.action_impersonation_wizard
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__target_id
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_users_form_impersonation
+msgid "Log in as"
+msgstr "Anmelden als"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/res_users.py:0
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.js:0
+msgid "Log in as %s"
+msgstr "Als %s anmelden"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "Log in as another user"
+msgstr "Als anderer Benutzer anmelden"
+
+#. module: user_impersonation_audit
+#: model:ir.module.module,summary:base.module_user_impersonation_audit
+msgid ""
+"Log in as another user (internal or portal) to reproduce issues: mandatory "
+"reason, time limit with automatic return, read-only mode, who-may-"
+"impersonate-whom policies, target consent, field-level change audit, banner "
+"with return button. Free. Keywords: login as, login as user, login as any "
+"user, log in as, impersonate, impersonation, impersonate users, switch user,"
+" become user, portal user login, audit trail."
+msgstr ""
+"Melden Sie sich als anderer Benutzer (intern oder Portal) an, um Probleme "
+"nachzustellen: Pflichtgrund, Zeitlimit mit automatischer Rückkehr, "
+"Schreibschutzmodus, Richtlinien, wer wen imitieren darf, Zustimmung des "
+"Zielbenutzers, Änderungsprotokoll auf Feldebene, Banner mit Zurück-"
+"Schaltfläche. Kostenlos. Stichwörter: Anmelden als, als Benutzer anmelden, "
+"als beliebiger Benutzer anmelden, imitieren, Imitation, Benutzer imitieren, "
+"Benutzer wechseln, Benutzer werden, Portalbenutzer-Anmeldung, Prüfprotokoll."
+
+#. module: user_impersonation_audit
+#: model:res.groups,name:user_impersonation_audit.group_impersonation_user
+msgid "Log in as other users"
+msgstr "Als andere Benutzer anmelden"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "Log in as this user"
+msgstr "Als dieser Benutzer anmelden"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "Log in as..."
+msgstr "Anmelden als..."
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__target_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__target_id
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Logged in as"
+msgstr "Angemeldet als"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__end_reason__logout
+msgid "Logged out"
+msgstr "Abgemeldet"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid ""
+"Logging in as another user is not allowed from your network address (%s)."
+msgstr ""
+"Die Anmeldung als anderer Benutzer ist von Ihrer Netzwerkadresse (%s) aus "
+"nicht erlaubt."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid ""
+"Logging in as another user is only allowed between %(start)s and %(end)s."
+msgstr ""
+"Die Anmeldung als anderer Benutzer ist nur zwischen %(start)s und %(end)s "
+"erlaubt."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid ""
+"Logging in as another user is only possible from your own web browser "
+"session."
+msgstr ""
+"Die Anmeldung als anderer Benutzer ist nur aus Ihrer eigenen Browsersitzung "
+"möglich."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__target_login
+msgid "Login"
+msgstr "Anmelden"
+
+#. module: user_impersonation_audit
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_root
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_users_form_impersonation
+msgid "Login As"
+msgstr "Anmelden als"
+
+#. module: user_impersonation_audit
+#: model:res.groups.privilege,name:user_impersonation_audit.res_groups_privilege_impersonation
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Login As User"
+msgstr "Als Benutzer anmelden"
+
+#. module: user_impersonation_audit
+#: model:res.groups.privilege,name:user_impersonation_audit.res_groups_privilege_impersonation_audit
+msgid "Login As User: Audit"
+msgstr "Als Benutzer anmelden: Prüfung"
+
+#. module: user_impersonation_audit
+#: model:ir.actions.server,name:user_impersonation_audit.ir_cron_impersonation_housekeeping_ir_actions_server
+msgid "Login As User: close expired sessions and purge old logs"
+msgstr ""
+"Als Benutzer anmelden: abgelaufene Sitzungen schließen und alte Protokolle "
+"bereinigen"
+
+#. module: user_impersonation_audit
+#: model:mail.template,name:user_impersonation_audit.mail_template_session_summary
+msgid "Login As User: end-of-session summary"
+msgstr "Als Benutzer anmelden: Zusammenfassung am Sitzungsende"
+
+#. module: user_impersonation_audit
+#: model:mail.template,name:user_impersonation_audit.mail_template_session_started
+msgid "Login As User: session started"
+msgstr "Als Benutzer anmelden: Sitzung gestartet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__target_company_id
+msgid "Main company"
+msgstr "Hauptunternehmen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_policy__impersonator_group_ids
+msgid ""
+"Members of any of these groups may use this policy. They also need the \"Log"
+" in as other users\" right."
+msgstr ""
+"Mitglieder einer dieser Gruppen dürfen diese Richtlinie verwenden. Sie "
+"benötigen außerdem das Recht \"Als andere Benutzer anmelden\"."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Members of these groups can never be impersonated."
+msgstr "Mitglieder dieser Gruppen können nie imitiert werden."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Menus and actions opened while impersonating."
+msgstr "Beim Imitieren geöffnete Menüs und Aktionen."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_activity__operation__message
+msgid "Message"
+msgstr "Nachricht"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_has_error
+msgid "Message Delivery error"
+msgstr "Nachricht mit Zustellungsfehler"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/mail_thread.py:0
+msgid "Message posted as the real user"
+msgstr "Nachricht als echter Benutzer gesendet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_ids
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+msgid "Messages"
+msgstr "Nachrichten"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__min_reason_length
+msgid "Min Reason Length"
+msgstr "Min. Grundlänge"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Minimum number of characters for the reason (also for extensions and consent"
+" requests)."
+msgstr ""
+"Mindestanzahl Zeichen für den Grund (auch für Verlängerungen und "
+"Zustimmungsanfragen)."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_min_reason_length
+msgid "Minimum reason length"
+msgstr "Mindestlänge des Grundes"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__model
+msgid "Model"
+msgstr "Modell"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "My sessions"
+msgstr "Meine Sitzungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__name
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__name
+msgid "Name"
+msgstr "Name"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_config_settings__uia_default_consent__never
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_users__impersonation_consent__never
+msgid "Never ask"
+msgstr "Nie fragen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_res_users__impersonation_consent
+msgid ""
+"Never ask: no question, no email. Notify only: the user gets an email when "
+"someone logs in as them. Require consent: the user must approve each request"
+" (or grant access from their preferences)."
+msgstr ""
+"Nie fragen: keine Frage, keine E-Mail. Nur benachrichtigen: Der Benutzer "
+"erhält eine E-Mail, wenn sich jemand als er anmeldet. Zustimmung verlangen: "
+"Der Benutzer muss jede Anfrage genehmigen (oder den Zugriff in seinen "
+"Einstellungen gewähren)."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_users__impersonation_protected
+msgid "Never impersonate"
+msgstr "Nie imitieren"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_groups__impersonation_protected
+msgid "Never impersonate members"
+msgstr "Mitglieder nie imitieren"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"New sessions start read-only: create, change and delete are refused. The "
+"impersonator can switch it off unless a policy forces it."
+msgstr ""
+"Neue Sitzungen starten schreibgeschützt: Erstellen, Ändern und Löschen "
+"werden abgelehnt. Der Imitierende kann dies ausschalten, sofern es nicht "
+"durch eine Richtlinie erzwungen wird."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__new_value
+msgid "New value"
+msgstr "Neuer Wert"
+
+#. module: user_impersonation_audit
+#: model:res.groups.privilege,placeholder:user_impersonation_audit.res_groups_privilege_impersonation
+#: model:res.groups.privilege,placeholder:user_impersonation_audit.res_groups_privilege_impersonation_audit
+msgid "No"
+msgstr "Nein"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_activity
+msgid "No activity recorded yet"
+msgstr "Noch keine Aktivität aufgezeichnet"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "No consent is needed: you can log in as %s now."
+msgstr "Es ist keine Zustimmung nötig: Sie können sich jetzt als %s anmelden."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_consent
+msgid "No consent request"
+msgstr "Keine Zustimmungsanfrage"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "No impersonation policy lets you log in as %s."
+msgstr "Keine Imitationsrichtlinie erlaubt Ihnen die Anmeldung als %s."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_session
+msgid "No impersonation session yet"
+msgstr "Noch keine Imitationssitzung"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "No user found."
+msgstr "Kein Benutzer gefunden."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_res_groups__impersonation_protected
+msgid "Nobody can log in as a member of this group."
+msgstr "Niemand kann sich als Mitglied dieser Gruppe anmelden."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_res_users__impersonation_protected
+msgid "Nobody can log in as this user, whatever the policies say."
+msgstr ""
+"Niemand kann sich als dieser Benutzer anmelden, unabhängig von den "
+"Richtlinien."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__consent_state__not_needed
+msgid "Not needed"
+msgstr "Nicht erforderlich"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__note
+msgid "Note"
+msgstr "Notiz"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Notify managers"
+msgstr "Manager benachrichtigen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_config_settings__uia_default_consent__notify
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_users__impersonation_consent__notify
+msgid "Notify only"
+msgstr "Nur benachrichtigen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Notify the user"
+msgstr "Benutzer benachrichtigen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Anzahl Aktionen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__message_has_error_counter
+msgid "Number of errors"
+msgstr "Anzahl Fehler"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_consent__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Anzahl der Nachrichten, die eine Aktion erfordern"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_consent__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Anzahl Nachrichten mit Zustellungsfehler"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Old and new value of each field changed, plus records created and deleted."
+msgstr ""
+"Alter und neuer Wert jedes geänderten Feldes sowie erstellte und gelöschte "
+"Datensätze."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__old_value
+msgid "Old value"
+msgstr "Alter Wert"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid ""
+"One extension is allowed. Explain why you need more time; the reason is "
+"added to the session log."
+msgstr ""
+"Eine Verlängerung ist erlaubt. Erklären Sie, warum Sie mehr Zeit benötigen; "
+"der Grund wird dem Sitzungsprotokoll hinzugefügt."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "Only %s can answer this request."
+msgstr "Nur %s kann diese Anfrage beantworten."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "Only impersonation managers can end a session."
+msgstr "Nur Imitations-Manager können eine Sitzung beenden."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_form
+msgid "Open record"
+msgstr "Datensatz öffnen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_activity__operation__action
+msgid "Opened"
+msgstr "Geöffnet"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+msgid "Opened menus"
+msgstr "Geöffnete Menüs"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__operation
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+msgid "Operation"
+msgstr "Vorgang"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__operation_label
+msgid "Operation Label"
+msgstr "Vorgangsbezeichnung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__reason_category__other
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__reason_category__other
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__reason_category__other
+msgid "Other"
+msgstr "Andere"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Password check"
+msgstr "Passwortprüfung"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/base.py:0
+msgid ""
+"Passwords, security keys and consent settings cannot be changed while you "
+"are logged in as another user."
+msgstr ""
+"Passwörter, Sicherheitsschlüssel und Zustimmungseinstellungen können nicht "
+"geändert werden, während Sie als anderer Benutzer angemeldet sind."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Per user, this can be changed on the user form (Login As tab)."
+msgstr ""
+"Pro Benutzer kann dies im Benutzerformular geändert werden (Reiter Anmelden "
+"als)."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/controllers/main.py:0
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid "Please give a reason of at least %s characters."
+msgstr "Bitte geben Sie einen Grund mit mindestens %s Zeichen an."
+
+#. module: user_impersonation_audit
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_policies
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Policies"
+msgstr "Richtlinien"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__policy_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__policy_id
+msgid "Policy"
+msgstr "Richtlinie"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "Portal"
+msgstr "Portal"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__target_share
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__target_share
+msgid "Portal user"
+msgstr "Portalbenutzer"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Portal users"
+msgstr "Portalbenutzer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_policy__target_type__portal
+msgid "Portal users only"
+msgstr "Nur Portalbenutzer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_protected_group_ids
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Protected groups"
+msgstr "Geschützte Gruppen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_protected_user_ids
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Protected users"
+msgstr "Geschützte Benutzer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_session__session_identifier
+msgid ""
+"Public half of the impersonated browser session id (as in Devices), used to "
+"log that browser out if the app is uninstalled mid-session."
+msgstr ""
+"Öffentliche Hälfte der Sitzungs-ID des imitierten Browsers (wie unter "
+"Geräte), wird verwendet, um diesen Browser abzumelden, wenn die App mitten "
+"in der Sitzung deinstalliert wird."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__rating_ids
+msgid "Ratings"
+msgstr "Bewertungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__read_only_forced
+msgid "Read Only Forced"
+msgstr "Schreibschutz erzwungen"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__read_only
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.frontend_layout_impersonation_banner
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Read-only"
+msgstr "Schreibgeschützt"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_read_only_default
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Read-only by default"
+msgstr "Standardmäßig schreibgeschützt"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__read_only
+msgid "Read-only session"
+msgstr "Schreibgeschützte Sitzung"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/base.py:0
+msgid ""
+"Read-only session: changes are blocked while you are logged in as another "
+"user. Return to your account to make changes."
+msgstr ""
+"Schreibgeschützte Sitzung: Änderungen sind gesperrt, solange Sie als anderer"
+" Benutzer angemeldet sind. Kehren Sie zu Ihrem Konto zurück, um Änderungen "
+"vorzunehmen."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/mail_thread.py:0
+msgid ""
+"Read-only session: you cannot post messages while you are logged in as "
+"another user."
+msgstr ""
+"Schreibgeschützte Sitzung: Sie können keine Nachrichten senden, solange Sie "
+"als anderer Benutzer angemeldet sind."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__reason
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__reason
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__reason
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Reason"
+msgstr "Begründung"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "Reason:"
+msgstr "Grund:"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "Recent"
+msgstr "Neueste"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__record_name
+msgid "Record"
+msgstr "Datensatz"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__res_id
+msgid "Record ID"
+msgstr "Datensatz-ID"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_track_changes
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Record field changes"
+msgstr "Feldänderungen aufzeichnen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Record opened menus"
+msgstr "Geöffnete Menüs aufzeichnen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_track_actions
+msgid "Record opened menus and actions"
+msgstr "Geöffnete Menüs und Aktionen aufzeichnen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__change_count
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "Records changed"
+msgstr "Geänderte Datensätze"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_activity
+msgid ""
+"Records created, changed and deleted, messages posted and menus opened while"
+" logged in as another user appear here."
+msgstr ""
+"Hier erscheinen erstellte, geänderte und gelöschte Datensätze, gesendete "
+"Nachrichten und geöffnete Menüs während der Anmeldung als anderer Benutzer."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_consent_form
+msgid "Refuse"
+msgstr "Zurücksetzen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__state__refused
+msgid "Refused"
+msgstr "Verweigert"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid "Request sent"
+msgstr "Anfrage gesendet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__requester_id
+msgid "Requested by"
+msgstr "Angefordert von"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_config_settings__uia_default_consent__require
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_users__impersonation_consent__require
+msgid "Require consent"
+msgstr "Zustimmung verlangen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Retention"
+msgstr "Aufbewahrung"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "Return"
+msgstr "Zurück"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__return_url
+msgid "Return Url"
+msgstr "Rückkehr-URL"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.return_confirm
+msgid "Return to my account"
+msgstr "Zurück zu meinem Konto"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "Return to your own account before answering an access request."
+msgstr ""
+"Kehren Sie zu Ihrem eigenen Konto zurück, bevor Sie eine Zugriffsanfrage "
+"beantworten."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.frontend_layout_impersonation_banner
+msgid "Return<span class=\"o_uia_banner_prefix\"> to my account</span>"
+msgstr "Zurück<span class=\"o_uia_banner_prefix\"> zu meinem Konto</span>"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__end_reason__manual
+msgid "Returned manually"
+msgstr "Manuell zurückgekehrt"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_session__session_hash
+msgid ""
+"SHA-256 hash of the browser session id. The session id itself is never "
+"stored."
+msgstr ""
+"SHA-256-Hash der Browser-Sitzungs-ID. Die Sitzungs-ID selbst wird nie "
+"gespeichert."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Safety"
+msgstr "Sicherheit"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_systray.xml:0
+msgid "Search name or login"
+msgstr "Name oder Login suchen"
+
+#. module: user_impersonation_audit
+#: model:res.groups,comment:user_impersonation_audit.group_impersonation_manager
+msgid ""
+"Sees every impersonation session of their companies, can end active sessions"
+" and edit policies. This right alone does not allow logging in as other "
+"users."
+msgstr ""
+"Sieht jede Imitationssitzung seiner Unternehmen, kann aktive Sitzungen "
+"beenden und Richtlinien bearbeiten. Dieses Recht allein erlaubt nicht, sich "
+"als andere Benutzer anzumelden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid "Select a single user to log in as."
+msgstr "Wählen Sie genau einen Benutzer zum Anmelden."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_send_summary
+msgid "Send an end-of-session summary to the user"
+msgstr "Dem Benutzer eine Zusammenfassung am Sitzungsende senden"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__sequence
+msgid "Sequence"
+msgstr "Sequenz"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__session_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__session_id
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__session_id
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_activity_search
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "Session"
+msgstr "Sitzung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__session_identifier
+msgid "Session Identifier"
+msgstr "Sitzungskennung"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__session_hash
+msgid "Session fingerprint"
+msgstr "Sitzungs-Fingerabdruck"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_time_limit
+msgid "Session time limit (min)"
+msgstr "Sitzungs-Zeitlimit (Min.)"
+
+#. module: user_impersonation_audit
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_sessions
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Sessions"
+msgstr "Sitzungen"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Sessions end automatically and the browser returns to the real user. "
+"Policies can set their own limit."
+msgstr ""
+"Sitzungen enden automatisch und der Browser kehrt zum echten Benutzer "
+"zurück. Richtlinien können ein eigenes Limit festlegen."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_policy__force_read_only
+msgid "Sessions started under this policy are always read-only."
+msgstr ""
+"Unter dieser Richtlinie gestartete Sitzungen sind immer schreibgeschützt."
+
+#. module: user_impersonation_audit
+#: model:ir.actions.act_window,name:user_impersonation_audit.action_impersonation_settings
+#: model:ir.ui.menu,name:user_impersonation_audit.menu_impersonation_settings
+msgid "Settings"
+msgstr "Einstellungen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__start_date
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Started"
+msgstr "Gestartet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__state
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__state
+msgid "State"
+msgstr "Status"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_consent_search
+msgid "Status"
+msgstr "Status"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_activity__summary
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#. module: user_impersonation_audit
+#: model:mail.template,subject:user_impersonation_audit.mail_template_session_summary
+msgid "Summary: {{ object.impersonator_id.name }} used your account"
+msgstr ""
+"Zusammenfassung: {{ object.impersonator_id.name }} hat Ihr Konto verwendet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__reason_category__support
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__reason_category__support
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__reason_category__support
+msgid "Support ticket"
+msgstr "Support-Ticket"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_res_config_settings__uia_allow_admin_targets
+msgid "System administrators may impersonate administrators"
+msgstr "Systemadministratoren dürfen Administratoren imitieren"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_policy__company_ids
+msgid ""
+"Target users must belong to one of these companies. Leave empty for all "
+"companies."
+msgstr ""
+"Zielbenutzer müssen zu einem dieser Unternehmen gehören. Für alle "
+"Unternehmen leer lassen."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_change__field_name
+msgid "Technical name"
+msgstr "Technischer Name"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "The banner offers one extension; a new reason is required."
+msgstr ""
+"Das Banner bietet eine Verlängerung an; ein neuer Grund ist erforderlich."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_wizard__target_company_id
+msgid "The default company for this user."
+msgstr "Das Standardunternehmen dieses Benutzers."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "The public user cannot be impersonated."
+msgstr "Der öffentliche Benutzer kann nicht imitiert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_activity.py:0
+msgid "The record no longer exists."
+msgstr "Der Datensatz existiert nicht mehr."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/controllers/main.py:0
+msgid "The session already reached the hard maximum."
+msgstr "Die Sitzung hat das harte Maximum bereits erreicht."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "The superuser (OdooBot) can never be impersonated."
+msgstr "Der Superuser (OdooBot) kann nie imitiert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/res_config_settings.py:0
+msgid ""
+"The time limit must be at least 1 minute and not above the hard maximum."
+msgstr ""
+"Das Zeitlimit muss mindestens 1 Minute betragen und darf das harte Maximum "
+"nicht überschreiten."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_activity.py:0
+msgid "There is no record to open."
+msgstr "Es gibt keinen Datensatz zum Öffnen."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "These users can never be impersonated."
+msgstr "Diese Benutzer können nie imitiert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_consent.py:0
+msgid "This request was already answered or has expired."
+msgstr "Diese Anfrage wurde bereits beantwortet oder ist abgelaufen."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/controllers/main.py:0
+msgid "This session cannot be extended."
+msgstr "Diese Sitzung kann nicht verlängert werden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid "This user does not exist."
+msgstr "Dieser Benutzer existiert nicht."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__reference
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__reference
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__reference
+msgid "Ticket / reference"
+msgstr "Ticket / Referenz"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_session__planned_end_date
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "Time limit"
+msgstr "Zeitlimit"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__time_limit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_wizard__time_limit
+msgid "Time limit (min)"
+msgstr "Zeitlimit (Min.)"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__end_reason__timeout
+msgid "Time limit reached"
+msgstr "Zeitlimit erreicht"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_search
+msgid "Today"
+msgstr "Heute"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_list
+msgid "Total"
+msgstr "Gesamt"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__reason_category__training
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_session__reason_category__training
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__reason_category__training
+msgid "Training"
+msgstr "Schulung"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_users_form_simple_modif_impersonation
+msgid ""
+"Until this time, support staff may log in as you without asking for each "
+"session. Every session is still recorded."
+msgstr ""
+"Bis zu diesem Zeitpunkt darf sich der Support-Mitarbeiter als Sie anmelden, "
+"ohne bei jeder Sitzung zu fragen. Jede Sitzung wird weiterhin aufgezeichnet."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_res_users__impersonation_grant_until
+msgid ""
+"Until this time, support staff may log in as you without asking. Leave empty"
+" to be asked each time (only when your account requires consent)."
+msgstr ""
+"Bis zu diesem Zeitpunkt darf sich der Support-Mitarbeiter als Sie anmelden, "
+"ohne zu fragen. Leer lassen, um jedes Mal gefragt zu werden (nur wenn Ihr "
+"Konto eine Zustimmung verlangt)."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__res_users__impersonation_consent__default
+msgid "Use the default from Settings"
+msgstr "Standard aus den Einstellungen verwenden"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__state__used
+msgid "Used"
+msgstr "Verwendet"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_wizard__target_login
+msgid "Used to log into the system"
+msgstr "Wird zur Anmeldung am System verwendet"
+
+#. module: user_impersonation_audit
+#: model:ir.model,name:user_impersonation_audit.model_res_users
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "User"
+msgstr "Benutzer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__target_id
+msgid "User asked"
+msgstr "Benutzer hat angefragt"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__target_type
+msgid "User type"
+msgstr "Benutzertyp"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,help:user_impersonation_audit.field_user_impersonation_policy__target_group_ids
+msgid ""
+"Users in any of these groups can be impersonated. Leave empty for any user."
+msgstr ""
+"Benutzer in einer dieser Gruppen können imitiert werden. Leer lassen für "
+"jeden Benutzer."
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_consent__valid_until
+msgid "Valid until"
+msgstr "Gültig bis"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_consent_search
+msgid "Waiting"
+msgstr "Wartend"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_consent__state__pending
+msgid "Waiting for answer"
+msgstr "Warten auf Antwort"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields.selection,name:user_impersonation_audit.selection__user_impersonation_wizard__consent_state__pending
+msgid "Waiting for the user"
+msgstr "Warten auf den Benutzer"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "What are you checking or fixing for this user?"
+msgstr "Was prüfen oder beheben Sie für diesen Benutzer?"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "When"
+msgstr "Wann"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.actions.act_window,help:user_impersonation_audit.action_impersonation_consent
+msgid ""
+"When a user requires consent, the request and the answer are kept here."
+msgstr ""
+"Wenn ein Benutzer eine Zustimmung verlangt, werden Anfrage und Antwort hier "
+"aufbewahrt."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "Where from"
+msgstr "Woher"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "Who"
+msgstr "Wer"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__impersonator_group_ids
+msgid "Who (groups)"
+msgstr "Wer (Gruppen)"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid "Who may impersonate"
+msgstr "Wer imitieren darf"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid ""
+"Who may impersonate whom, in which companies, for how long and whether read-"
+"only."
+msgstr ""
+"Wer wen in welchen Unternehmen, für wie lange und ob schreibgeschützt "
+"imitieren darf."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid "Whom"
+msgstr "Wen"
+
+#. module: user_impersonation_audit
+#: model:ir.model.fields,field_description:user_impersonation_audit.field_user_impersonation_policy__target_group_ids
+msgid "Whom (groups)"
+msgstr "Wen (Gruppen)"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_session_form
+msgid "Why"
+msgstr "Warum"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid "Why this policy exists..."
+msgstr "Warum es diese Richtlinie gibt..."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid ""
+"You are already logged in as another user. Return to your account first."
+msgstr ""
+"Sie sind bereits als anderer Benutzer angemeldet. Kehren Sie zuerst zu Ihrem"
+" Konto zurück."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.return_confirm
+msgid "You are logged in as"
+msgstr "Sie sind angemeldet als"
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+#: code:addons/user_impersonation_audit/wizard/impersonation_wizard.py:0
+msgid "You are not allowed to log in as other users."
+msgstr "Sie dürfen sich nicht als andere Benutzer anmelden."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/controllers/main.py:0
+msgid "You are not logged in as another user."
+msgstr "Sie sind nicht als anderer Benutzer angemeldet."
+
+#. module: user_impersonation_audit
+#. odoo-python
+#: code:addons/user_impersonation_audit/models/impersonation_session.py:0
+msgid "You cannot log in as yourself."
+msgstr "Sie können sich nicht als Sie selbst anmelden."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.consent_result
+msgid ""
+"can now log in to your account for one session.\n"
+"                                Everything done in your account is recorded."
+msgstr ""
+"kann sich jetzt für eine Sitzung in Ihrem Konto anmelden.\n"
+"                                Alles, was in Ihrem Konto getan wird, wird aufgezeichnet."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.consent_result
+msgid "cannot log in to your account. They have been told."
+msgstr "kann sich nicht in Ihrem Konto anmelden. Die Person wurde informiert."
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "characters."
+msgstr "Zeichen."
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.res_config_settings_view_form_impersonation
+msgid "e.g. 10.0.0.0/8, 203.0.113.7"
+msgstr "z. B. 10.0.0.0/8, 203.0.113.7"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_policy_form
+msgid "e.g. Helpdesk: portal customers, read-only"
+msgstr "z. B. Helpdesk: Portalkunden, schreibgeschützt"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "e.g. Still reproducing the issue with the customer on the phone"
+msgstr "z. B. Reproduziere das Problem noch mit dem Kunden am Telefon"
+
+#. module: user_impersonation_audit
+#: model_terms:ir.ui.view,arch_db:user_impersonation_audit.view_impersonation_wizard_form
+msgid "e.g. TCK-1042"
+msgstr "z. B. TCK-1042"
+
+#. module: user_impersonation_audit
+#. odoo-javascript
+#: code:addons/user_impersonation_audit/static/src/backend/impersonation_banner.xml:0
+msgid "to my account"
+msgstr "zu meinem Konto"
+
+#. module: user_impersonation_audit
+#: model:mail.template,subject:user_impersonation_audit.mail_template_session_started
+msgid ""
+"{{ object.impersonator_id.name }} logged in as {{ object.target_id.name }}"
+msgstr ""
+"{{ object.impersonator_id.name }} hat sich als {{ object.target_id.name }} "
+"angemeldet"

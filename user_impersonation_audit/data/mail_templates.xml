@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_session_started" model="mail.template">
+            <field name="name">Login As User: session started</field>
+            <field name="model_id" ref="model_user_impersonation_session"/>
+            <field name="subject">{{ object.impersonator_id.name }} logged in as {{ object.target_id.name }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="lang">{{ object.target_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-size: 14px;">
+    <p><t t-out="object.impersonator_id.name or ''">Admin</t> logged in as <t t-out="object.target_id.name or ''">User</t> to help.</p>
+    <table style="border-collapse: collapse;">
+        <tr><td style="padding: 3px 12px 3px 0; color: #666;">Reason</td><td style="padding: 3px 0;"><t t-out="object.reason or ''">Reason</t></td></tr>
+        <tr t-if="object.reference"><td style="padding: 3px 12px 3px 0; color: #666;">Reference</td><td style="padding: 3px 0;"><t t-out="object.reference or ''">TCK-1</t></td></tr>
+        <tr><td style="padding: 3px 12px 3px 0; color: #666;">Started</td><td style="padding: 3px 0;"><t t-out="format_datetime(object.start_date, tz=object.target_id.tz, dt_format='short')">now</t></td></tr>
+        <tr><td style="padding: 3px 12px 3px 0; color: #666;">Ends at the latest</td><td style="padding: 3px 0;"><t t-out="format_datetime(object.planned_end_date, tz=object.target_id.tz, dt_format='short')">later</t></td></tr>
+        <tr><td style="padding: 3px 12px 3px 0; color: #666;">Mode</td><td style="padding: 3px 0;"><t t-if="object.read_only">Read-only</t><t t-else="">Full access, every change is recorded</t></td></tr>
+    </table>
+    <p style="color: #666;">You do not need to do anything. If you did not expect this, contact your administrator.</p>
+</div>
+            </field>
+        </record>
+
+        <record id="mail_template_session_summary" model="mail.template">
+            <field name="name">Login As User: end-of-session summary</field>
+            <field name="model_id" ref="model_user_impersonation_session"/>
+            <field name="subject">Summary: {{ object.impersonator_id.name }} used your account</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="lang">{{ object.target_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-size: 14px;">
+    <p><t t-out="object.impersonator_id.name or ''">Admin</t> was logged in as you for <t t-out="object.duration">10</t> minutes.</p>
+    <p><strong>Reason:</strong> <t t-out="object.reason or ''">Reason</t></p>
+    <t t-set="changes" t-value="object.uia_changed_activities()"/>
+    <p t-if="not changes">Nothing was created, changed or deleted.</p>
+    <t t-else="">
+        <p>Records created, changed or deleted:</p>
+        <ul>
+            <li t-foreach="changes[:50]" t-as="act">
+                <t t-out="act.model_description or act.model or ''">Contact</t>:
+                <t t-out="act.record_name or ''">Name</t>
+                (<t t-out="act.operation_label">Changed</t><t t-if="act.summary and act.operation == 'write'">: <t t-out="act.summary"/></t>)
+            </li>
+        </ul>
+    </t>
+</div>
+            </field>
+        </record>
+    </data>
+</odoo>

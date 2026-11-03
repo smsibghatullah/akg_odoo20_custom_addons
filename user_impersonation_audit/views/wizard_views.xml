@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_impersonation_wizard_form" model="ir.ui.view">
+        <field name="name">user.impersonation.wizard.form</field>
+        <field name="model">user.impersonation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Log in as">
+                <div class="alert alert-danger" role="alert" invisible="not blocked_message">
+                    <i class="oi oi-filled me-1" data-icon="block" title="Blocked"/><field name="blocked_message" readonly="1" class="d-inline"/>
+                </div>
+                <div class="alert alert-warning" role="alert" invisible="blocked_message or not target_id">
+                    <i class="oi oi-filled me-1" data-icon="videocam" title="Recorded"/>
+                    This session will be recorded: who you are, the reason, start and end, your network address and browser,
+                    the menus you open and every record you create, change or delete.
+                    The user gets a note on their profile.
+                </div>
+                <div class="alert alert-info" role="status"
+                     invisible="blocked_message or consent_state not in ('missing', 'pending')">
+                    <i class="oi oi-filled me-1" data-icon="back_hand" title="Consent"/>
+                    <span invisible="consent_state != 'missing'">This user requires consent. Send a request; they approve it from their inbox or email.</span>
+                    <span invisible="consent_state != 'pending'">A request was sent and is waiting for the user's answer.</span>
+                </div>
+                <group>
+                    <group string="User">
+                        <field name="target_id" options="{'no_create': True, 'no_open': True}" widget="many2one_avatar_user"/>
+                        <field name="target_login" invisible="not target_id"/>
+                        <field name="target_share" invisible="not target_id"/>
+                        <field name="target_company_id" invisible="not target_id"/>
+                        <field name="target_company_ids" widget="many2many_tags" invisible="not target_id"/>
+                    </group>
+                    <group string="Session" invisible="blocked_message or not target_id">
+                        <field name="time_limit"/>
+                        <field name="policy_id" invisible="not policy_id"/>
+                        <field name="read_only" readonly="read_only_forced" widget="boolean_toggle"/>
+                        <field name="read_only_forced" invisible="1"/>
+                        <field name="consent_state" invisible="consent_state == 'not_needed'"/>
+                    </group>
+                </group>
+                <group invisible="blocked_message or not target_id">
+                    <field name="reason_category" widget="radio" options="{'horizontal': true}"/>
+                    <field name="reference" placeholder="e.g. TCK-1042"/>
+                    <field name="reason" required="1" placeholder="What are you checking or fixing for this user?"/>
+                    <field name="min_reason_length" invisible="1"/>
+                </group>
+                <group string="Access rights of this user" invisible="not target_id">
+                    <field name="target_groups" nolabel="1" colspan="2" readonly="1"/>
+                </group>
+                <field name="landing_url" invisible="1"/>
+                <field name="return_url" invisible="1"/>
+                <field name="consent_mode" invisible="1"/>
+                <footer>
+                    <button name="action_start" type="object" string="Log in as this user" class="btn-primary" data-hotkey="q"
+                            invisible="blocked_message or not target_id or consent_state in ('missing', 'pending')"/>
+                    <button name="action_request_consent" type="object" string="Ask for consent" class="btn-primary"
+                            invisible="blocked_message or consent_state != 'missing'"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_impersonation_wizard" model="ir.actions.act_window">
+        <field name="name">Log in as</field>
+        <field name="res_model">user.impersonation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_users"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="group_ids" eval="[(4, ref('group_impersonation_user'))]"/>
+    </record>
+</odoo>

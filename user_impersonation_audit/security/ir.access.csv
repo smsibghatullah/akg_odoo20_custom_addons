@@ -1,0 +1,13 @@
+id,name,model_id,group_id/id,operation,domain
+access_session_user,impersonation.session.user,user.impersonation.session,group_impersonation_user,r,"[('impersonator_id', '=', user.id)]"
+access_session_manager,impersonation.session.manager,user.impersonation.session,group_impersonation_manager,r,"[('company_id', 'in', company_ids)]"
+access_activity_user,impersonation.activity.user,user.impersonation.activity,group_impersonation_user,r,"[('impersonator_id', '=', user.id)]"
+access_activity_manager,impersonation.activity.manager,user.impersonation.activity,group_impersonation_manager,r,"[('company_id', 'in', company_ids)]"
+access_change_user,impersonation.change.user,user.impersonation.change,group_impersonation_user,r,"[('session_id.impersonator_id', '=', user.id)]"
+access_change_manager,impersonation.change.manager,user.impersonation.change,group_impersonation_manager,r,"[('company_id', 'in', company_ids)]"
+access_policy_user,impersonation.policy.user,user.impersonation.policy,group_impersonation_user,r,
+access_policy_manager,impersonation.policy.manager,user.impersonation.policy,group_impersonation_manager,crud,
+access_policy_company,Impersonation policies: companies,user.impersonation.policy,,crud,"['|', ('company_ids', '=', False), ('company_ids', 'in', company_ids)]"
+access_consent_own,impersonation.consent.own,user.impersonation.consent,base.group_user,r,"['|', ('target_id', '=', user.id), ('requester_id', '=', user.id)]"
+access_consent_manager,impersonation.consent.manager,user.impersonation.consent,group_impersonation_manager,r,"[('company_id', 'in', company_ids)]"
+access_wizard_user,impersonation.wizard.user,user.impersonation.wizard,group_impersonation_user,crud,

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_impersonation" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.impersonation</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="95"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Login As User" string="Login As User" name="user_impersonation_audit">
+                    <block title="Sessions" name="uia_sessions">
+                        <setting string="Time limit" help="Sessions end automatically and the browser returns to the real user. Policies can set their own limit.">
+                            <div class="content-group">
+                                <div class="row mt8"><label for="uia_time_limit" class="col-lg-6 o_light_label"/><field name="uia_time_limit" class="col-lg-3"/></div>
+                                <div class="row"><label for="uia_max_time_limit" class="col-lg-6 o_light_label"/><field name="uia_max_time_limit" class="col-lg-3"/></div>
+                                <div class="row"><label for="uia_idle_timeout" class="col-lg-6 o_light_label"/><field name="uia_idle_timeout" class="col-lg-3"/></div>
+                                <div class="text-muted">Idle timeout 0 = off. The hard maximum also caps extensions and policies.</div>
+                            </div>
+                        </setting>
+                        <setting string="Extension" help="The banner offers one extension; a new reason is required.">
+                            <field name="uia_allow_extension"/>
+                            <div class="content-group" invisible="not uia_allow_extension">
+                                <div class="row mt8"><label for="uia_extension_minutes" class="col-lg-6 o_light_label"/><field name="uia_extension_minutes" class="col-lg-3"/></div>
+                            </div>
+                        </setting>
+                        <setting string="Read-only by default" help="New sessions start read-only: create, change and delete are refused. The impersonator can switch it off unless a policy forces it.">
+                            <field name="uia_read_only_default"/>
+                        </setting>
+                        <setting string="Reason" help="Minimum number of characters for the reason (also for extensions and consent requests).">
+                            <field name="uia_min_reason_length"/>
+                        </setting>
+                    </block>
+                    <block title="Safety" name="uia_safety">
+                        <setting string="Password check" help="Ask the impersonator for their own password before starting (re-asked after 10 minutes).">
+                            <field name="uia_require_password"/>
+                        </setting>
+                        <setting string="Administrators" help="By default nobody can log in as an administrator. Allow system administrators to do it.">
+                            <field name="uia_allow_admin_targets"/>
+                        </setting>
+                        <setting string="Allowed networks" help="IP addresses or networks (CIDR) allowed to start a session, separated by commas. Empty = any.">
+                            <field name="uia_ip_allowlist" placeholder="e.g. 10.0.0.0/8, 203.0.113.7"/>
+                        </setting>
+                        <setting string="Allowed hours" help="In the impersonator's time zone. Same value twice = any time.">
+                            <div class="content-group">
+                                <div class="row mt8"><label for="uia_hours_from" class="col-lg-4 o_light_label"/><field name="uia_hours_from" widget="float_time" class="col-lg-3"/></div>
+                                <div class="row"><label for="uia_hours_to" class="col-lg-4 o_light_label"/><field name="uia_hours_to" widget="float_time" class="col-lg-3"/></div>
+                            </div>
+                        </setting>
+                        <setting string="Protected users" help="These users can never be impersonated.">
+                            <field name="uia_protected_user_ids" widget="many2many_tags"/>
+                        </setting>
+                        <setting string="Protected groups" help="Members of these groups can never be impersonated.">
+                            <field name="uia_protected_group_ids" widget="many2many_tags"/>
+                        </setting>
+                        <setting string="Policies" help="Who may impersonate whom, in which companies, for how long and whether read-only.">
+                            <button name="%(action_impersonation_policy)d" type="action" string="Policies" icon="oi-arrow-right" class="btn-link"/>
+                        </setting>
+                    </block>
+                    <block title="Consent and notifications" name="uia_notify">
+                        <setting string="Default consent" help="Per user, this can be changed on the user form (Login As tab).">
+                            <field name="uia_default_consent"/>
+                        </setting>
+                        <setting string="Notify the user" help="Email the user when someone logs in as them.">
+                            <field name="uia_notify_target"/>
+                        </setting>
+                        <setting string="Notify managers" help="Email the impersonation managers of the company when a session starts.">
+                            <field name="uia_notify_managers"/>
+                        </setting>
+                        <setting string="End-of-session summary" help="Email the user the reason, duration and the records changed when the session ends.">
+                            <field name="uia_send_summary"/>
+                        </setting>
+                    </block>
+                    <block title="Audit trail" name="uia_audit">
+                        <setting string="Record field changes" help="Old and new value of each field changed, plus records created and deleted.">
+                            <field name="uia_track_changes"/>
+                        </setting>
+                        <setting string="Record opened menus" help="Menus and actions opened while impersonating.">
+                            <field name="uia_track_actions"/>
+                        </setting>
+                        <setting string="Retention" help="Ended sessions older than this are deleted by a scheduled job. 0 = keep forever.">
+                            <field name="uia_retention_days"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_impersonation_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'user_impersonation_audit', 'bin_size': False}</field>
+    </record>
+</odoo>

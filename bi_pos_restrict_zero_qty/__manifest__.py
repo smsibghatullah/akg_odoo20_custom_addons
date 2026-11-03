@@ -12,6 +12,7 @@
     'website': 'https://www.browseinfo.com/demo-request?app=bi_pos_restrict_zero_qty&version=20&edition=Community',
     'depends': ['base', 'point_of_sale'],
     'data': [
+        'security/ir.access.csv',
         'views/pos_config_view.xml',
     ],
     'assets': {

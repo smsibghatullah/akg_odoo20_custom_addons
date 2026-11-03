@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="user_impersonation_audit.Banner">
+        <div class="o_uia_banner d-flex align-items-center justify-content-center" role="alert"
+             t-att-class="{'o_uia_warning': this.isWarning}">
+            <span class="o_uia_banner_text text-truncate">
+                <i class="oi oi-filled me-1" data-icon="person" aria-hidden="true"/>
+                <span class="o_uia_banner_prefix">Logged in as</span> <b t-out="this.info.target_name"/>
+                <span class="o_uia_banner_real d-none d-md-inline"> (you are <t t-out="this.info.real_name"/>)</span>
+                <span t-if="this.info.read_only" class="badge ms-2 o_uia_read_only">Read-only</span>
+                <span class="ms-2"><span class="o_uia_banner_prefix">Ends in</span> <b class="o_uia_countdown" t-out="this.timeLeft"/></span>
+            </span>
+            <button t-if="this.state.canExtend" class="btn btn-sm btn-outline-light ms-2 o_uia_extend" t-on-click="this.openExtend">Extend</button>
+            <button class="btn btn-sm btn-light ms-2 o_uia_return" t-on-click="this.returnToAccount">Return<span class="o_uia_banner_prefix"> to my account</span></button>
+        </div>
+    </t>
+
+    <t t-name="user_impersonation_audit.ExtendDialog">
+        <Dialog title.translate="Extend this session" size="'md'">
+            <p>One extension is allowed. Explain why you need more time; the reason is added to the session log.</p>
+            <textarea class="form-control o_uia_extend_reason" rows="3" t-att-value="this.state.reason" t-on-input="this.onInput"
+                      placeholder="e.g. Still reproducing the issue with the customer on the phone"/>
+            <div class="form-text" t-if="this.tooShort">At least <t t-out="this.props.minLength"/> characters.</div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-att-disabled="this.tooShort or this.state.busy" t-on-click="this.confirm">Extend</button>
+                <button class="btn btn-secondary" t-on-click="this.props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

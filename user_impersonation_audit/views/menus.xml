@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_impersonation_root" name="Login As" sequence="95"
+              web_icon="user_impersonation_audit,static/description/icon.png"
+              groups="user_impersonation_audit.group_impersonation_user,user_impersonation_audit.group_impersonation_manager"/>
+    <menuitem id="menu_impersonation_sessions" name="Sessions" parent="menu_impersonation_root"
+              action="action_impersonation_session" sequence="10"/>
+    <menuitem id="menu_impersonation_activity" name="Activity" parent="menu_impersonation_root"
+              action="action_impersonation_activity" sequence="20"/>
+    <menuitem id="menu_impersonation_consent" name="Consent Requests" parent="menu_impersonation_root"
+              action="action_impersonation_consent" sequence="30"/>
+    <menuitem id="menu_impersonation_config" name="Configuration" parent="menu_impersonation_root" sequence="90"
+              groups="user_impersonation_audit.group_impersonation_manager"/>
+    <menuitem id="menu_impersonation_policies" name="Policies" parent="menu_impersonation_config"
+              action="action_impersonation_policy" sequence="10"/>
+    <menuitem id="menu_impersonation_settings" name="Settings" parent="menu_impersonation_config"
+              action="action_impersonation_settings" sequence="20" groups="base.group_system"/>
+</odoo>

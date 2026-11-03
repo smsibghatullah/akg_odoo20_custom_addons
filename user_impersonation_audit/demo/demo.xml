@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="demo_group_support" model="res.groups">
+        <field name="name">Support Desk (demo)</field>
+    </record>
+
+    <record id="demo_user_agent" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Nadia Brooks</field>
+        <field name="login">nadia</field>
+        <field name="password">nadia</field>
+        <field name="email">nadia.brooks@example.com</field>
+        <field name="tz">Europe/Brussels</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('group_impersonation_user')), (4, ref('demo_group_support'))]"/>
+    </record>
+
+    <record id="demo_user_olivia" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Olivia Park</field>
+        <field name="login">olivia</field>
+        <field name="password">olivia</field>
+        <field name="email">olivia.park@example.com</field>
+        <field name="impersonation_consent">require</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="base.user_admin" model="res.users">
+        <field name="group_ids" eval="[(4, ref('group_impersonation_user'))]"/>
+    </record>
+
+    <record id="demo_policy_admins" model="user.impersonation.policy">
+        <field name="name">Administrators: any user, full access</field>
+        <field name="sequence">10</field>
+        <field name="impersonator_group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="target_type">all</field>
+        <field name="time_limit">60</field>
+    </record>
+    <record id="demo_policy_support" model="user.impersonation.policy">
+        <field name="name">Support desk: portal customers, read-only</field>
+        <field name="sequence">20</field>
+        <field name="impersonator_group_ids" eval="[(4, ref('demo_group_support'))]"/>
+        <field name="target_type">portal</field>
+        <field name="time_limit">15</field>
+        <field name="force_read_only" eval="True"/>
+        <field name="note">Support agents check what a customer sees on the portal. They cannot change anything.</field>
+    </record>
+
+    <function model="user.impersonation.session" name="_uia_demo_create"/>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_impersonation" model="ir.ui.view">
+        <field name="name">res.users.form.impersonation</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="impersonation_can_login_as" invisible="1"/>
+                <button name="action_impersonation_login_as" type="object" string="Log in as"
+                        groups="user_impersonation_audit.group_impersonation_user"
+                        invisible="not impersonation_can_login_as"/>
+            </xpath>
+            <div name="button_box" position="inside">
+                <button name="action_impersonation_sessions" type="object" class="oe_stat_button" icon="person" icon_class="oi-filled"
+                        groups="user_impersonation_audit.group_impersonation_manager" invisible="not id">
+                    <field name="impersonation_session_count" widget="statinfo" string="Impersonated"/>
+                </button>
+            </div>
+            <xpath expr="//page[@name='page_security']" position="after">
+                <page string="Login As" name="impersonation" groups="user_impersonation_audit.group_impersonation_manager">
+                    <group>
+                        <group>
+                            <field name="impersonation_consent"/>
+                            <field name="impersonation_protected"/>
+                            <field name="impersonation_grant_until"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_users_form_simple_modif_impersonation" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.impersonation</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <group name="other_preferences" position="inside">
+                <field name="impersonation_consent" readonly="1" invisible="impersonation_consent in ('default', 'never')"/>
+                <field name="impersonation_grant_until" readonly="0"
+                       help="Until this time, support staff may log in as you without asking for each session. Every session is still recorded."/>
+            </group>
+        </field>
+    </record>
+
+    <record id="view_groups_form_impersonation" model="ir.ui.view">
+        <field name="name">res.groups.form.impersonation</field>
+        <field name="model">res.groups</field>
+        <field name="inherit_id" ref="base.view_groups_form"/>
+        <field name="arch" type="xml">
+            <field name="disjoint_ids" position="after">
+                <field name="impersonation_protected" groups="user_impersonation_audit.group_impersonation_manager"/>
+            </field>
+        </field>
+    </record>
+</odoo>

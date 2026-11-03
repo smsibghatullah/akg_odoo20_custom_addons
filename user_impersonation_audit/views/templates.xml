@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal / website pages: same banner as the backend, rendered on the server. -->
+    <template id="frontend_layout_impersonation_banner" inherit_id="web.frontend_layout" name="Impersonation banner">
+        <xpath expr="//div[@id='wrapwrap']" position="before">
+            <t t-set="uia_banner" t-value="request and request.env['ir.http'].uia_banner_info()"/>
+            <div t-if="uia_banner" class="o_uia_banner o_uia_banner_frontend" role="alert"
+                 t-att-data-remaining="uia_banner['remaining']">
+                <span class="o_uia_banner_text">
+                    <i class="oi oi-filled me-1" data-icon="person" role="img" aria-label="Impersonation" title="Impersonation"/>
+                    <span class="o_uia_banner_prefix">Logged in as</span> <b t-out="uia_banner['target_name']"/>
+                    <span class="o_uia_banner_real">(you are <t t-out="uia_banner['real_name']"/>)</span>
+                    <span t-if="uia_banner['read_only']" class="badge ms-1 o_uia_read_only">Read-only</span>
+                    <span class="ms-2"><span class="o_uia_banner_prefix">Ends in</span> <b class="o_uia_countdown">--:--</b></span>
+                </span>
+                <form action="/impersonation/return" method="post" class="d-inline o_uia_return_form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <button type="submit" class="btn btn-sm btn-light ms-2 o_uia_return">Return<span class="o_uia_banner_prefix"> to my account</span></button>
+                </form>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="return_confirm" name="Impersonation return">
+        <t t-call="web.frontend_layout">
+            <t t-set="no_footer" t-value="True"/>
+            <div class="container py-5" style="max-width: 640px;">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="h4"><i class="oi oi-filled me-2" data-icon="person" role="img" aria-label="Impersonation" title="Impersonation"/>Return to your account</h2>
+                        <p>You are logged in as <b t-out="request.env.user.name"/>. Return to your own account
+                            (<t t-out="imp['real_name']"/>) and end this session?</p>
+                        <form action="/impersonation/return" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-primary o_uia_return_confirm">Return to my account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="consent_result" name="Impersonation consent answer">
+        <t t-call="web.frontend_layout">
+            <t t-set="no_footer" t-value="True"/>
+            <div class="container py-5" style="max-width: 640px;">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <t t-if="error">
+                            <h2 class="h4"><i class="oi oi-filled text-warning me-2" data-icon="warning" role="img" aria-label="Warning" title="Warning"/>Nothing changed</h2>
+                            <p class="mb-0" t-out="error"/>
+                        </t>
+                        <t t-elif="decision == 'approve'">
+                            <h2 class="h4"><i class="oi oi-filled text-success me-2" data-icon="check_circle" role="img" aria-label="Allowed" title="Allowed"/>Access allowed</h2>
+                            <p><t t-out="consent.requester_id.name"/> can now log in to your account for one session.
+                                Everything done in your account is recorded.</p>
+                        </t>
+                        <t t-else="">
+                            <h2 class="h4"><i class="oi oi-filled text-danger me-2" data-icon="cancel" role="img" aria-label="Refused" title="Refused"/>Access refused</h2>
+                            <p><t t-out="consent.requester_id.name"/> cannot log in to your account. They have been told.</p>
+                        </t>
+                        <a t-att-href="'/my' if request.env.user.share else '/odoo'" class="btn btn-primary mt-2">Continue</a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

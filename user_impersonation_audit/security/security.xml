@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_groups_privilege_impersonation" model="res.groups.privilege">
+        <field name="name">Login As User</field>
+        <field name="category_id" ref="base.module_category_administration"/>
+        <field name="sequence">40</field>
+    </record>
+    <record id="res_groups_privilege_impersonation_audit" model="res.groups.privilege">
+        <field name="name">Login As User: Audit</field>
+        <field name="category_id" ref="base.module_category_administration"/>
+        <field name="sequence">41</field>
+    </record>
+
+    <!-- May start sessions. Empty by default: nobody can impersonate until an administrator adds them. -->
+    <record id="group_impersonation_user" model="res.groups">
+        <field name="name">Log in as other users</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_groups_privilege_impersonation"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can log in as other users, within the policies and safety rules. Sees their own sessions.</field>
+    </record>
+
+    <!-- Oversight: all sessions of their companies, force end, policies. Does NOT allow impersonating. -->
+    <record id="group_impersonation_manager" model="res.groups">
+        <field name="name">Audit and end sessions</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_groups_privilege_impersonation_audit"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_by_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="comment">Sees every impersonation session of their companies, can end active sessions and edit policies. This right alone does not allow logging in as other users.</field>
+    </record>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_impersonation_policy_list" model="ir.ui.view">
+        <field name="name">user.impersonation.policy.list</field>
+        <field name="model">user.impersonation.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="impersonator_group_ids" widget="many2many_tags"/>
+                <field name="target_group_ids" widget="many2many_tags"/>
+                <field name="target_type"/>
+                <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
+                <field name="time_limit"/>
+                <field name="force_read_only"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_impersonation_policy_form" model="ir.ui.view">
+        <field name="name">user.impersonation.policy.form</field>
+        <field name="model">user.impersonation.policy</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Helpdesk: portal customers, read-only"/></h1>
+                    </div>
+                    <group>
+                        <group string="Who may impersonate">
+                            <field name="impersonator_group_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Whom">
+                            <field name="target_group_ids" widget="many2many_tags" placeholder="Any user"/>
+                            <field name="target_type"/>
+                            <field name="company_ids" widget="many2many_tags" placeholder="All companies"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Session">
+                            <field name="time_limit"/>
+                            <field name="force_read_only"/>
+                            <field name="sequence"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Why this policy exists..."/>
+                    <div class="alert alert-info mt-3" role="status">
+                        As soon as one policy is active, a session can only start if a policy matches (first match by sequence).
+                        Without any policy, members of "Log in as other users" may impersonate anyone the safety rules allow.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_impersonation_policy_search" model="ir.ui.view">
+        <field name="name">user.impersonation.policy.search</field>
+        <field name="model">user.impersonation.policy</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="impersonator_group_ids"/>
+                <field name="target_group_ids"/>
+                <filter name="filter_read_only" string="Forced read-only" domain="[('force_read_only', '=', True)]"/>
+                <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_impersonation_policy" model="ir.actions.act_window">
+        <field name="name">Impersonation policies</field>
+        <field name="res_model">user.impersonation.policy</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first policy</p>
+            <p>Example: members of Helpdesk may log in as portal users for 15 minutes, read-only; administrators get 60 minutes with full access.</p>
+        </field>
+    </record>
+</odoo>
