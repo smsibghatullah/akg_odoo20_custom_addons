@@ -15,12 +15,11 @@
         <t t-set="th_style" t-value="'text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important'"/>
         <t t-set="td_style" t-value="'border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important;vertical-align:middle'"/>
 
-        <t t-call="akg_doc_reports.akgr_header"/>
-
         <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
              t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
              t-att-data-oe-lang="doc.env.context.get('lang')">
             <t t-call="akg_doc_reports.akgr_css"/>
+            <t t-call="akg_payment_receipt_report.akgp_header"/>
 
             <div class="title"><t t-out="doc._akgp_title()"/>: <t t-out="doc.name or ''"/></div>
 
@@ -55,5 +54,21 @@
         </div>
 
         <t t-call="akg_doc_reports.akgr_footer"/>
+    </template>
+
+    <template id="akgp_header">
+        <table style="width:100%;border:0 none !important;margin:0 0 8px 0">
+            <tr style="border:0 none !important">
+                <td style="width:50%;border:0 none !important;vertical-align:top;padding:0">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                         style="max-height:90px;max-width:240px" alt="Logo"/>
+                </td>
+                <td style="width:50%;border:0 none !important;vertical-align:top;padding:0">
+                    <div style="font-size:15px;font-weight:bold;margin-bottom:8px"><t t-out="company.name"/></div>
+                    <div t-if="company.vat" style="font-size:14px;margin-bottom:8px">Tax ID: <t t-out="company.vat"/></div>
+                    <div t-if="company.website" style="font-size:14px;color:#1a73e8"><t t-out="company.website"/></div>
+                </td>
+            </tr>
+        </table>
     </template>
 </odoo>

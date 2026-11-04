@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Payment Receipt Report',
-    'version': '20.0.1.0.1',
+    'version': '20.0.1.0.2',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Payment Receipt / Refund Confirmation (account.payment) PDF in the AKG layout.',

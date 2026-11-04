@@ -14,13 +14,27 @@ class IrActionsReport(models.Model):
     _inherit = 'ir.actions.report'
 
     @api.model
+    def _akgp_paperformat(self):
+        """AKG paper format with a small top margin (the header is now printed inside the page,
+        so it can no longer be cut off at the top). Copy of akg_doc_reports' format, created once."""
+        Paper = self.env['report.paperformat']
+        name = 'AKG A4 - body header'
+        paper = Paper.search([('name', '=', name)], limit=1)
+        if paper:
+            return paper
+        base = self.env.ref('akg_doc_reports.paperformat_akgr', raise_if_not_found=False)
+        if not base:
+            return Paper
+        return base.copy({'name': name, 'margin_top': 12, 'header_spacing': 0})
+
+    @api.model
     def _akgp_apply_report(self):
         """Point the standard Payment Receipt action(s) to the AKG template + paper format.
 
         Found by xml id AND by standard template name. Called from
         data/report_action.xml (every install / upgrade).
         """
-        paperformat = self.env.ref('akg_doc_reports.paperformat_akgr', raise_if_not_found=False)
+        paperformat = self._akgp_paperformat()
         reports = self.browse()
         for xmlid in AKGP_XMLIDS:
             report = self.env.ref(xmlid, raise_if_not_found=False)
