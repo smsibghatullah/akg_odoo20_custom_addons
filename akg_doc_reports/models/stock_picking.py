@@ -64,7 +64,7 @@ class StockPicking(models.Model):
             demand = first_field(move, ['product_uom_qty'], 0.0)
             done = first_field(move, ['quantity', 'quantity_done'], 0.0)
             qty = (done or demand) if self.state == 'done' else (demand or done)
-            uom = first_field(move, ['product_uom_id', 'product_uom'])
+            uom = first_field(move, ['product_uom', 'product_uom_id']) or product.uom_id
             lots = []
             if 'move_line_ids' in move._fields and 'lot_id' in self.env['stock.move.line']._fields:
                 lots = [l for l in move.move_line_ids.mapped('lot_id.name') if l]
@@ -76,4 +76,24 @@ class StockPicking(models.Model):
                 'to': move.location_dest_id.display_name,
                 'lots': ', '.join(lots),
             })
+        return rows
+
+    # ---- Delivery Slip (Odoo 16 look: Product / Ordered / Delivered) ----
+    def _akgr_delivery_info_rows(self):
+        self.ensure_one()
+        done = first_field(self, ['date_done'])
+        shipping = (done if self.state == 'done' and done else False) or self.scheduled_date
+        items = [('Order', self.origin, 'text'), ('Shipping Date', shipping, 'datetime')]
+        return chunk([i for i in items if i[1]], 4)
+
+    def _akgr_delivery_lines(self):
+        self.ensure_one()
+        rows = []
+        for base in self._akgr_lines():
+            rows.append(base)
+        moves = (first_field(self, ['move_ids', 'move_ids_without_package']) or self.env['stock.move'])
+        moves = moves.sorted(key=lambda m: (m.sequence, m.id))
+        for row, move in zip(rows, moves):
+            row['ordered'] = first_field(move, ['product_uom_qty'], 0.0)
+            row['delivered'] = first_field(move, ['quantity', 'quantity_done'], 0.0)
         return rows

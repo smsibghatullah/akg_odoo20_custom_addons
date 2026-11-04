@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Pro-Forma Invoice Report',
-    'version': '20.0.1.1.0',
+    'version': '20.0.1.1.1',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Pro-Forma Invoice PDF in the AKG layout, with its own Print menu entry.',

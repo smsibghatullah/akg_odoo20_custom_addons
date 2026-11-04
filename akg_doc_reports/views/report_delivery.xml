@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Delivery Slip in the Odoo 16 look: partner address (left) + WAREHOUSE address (right),
+         no "Delivery Address" block, table Product / Ordered / Delivered. -->
+    <template id="report_deliveryslip_akg">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="akg_doc_reports.deliveryslip_document_akg" t-lang="doc._akgr_lang()"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="deliveryslip_document_akg">
+        <t t-set="company" t-value="doc.company_id"/>
+        <t t-set="info_rows" t-value="doc._akgr_delivery_info_rows()"/>
+        <t t-set="lines" t-value="doc._akgr_delivery_lines()"/>
+        <t t-set="wh_partner" t-value="doc._akgr_warehouse_partner()"/>
+        <t t-set="show_lots" t-value="any(l['lots'] for l in lines)"/>
+
+        <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
+             t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
+             t-att-data-oe-lang="doc.env.context.get('lang')">
+            <t t-call="akg_doc_reports.akgr_css"/>
+            <t t-call="akg_report_layout.akg_header_inline"/>
+
+            <table style="margin-top:14px;border:0 none !important">
+                <tr style="border:0 none !important">
+                    <td style="width:58%; padding-right:20px;border:0 none !important">
+                        <t t-if="doc.partner_id">
+                            <div class="lb"><t t-out="doc._akgr_partner_label()"/></div>
+                            <address t-out="doc._akgr_addr(doc.partner_id)"/>
+                            <div t-if="doc.partner_id.vat" style="font-size:15px;">VAT: <t t-out="doc.partner_id.vat"/></div>
+                        </t>
+                    </td>
+                    <td style="width:42%;border:0 none !important">
+                        <t t-if="wh_partner">
+                            <div class="lb">Warehouse Address:</div>
+                            <address t-out="doc._akgr_addr(wh_partner)"/>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="title" style="margin-bottom:6px;"><t t-out="doc.name"/></div>
+
+            <t t-call="akg_doc_reports.akgr_info"/>
+
+            <table class="lines" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                <thead style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <th class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Product</th>
+                        <th class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Ordered</th>
+                        <th class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Delivered</th>
+                        <th t-if="show_lots" class="l" style="text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important">Lot/Serial</th>
+                    </tr>
+                </thead>
+                <tbody style="border:0 none !important">
+                    <tr t-foreach="lines" t-as="line" style="border:0 none !important">
+                        <td class="l first" style="white-space: pre-line;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['name']"/></td>
+                        <td class="l" style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
+                            <span t-out="line['ordered']" t-options='{"widget": "float", "precision": 2}'/>
+                            <t t-out="line['uom']"/>
+                        </td>
+                        <td class="l" style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
+                            <span t-out="line['delivered']" t-options='{"widget": "float", "precision": 2}'/>
+                            <t t-out="line['uom']"/>
+                        </td>
+                        <td t-if="show_lots" class="l" style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><t t-out="line['lots']"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div t-if="doc._akgr_note()" style="margin-top:16px;"><t t-out="doc._akgr_note()"/></div>
+        </div>
+
+        <t t-call="akg_doc_reports.akgr_footer"/>
+    </template>
+</odoo>

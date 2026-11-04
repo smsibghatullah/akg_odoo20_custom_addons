@@ -17,12 +17,11 @@
         <t t-set="wh_partner" t-value="doc._akgr_warehouse_partner()"/>
         <t t-set="show_lots" t-value="any(l['lots'] for l in lines)"/>
 
-        <t t-call="akg_doc_reports.akgr_header"/>
-
         <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
              t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
              t-att-data-oe-lang="doc.env.context.get('lang')">
             <t t-call="akg_doc_reports.akgr_css"/>
+            <t t-call="akg_report_layout.akg_header_inline"/>
 
             <div t-if="barcode_uri" style="text-align:right; margin-top:4px;">
                 <img t-att-src="barcode_uri" style="width:300px; height:50px;"/>
@@ -30,13 +29,13 @@
 
             <table style="margin-top:14px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:50%; padding-right:20px;border:0 none !important">
+                    <td style="width:58%; padding-right:20px;border:0 none !important">
                         <t t-if="wh_partner">
                             <div class="lb">Warehouse Address:</div>
                             <address t-out="doc._akgr_addr(wh_partner)"/>
                         </t>
                     </td>
-                    <td style="width:50%;border:0 none !important">
+                    <td style="width:42%;border:0 none !important">
                         <t t-if="doc.partner_id">
                             <div class="lb"><t t-out="doc._akgr_partner_label()"/></div>
                             <address t-out="doc._akgr_addr(doc.partner_id)"/>

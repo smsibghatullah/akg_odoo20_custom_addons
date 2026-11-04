@@ -15,6 +15,8 @@ AKGR_TARGETS = [
      'akg_doc_reports.report_purchasequotation_akg'),
     ('stock.picking', ['stock.report_picking'], ['stock.action_report_picking'],
      'akg_doc_reports.report_picking_akg'),
+    ('stock.picking', ['stock.report_deliveryslip'], ['stock.action_report_delivery'],
+     'akg_doc_reports.report_deliveryslip_akg'),
 ]
 
 
@@ -141,8 +143,11 @@ class IrActionsReport(models.Model):
                 new = 'akg_doc_reports.report_purchasequotation_akg'
             elif template == 'purchase.report_purchaseorder':
                 new = 'akg_doc_reports.report_purchaseorder_akg'
-        elif model == 'stock.picking' and template == 'stock.report_picking':
-            new = 'akg_doc_reports.report_picking_akg'
+        elif model == 'stock.picking':
+            if template == 'stock.report_picking':
+                new = 'akg_doc_reports.report_picking_akg'
+            elif template.startswith('stock.') and 'deliveryslip' in low:
+                new = 'akg_doc_reports.report_deliveryslip_akg'
         if new != template:
             _logger.info('akg_doc_reports: %s render %s -> %s', model, template, new)
         return new

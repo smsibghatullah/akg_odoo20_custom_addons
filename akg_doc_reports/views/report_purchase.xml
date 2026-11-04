@@ -31,24 +31,23 @@
         <t t-set="ship_partner" t-value="doc._akgr_shipping_partner()"/>
         <t t-set="show_discount" t-value="any(l.get('discount') for l in lines if l['type'] == 'line')"/>
 
-        <t t-call="akg_doc_reports.akgr_header"/>
-
         <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
              t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
              t-att-data-oe-lang="doc.env.context.get('lang')">
             <t t-call="akg_doc_reports.akgr_css"/>
+            <t t-call="akg_report_layout.akg_header_inline"/>
 
             <table style="margin-top:4px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:50%; padding-right:20px;border:0 none !important">
+                    <td style="width:58%; padding-right:20px;border:0 none !important">
                         <t t-if="ship_partner">
                             <div class="lb">Shipping address:</div>
                             <address t-out="doc._akgr_addr(ship_partner)"/>
                         </t>
                     </td>
-                    <td style="width:50%;border:0 none !important">
+                    <td style="width:42%;border:0 none !important">
                         <address t-out="doc._akgr_addr(doc.partner_id)"/>
-                        <div t-if="doc.partner_id.vat" style="font-size:14px;">VAT: <t t-out="doc.partner_id.vat"/></div>
+                        <div t-if="doc.partner_id.vat" style="font-size:15px;">VAT: <t t-out="doc.partner_id.vat"/></div>
                     </td>
                 </tr>
             </table>

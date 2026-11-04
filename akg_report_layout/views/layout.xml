@@ -5,24 +5,24 @@
          so each block calls this template. No @font-face on purpose. -->
     <template id="akg_css">
         <style>
-            html .akgr.akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
+            html .akgr.akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: bold; color: #222; }
             /* Odoo 20 report css draws borders on every table: switch them all off ... */
             html .akgr.akgr table { border-collapse: collapse; width: 100%; border: 0 none !important; }
             html .akgr.akgr table td, html .akgr.akgr table th { border: 0 none !important; background: transparent; box-shadow: none; padding: 0; vertical-align: top; }
             /* ... and draw only the borders the AKG design wants */
             html .akgr.akgr table.lines { border-bottom: 2px solid #444 !important; }
-            html .akgr.akgr table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.5; }
+            html .akgr.akgr table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 14px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.5; }
             html .akgr.akgr table.lines td { border-bottom: 1px solid #ccc !important; border-left: 1px solid #ddd !important; padding: 12px 8px; text-align: right; }
             html .akgr.akgr table.lines th.l, html .akgr.akgr table.lines td.l { text-align: left; }
             html .akgr.akgr table.lines td.first, html .akgr.akgr table.lines td:first-child { border-left: 0 none !important; }
             html .akgr.akgr table.tot { border-bottom: 2px solid #444 !important; }
             html .akgr.akgr table.tot td { border: 1px solid #e3e3e3 !important; padding: 13px 9px; text-align: right; }
             html .akgr.akgr table.tot td.lb { text-align: left; }
-            .akgr address { font-style: normal; margin: 0; line-height: 1.55; font-size: 14px; }
+            .akgr address { font-style: normal; margin: 0; line-height: 1.55; font-size: 15px; font-weight: bold; }
             .akgr a { color: #555; text-decoration: underline; }
             .akgr .teal { color: #1ca3b8; }
             .akgr .lb { color: #555; font-weight: bold; }
-            .akgr .title { font-size: 32px; color: #1ca3b8; margin: 22px 0 14px 0; }
+            .akgr .title { font-size: 34px; color: #1ca3b8; margin: 22px 0 14px 0; }
             .akgr .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #000; }
         </style>
     </template>
@@ -37,10 +37,30 @@
         <div class="header" dir="ltr" style="width:100%; margin:0; padding:0;">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="display:table; width:100%;">
-                <div style="display:table-cell; width:45%; vertical-align:top; text-align:left;">
+                <div style="display:table-cell; width:58%; vertical-align:top; text-align:left;">
                     <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
                 </div>
-                <div style="display:table-cell; width:55%; vertical-align:top; text-align:left; padding-left:60px; padding-top:8px; font-size:14px; line-height:2.1;">
+                <div style="display:table-cell; width:42%; vertical-align:top; text-align:left; padding-left:0; padding-top:6px; font-size:16px; line-height:1.95;">
+                    <div style="font-weight:bold"><t t-out="co.name"/></div>
+                    <div t-if="co.vat">Tax ID: <t t-out="co.vat"/></div>
+                    <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Header printed INSIDE the page body (first thing of the document). Own reports use this one:
+         it does not depend on wkhtmltopdf header positioning (margin_top / header_spacing).
+         Class is "akgh", not "header", so Odoo does not extract it. Needs `company`. -->
+    <template id="akg_header_inline">
+        <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
+        <t t-set="logo_uri" t-value="co._akgr_logo_uri()"/>
+        <div class="akgh" dir="ltr" style="width:100%; margin:0 0 14px 0; padding:0;">
+            <div class="akgr" style="display:table; width:100%;">
+                <div style="display:table-cell; width:58%; vertical-align:top; text-align:left;">
+                    <img t-if="logo_uri" t-att-src="logo_uri" style="max-height: 90px; max-width: 220px;"/>
+                </div>
+                <div style="display:table-cell; width:42%; vertical-align:top; text-align:left; padding-left:0; padding-top:6px; font-size:16px; line-height:1.95;">
                     <div style="font-weight:bold"><t t-out="co.name"/></div>
                     <div t-if="co.vat">Tax ID: <t t-out="co.vat"/></div>
                     <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
@@ -58,14 +78,14 @@
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="border-top: 2px solid #444; padding-top: 8px;">
                 <div style="display:table; width:100%;">
-                    <div style="display:table-cell; width:28%; vertical-align:top; font-size:11px; line-height:1.9; padding-top:10px;">
+                    <div style="display:table-cell; width:28%; vertical-align:top; font-size:13px; line-height:1.8; padding-top:8px;">
                         <div t-if="co.website" style="color:#1a73e8;"><t t-out="co.website"/></div>
                         <div>Tax Card No. <t t-out="fv['tax_card']"/></div>
                         <div>CR. No. <t t-out="fv['cr_no']"/></div>
                     </div>
                     <div style="display:table-cell; width:50%; vertical-align:top; text-align:center; padding-top:4px;">
-                        <div class="ar" style="font-size:12px;"><t t-out="fv['ar_name']"/></div>
-                        <div style="margin-top:14px; font-size:13px;">
+                        <div class="ar" style="font-size:14px;"><t t-out="fv['ar_name']"/></div>
+                        <div style="margin-top:12px; font-size:15px;">
                             <t t-out="fv['thank_en']"/> <span class="ar"><t t-out="fv['thank_ar']"/></span>
                         </div>
                     </div>

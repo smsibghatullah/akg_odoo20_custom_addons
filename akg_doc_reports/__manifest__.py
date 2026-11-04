@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Quotation / Order / RFQ / Picking Reports (Odoo 16 look)',
-    'version': '20.0.1.1.6',
+    'version': '20.0.1.2.0',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Sales order/quotation, purchase order/RFQ and picking operations '
@@ -26,6 +26,7 @@ PNG backend (rlPyCairo / _rl_renderPM) is not installed.
         'views/report_sale.xml',
         'views/report_purchase.xml',
         'views/report_picking.xml',
+        'views/report_delivery.xml',
         'data/report_action.xml',
     ],
     'uninstall_hook': 'uninstall_hook',

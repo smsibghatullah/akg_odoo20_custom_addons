@@ -35,9 +35,6 @@
 
         <!-- Footer texts (Tax card, CR no., Arabic name, Thank you) are edited in akg_report_layout -->
 
-        <!-- Shared header (akg_report_layout) -->
-        <t t-call="akg_report_layout.akg_header"/>
-
         <div t-attf-class="article akg-doc o_company_#{company.id}_layout" dir="ltr"
              t-att-data-oe-model="o and o._name"
              t-att-data-oe-id="o and o.id"
@@ -48,30 +45,33 @@
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
                 @font-face { font-family: 'Oswald'; font-weight: bold;
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
-                .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 13px; color: #222; }
+                .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: bold; color: #222; }
                 html .akg-doc.akg-doc table { border-collapse: collapse; width: 100%; border: 0 none !important; }
                 html .akg-doc.akg-doc table td, html .akg-doc.akg-doc table th { border: 0 none !important; background: transparent; box-shadow: none; padding: 0; vertical-align: top; }
                 html .akg-doc.akg-doc table.lines { border-bottom: 2px solid #444 !important; }
-                html .akg-doc.akg-doc table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 13px; font-weight: normal; text-transform: uppercase; line-height: 1.5; }
+                html .akg-doc.akg-doc table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 14px; font-weight: bold; text-transform: uppercase; line-height: 1.5; }
                 html .akg-doc.akg-doc table.lines td { border-bottom: 1px solid #ccc !important; border-left: 1px solid #ddd !important; padding: 14px 8px; text-align: right; }
                 html .akg-doc.akg-doc table.lines td:first-child { border-left: 0 none !important; }
                 html .akg-doc.akg-doc table.tot td { border: 1px solid #e3e3e3 !important; padding: 15px 9px; text-align: right; }
-                html .akg-doc.akg-doc table.info td { padding: 3px 0; font-size: 13px; }
+                html .akg-doc.akg-doc table.info td { padding: 3px 0; font-size: 15px; }
                 .akg-doc .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
                 .akg-doc .ar-n { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: normal; color: #222; }
                 .akg-doc .teal { color: #1ca3b8; }
-                .akg-doc .lines th .ar { font-size: 12px; text-transform: none; display: block; }
-                .akg-doc .tot .lbl { font-family: 'DejaVu Sans', sans-serif; font-weight: bold; color: #555; font-size: 12px; }
+                .akg-doc .lines th .ar { font-size: 13px; text-transform: none; display: block; }
+                .akg-doc .tot .lbl { font-family: 'DejaVu Sans', sans-serif; font-weight: bold; color: #555; font-size: 13px; }
             </style>
+
+            <!-- Shared header (akg_report_layout), printed inside the page body -->
+            <t t-call="akg_report_layout.akg_header_inline"/>
 
             <!-- ============ Customer address (right) ============ -->
             <table style="width:100%; margin-top:4px;border:0 none !important">
                 <tr style="border:0 none !important">
                     <td style="width:50%;border:0 none !important"/>
-                    <td style="width:50%; text-align:right; font-size:14px; line-height:1.55;border:0 none !important">
+                    <td style="width:50%; text-align:right; font-size:16px; line-height:1.55;border:0 none !important">
                         <address t-field="o.partner_id"
                                  t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
-                                 style="margin:0; text-align:right;"/>
+                                 style="margin:0; text-align:right; font-style:normal;"/>
                         <div t-if="o.partner_id.vat">
                             <t t-out="o._akg_vat_label()"/>: <span t-field="o.partner_id.vat"/>
                         </div>
@@ -82,13 +82,13 @@
             <!-- ============ Title row ============ -->
             <table style="width:100%; margin-top:14px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:38%; text-align:left; font-size:21px;border:0 none !important" class="teal">
+                    <td style="width:38%; text-align:left; font-size:24px;border:0 none !important" class="teal">
                         <t t-out="titles[0]"/>
                     </td>
-                    <td style="width:26%; text-align:center; font-size:21px; font-weight:bold;border:0 none !important" class="teal">
+                    <td style="width:26%; text-align:center; font-size:24px; font-weight:bold;border:0 none !important" class="teal">
                         <t t-if="o.name and o.name != '/'" t-out="o.name"/>
                     </td>
-                    <td style="width:36%; text-align:right; font-size:21px;border:0 none !important" class="teal">
+                    <td style="width:36%; text-align:right; font-size:24px;border:0 none !important" class="teal">
                         <span class="ar teal"><t t-out="titles[1]"/></span>
                     </td>
                 </tr>
