@@ -12,6 +12,15 @@ class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
     # ------------------------------------------------------------------ helpers
+    def _akgp_lang(self):
+        """Language of the report. Uses the shared akg helper when this model has it
+        (it does not exist on account.payment), else the current context language."""
+        self.ensure_one()
+        shared = getattr(self, '_akgr_lang', None)
+        if shared:
+            return shared()
+        return self.env.context.get('lang') or self.env.lang or 'en_US'
+
     def _akgp_date(self, value):
         return value.strftime(AKGP_DATE_FORMAT) if value else ''
 
