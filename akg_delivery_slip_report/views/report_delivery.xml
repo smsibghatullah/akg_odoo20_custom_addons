@@ -13,7 +13,7 @@
         <t t-set="info_rows" t-value="doc._akgd_info_rows()"/>
         <t t-set="lines" t-value="doc._akgd_lines()"/>
         <t t-set="customer" t-value="doc._akgd_customer()"/>
-        <t t-set="delivery" t-value="doc._akgd_delivery_partner()"/>
+        <t t-set="delivery" t-value="doc._akgd_warehouse_partner()"/>
         <t t-set="delivery_phone" t-value="doc._akgd_phone(delivery)"/>
         <t t-set="show_lots" t-value="any(l['lots'] for l in lines)"/>
         <t t-set="th_style" t-value="'text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important'"/>
@@ -37,7 +37,7 @@
                     </td>
                     <td style="width:50%;border:0 none !important">
                         <t t-if="delivery">
-                            <div class="lb">Delivery Address:</div>
+                            <div class="lb">Warehouse Address:</div>
                             <address t-out="doc._akgr_addr(delivery)"/>
                             <div t-if="delivery_phone" style="font-size:14px;"><t t-out="delivery_phone"/></div>
                         </t>

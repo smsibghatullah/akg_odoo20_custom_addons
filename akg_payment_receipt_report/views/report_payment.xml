@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payment_akg">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="akg_payment_receipt_report.payment_document_akg" t-lang="doc._akgr_lang()"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="payment_document_akg">
+        <t t-set="company" t-value="doc.company_id"/>
+        <t t-set="info_rows" t-value="doc._akgp_info_rows()"/>
+        <t t-set="lines" t-value="doc._akgp_lines()"/>
+        <t t-set="th_style" t-value="'text-align:center;border:0 none !important;border-top:2px solid #444 !important;border-bottom:2px solid #444 !important'"/>
+        <t t-set="td_style" t-value="'border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important;vertical-align:middle'"/>
+
+        <t t-call="akg_doc_reports.akgr_header"/>
+
+        <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
+             t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
+             t-att-data-oe-lang="doc.env.context.get('lang')">
+            <t t-call="akg_doc_reports.akgr_css"/>
+
+            <div class="title"><t t-out="doc._akgp_title()"/>: <t t-out="doc.name or ''"/></div>
+
+            <t t-call="akg_doc_reports.akgr_info"/>
+
+            <table class="lines" style="border:0 none !important;border-bottom:2px solid #444 !important">
+                <thead style="border:0 none !important">
+                    <tr style="border:0 none !important">
+                        <th t-att-style="th_style + ';width:13%'">Invoice Date</th>
+                        <th t-att-style="th_style + ';width:20%'">Invoice Number</th>
+                        <th t-att-style="th_style">Reference</th>
+                        <th t-att-style="th_style + ';width:17%;text-align:right'">Amount</th>
+                    </tr>
+                </thead>
+                <tbody style="border:0 none !important">
+                    <tr t-foreach="lines" t-as="line" style="border:0 none !important">
+                        <t t-if="line['kind'] == 'due'">
+                            <td class="first" style="border:0 none !important;border-bottom:1px solid #ccc !important"/>
+                            <td t-att-style="td_style + ';font-weight:bold;color:#666'"><t t-out="line['number']"/></td>
+                            <td t-att-style="td_style"/>
+                            <td t-att-style="td_style + ';text-align:right;white-space:nowrap;font-weight:bold;color:#666'"><t t-out="line['amount']"/></td>
+                        </t>
+                        <t t-else="">
+                            <td class="first" style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important"><t t-out="line['date']"/></td>
+                            <td t-att-style="td_style"><t t-out="line['number']"/></td>
+                            <td t-att-style="td_style"><t t-out="line['reference']"/></td>
+                            <td t-att-style="td_style + ';text-align:right;white-space:nowrap'"><t t-out="line['amount']"/></td>
+                        </t>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <t t-call="akg_doc_reports.akgr_footer"/>
+    </template>
+</odoo>

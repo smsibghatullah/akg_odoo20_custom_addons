@@ -1,7 +1,7 @@
 akg_delivery_slip_report - Odoo 20
 ==================================
 Delivery Slip (stock.picking) in the AKG look: header with logo, Customer Address /
-Delivery Address, picking reference as teal title, Order + Shipping Date, table
+Warehouse Address (address of the picking's warehouse, NOT the customer delivery address), picking reference as teal title, Order + Shipping Date, table
 Product / Ordered / Delivered (Lot/Serial column only when lots are used), footer with QR.
 
 Needs: akg_report_layout + akg_doc_reports (already installed).

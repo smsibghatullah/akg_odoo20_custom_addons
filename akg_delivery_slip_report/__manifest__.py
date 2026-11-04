@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Delivery Slip Report',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.1.0',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Delivery Slip (stock.picking) PDF in the AKG layout.',
     'description': """
 Delivery Slip in the same AKG look as the other reports: shared header (logo,
-company name, Tax ID, website), Customer Address / Delivery Address blocks,
+company name, Tax ID, website), Customer Address / Warehouse Address blocks,
 teal picking reference as title, Order + Shipping Date row, Product / Ordered /
 Delivered table (and Lot/Serial when used) and the shared footer with QR.
 

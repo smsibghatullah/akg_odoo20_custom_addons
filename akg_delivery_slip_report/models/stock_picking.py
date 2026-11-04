@@ -27,10 +27,21 @@ class StockPicking(models.Model):
         sale = first_field(self, ['sale_id'])
         return (sale and sale.partner_id) or self.partner_id
 
-    def _akgd_delivery_partner(self):
+    def _akgd_warehouse_partner(self):
+        """Address of the warehouse the goods leave from (shown instead of the delivery address).
+
+        Order: operation type warehouse -> source location warehouse -> company partner.
+        """
         self.ensure_one()
-        moves = self._akgd_moves()
-        return (moves[:1].partner_id) or self.partner_id
+        warehouse = self.picking_type_id.warehouse_id
+        if not warehouse:
+            warehouse = first_field(self.location_id, ['warehouse_id'])
+        partner = warehouse.partner_id if warehouse else False
+        return partner or self.company_id.partner_id
+
+    # kept so old templates calling the previous name do not break
+    def _akgd_delivery_partner(self):
+        return self._akgd_warehouse_partner()
 
     def _akgd_phone(self, partner):
         return phone_of(partner)
