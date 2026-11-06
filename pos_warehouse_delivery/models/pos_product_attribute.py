@@ -1,5 +1,5 @@
 from odoo import api, models
-from odoo.osv import expression
+from odoo.fields import Domain
 
 
 class ProductAttribute(models.Model):
@@ -13,4 +13,4 @@ class ProductAttribute(models.Model):
             ('product_tmpl_id.available_in_pos', '=', True),
             ('product_tmpl_id.active', '=', True),
         ])
-        return expression.OR([domain, [('id', 'in', lines.attribute_id.ids)]])
+        return Domain.OR([Domain(domain), Domain('id', 'in', lines.attribute_id.ids)])
