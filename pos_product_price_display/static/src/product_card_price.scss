@@ -1,5 +1,13 @@
 .product .tile-price {
-    font-size: 0.7rem;
-    line-height: 1.2;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    padding: 0.1rem 0.5rem !important;
     pointer-events: none;
+    white-space: nowrap;
+}
+
+// leave room under the product name so the bigger badge does not cover it
+.product:has(.tile-price) .product-content {
+    padding-bottom: 2rem !important;
 }
