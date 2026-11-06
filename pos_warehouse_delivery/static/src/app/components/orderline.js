@@ -70,10 +70,28 @@ patch(Orderline.prototype, {
         ev.stopPropagation();
     },
 
-    onWarehouseChange(ev) {
+    async onWarehouseChange(ev) {
         ev.stopPropagation();
-        const id = parseInt(ev.target.value);
-        this.line.update({ warehouse_id: isNaN(id) ? false : id });
+        const select = ev.target;
+        const id = parseInt(select.value);
+        const warehouseId = isNaN(id) ? false : id;
+        const oldId = this.line.warehouse_id?.id || this.selectedWarehouseId || "";
+        const product = this.line.product_id;
+        if (
+            warehouseId &&
+            warehouseId !== oldId &&
+            this.pos.isLotRequiredFor(product) &&
+            !this.line.refunded_orderline_id
+        ) {
+            // lots belong to a warehouse: the old lot is dropped and one lot of
+            // the new warehouse must be chosen (cancel keeps the old warehouse)
+            const done = await this.pos.repickLotsForWarehouse(this.line, warehouseId);
+            if (!done) {
+                select.value = String(oldId);
+            }
+            return;
+        }
+        this.line.update({ warehouse_id: warehouseId });
     },
 
     onShipLaterToggle(ev) {

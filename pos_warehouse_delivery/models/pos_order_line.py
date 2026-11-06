@@ -18,3 +18,49 @@ class PosOrderLine(models.Model):
             if name not in fields_list:
                 fields_list.append(name)
         return fields_list
+
+    @api.model
+    def get_existing_lots(self, company_id, config_id, product_id, warehouse_id=None):
+        """Lots available in the given warehouse.
+
+        Same result shape as pos_stock.get_existing_lots, but the stock is
+        read from *all internal locations of the chosen warehouse* instead of
+        the POS operation type source location only. Without ``warehouse_id``
+        the standard behaviour is kept.
+        """
+        if not warehouse_id:
+            return super().get_existing_lots(company_id, config_id, product_id)
+        warehouse = self.env['stock.warehouse'].browse(warehouse_id).exists()
+        if not warehouse:
+            return super().get_existing_lots(company_id, config_id, product_id)
+
+        self.check_access('read')
+        locations = (
+            warehouse.view_location_id.child_internal_location_ids
+            | warehouse.lot_stock_id.child_internal_location_ids
+        )
+        domain = [
+            '|',
+            ('company_id', '=', False),
+            ('company_id', '=', company_id),
+            ('product_id', '=', product_id),
+            ('location_id', 'in', locations.ids),
+            ('lot_id', '!=', False),
+        ]
+        groups = self.sudo().env['stock.quant']._read_group(
+            domain=domain,
+            groupby=['lot_id'],
+            aggregates=['quantity:sum'],
+        )
+        has_expiration = 'expiration_date' in self.env['stock.lot']._fields
+        result = []
+        for lot, total_quantity in groups:
+            # net stock of the warehouse must be positive (negative / empty lots are hidden)
+            if lot and total_quantity > 0:
+                result.append({
+                    'id': lot.id,
+                    'name': lot.name,
+                    'product_qty': total_quantity,
+                    'expiration_date': lot.expiration_date if has_expiration else False,
+                })
+        return result
