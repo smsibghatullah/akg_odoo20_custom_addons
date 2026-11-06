@@ -30,7 +30,8 @@ Point of Sale -> Configuration -> Point of Sale -> (shop) -> Configuration tab:
 - Orderline par warehouse dropdown badalne par purana lot hat jata hai aur **nayi warehouse ke lots dobara chunne parte hain**. Cancel karne par purani warehouse/lot wapas.
 - Faltu `pos_product_attribute.py` override hata diya (wo kuch nahi karta tha).
 
-## v20.0.1.3.0 - "None" warehouse option
-- Orderline warehouse dropdown mein **None (all lots)** option. None chunne par lot popup mein **saari warehouses ke lots** (jin ka net stock > 0) aate hain.
-- Naye line par default warehouse pehle ki tarah pre-selected rehti hai.
-- None wali line ki delivery order bante waqt POS ki Default Warehouse se hoti hai (`pos.order._get_line_warehouse` ka purana fallback).
+## v20.0.1.4.0 - Lots: sab lots pehle, phir warehouse-wise
+- Product par pehli baar click: lot popup mein **saari warehouses ke lots** (net stock > 0).
+- Orderline par warehouse dropdown se warehouse chunne ke baad lots **us warehouse ke hisaab se filter** hote hain; purana lot hat jata hai aur naya lot chunna parta hai (cancel = purani warehouse/lot wapas).
+- Lot ke bagair tracked product add nahi hota (popup cancel = line hat jati hai).
+- ("None" option v1.3.0 mein tha, v1.4.0 mein hata diya.)

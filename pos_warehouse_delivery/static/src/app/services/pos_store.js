@@ -33,17 +33,33 @@ patch(PosStore.prototype, {
         );
     },
 
+    /** Lines whose warehouse was chosen by the cashier (lots are filtered only after that). */
+    isWarehouseChosen(line) {
+        return Boolean(this._chosenWarehouseLines?.has(line.uuid ?? line.id));
+    },
+
+    markWarehouseChosen(line) {
+        if (!this._chosenWarehouseLines) {
+            this._chosenWarehouseLines = new Set();
+        }
+        this._chosenWarehouseLines.add(line.uuid ?? line.id);
+    },
+
     /**
-     * Warehouse whose lots are offered: pending choice > selected line.
-     * `false` means "None" = lots of all warehouses.
+     * Warehouse whose lots are offered in the lot popup.
+     *  - pending choice (set while adding a line / re-picking after a warehouse change)
+     *  - selected line, but only once the cashier has chosen a warehouse for it
+     *  - otherwise `false` = lots of ALL warehouses
      */
     getLotWarehouseId() {
         if (this._lotWarehouseId !== undefined) {
             return this._lotWarehouseId;
         }
-        const order = this.getOrder?.();
-        const line = order?.getSelectedOrderline?.();
-        return line?.warehouse_id?.id || false;
+        const line = this.getOrder?.()?.getSelectedOrderline?.();
+        if (line && this.isWarehouseChosen(line)) {
+            return line.warehouse_id?.id || false;
+        }
+        return false;
     },
 
     /**
@@ -103,6 +119,7 @@ patch(PosStore.prototype, {
         }
         line.update({ warehouse_id: warehouseId });
         line.editPackLotLines(payload);
+        this.markWarehouseChosen(line);
         return true;
     },
 
@@ -125,12 +142,11 @@ patch(PosStore.prototype, {
             }
         }
 
-        // lots offered in the popup must come from this line's warehouse
         const targetOrder = order || this.getOrder();
         const linesBefore = [...(targetOrder?.lines || [])];
+        // first click on a product: lots of ALL warehouses are offered
         const previous = this._lotWarehouseId;
-        const wh = vals.warehouse_id;
-        this._lotWarehouseId = (typeof wh === "object" ? wh?.id : wh) || false;
+        this._lotWarehouseId = false;
         let result;
         try {
             result = await super.addLineToOrder(vals, order, opts, configure);
