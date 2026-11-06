@@ -20,33 +20,38 @@ class PosOrderLine(models.Model):
         return fields_list
 
     @api.model
-    def get_existing_lots(self, company_id, config_id, product_id, warehouse_id=None):
-        """Lots available in the given warehouse.
+    def get_existing_lots(self, company_id, config_id, product_id,
+                          warehouse_id=None, all_warehouses=False):
+        """Lots with stock, filtered by warehouse.
 
-        Same result shape as pos_stock.get_existing_lots, but the stock is
-        read from *all internal locations of the chosen warehouse* instead of
-        the POS operation type source location only. Without ``warehouse_id``
-        the standard behaviour is kept.
+        * ``warehouse_id``: lots with positive net stock in the internal
+          locations of that warehouse.
+        * ``all_warehouses`` (the "None" warehouse choice): lots with positive net
+          stock in ANY internal location (all warehouses together).
+        * neither: standard pos_stock behaviour.
+        Same result shape as pos_stock.get_existing_lots.
         """
-        if not warehouse_id:
-            return super().get_existing_lots(company_id, config_id, product_id)
-        warehouse = self.env['stock.warehouse'].browse(warehouse_id).exists()
-        if not warehouse:
+        warehouse = self.env['stock.warehouse'].browse(warehouse_id).exists() if warehouse_id else None
+        if not warehouse and not all_warehouses:
             return super().get_existing_lots(company_id, config_id, product_id)
 
         self.check_access('read')
-        locations = (
-            warehouse.view_location_id.child_internal_location_ids
-            | warehouse.lot_stock_id.child_internal_location_ids
-        )
         domain = [
             '|',
             ('company_id', '=', False),
             ('company_id', '=', company_id),
             ('product_id', '=', product_id),
-            ('location_id', 'in', locations.ids),
             ('lot_id', '!=', False),
         ]
+        if warehouse:
+            locations = (
+                warehouse.view_location_id.child_internal_location_ids
+                | warehouse.lot_stock_id.child_internal_location_ids
+            )
+            domain.append(('location_id', 'in', locations.ids))
+        else:
+            domain.append(('location_id.usage', '=', 'internal'))
+
         groups = self.sudo().env['stock.quant']._read_group(
             domain=domain,
             groupby=['lot_id'],
@@ -55,7 +60,7 @@ class PosOrderLine(models.Model):
         has_expiration = 'expiration_date' in self.env['stock.lot']._fields
         result = []
         for lot, total_quantity in groups:
-            # net stock of the warehouse must be positive (negative / empty lots are hidden)
+            # net stock must be positive (negative / empty lots are hidden)
             if lot and total_quantity > 0:
                 result.append({
                     'id': lot.id,

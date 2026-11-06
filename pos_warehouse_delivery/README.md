@@ -29,3 +29,8 @@ Point of Sale -> Configuration -> Point of Sale -> (shop) -> Configuration tab:
 - Lot/serial wale product ko **bagair lot chune order mein add nahi hone dete** (popup cancel = line hat jati hai). Sirf tab jab POS ke operation type mein lots use hon.
 - Orderline par warehouse dropdown badalne par purana lot hat jata hai aur **nayi warehouse ke lots dobara chunne parte hain**. Cancel karne par purani warehouse/lot wapas.
 - Faltu `pos_product_attribute.py` override hata diya (wo kuch nahi karta tha).
+
+## v20.0.1.3.0 - "None" warehouse option
+- Orderline warehouse dropdown mein **None (all lots)** option. None chunne par lot popup mein **saari warehouses ke lots** (jin ka net stock > 0) aate hain.
+- Naye line par default warehouse pehle ki tarah pre-selected rehti hai.
+- None wali line ki delivery order bante waqt POS ki Default Warehouse se hoti hai (`pos.order._get_line_warehouse` ka purana fallback).

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'POS Warehouse Delivery Orders',
-    'version': '20.0.1.2.0',
+    'version': '20.0.1.3.0',
     'category': 'Point of Sale',
     'summary': 'Warehouse dropdown per POS orderline + warehouse-wise delivery orders',
     'depends': ['point_of_sale', 'pos_stock'],

@@ -33,14 +33,17 @@ patch(PosStore.prototype, {
         );
     },
 
-    /** Warehouse whose lots are offered: pending choice > selected line > default. */
+    /**
+     * Warehouse whose lots are offered: pending choice > selected line.
+     * `false` means "None" = lots of all warehouses.
+     */
     getLotWarehouseId() {
-        if (this._lotWarehouseId) {
+        if (this._lotWarehouseId !== undefined) {
             return this._lotWarehouseId;
         }
         const order = this.getOrder?.();
         const line = order?.getSelectedOrderline?.();
-        return line?.warehouse_id?.id || this.getDefaultWarehouse()?.id || false;
+        return line?.warehouse_id?.id || false;
     },
 
     /**
@@ -48,16 +51,17 @@ patch(PosStore.prototype, {
      * the lots with stock in that warehouse are offered.
      */
     async editLots(product, packLotLinesToEdit) {
-        const warehouseId = this.config.enable_warehouse_delivery && this.getLotWarehouseId();
-        if (!warehouseId) {
+        if (!this.config.enable_warehouse_delivery) {
             return super.editLots(...arguments);
         }
+        // false = "None": lots of all warehouses
+        const warehouseId = this.getLotWarehouseId() || false;
         const data = this.data;
         const hadOwnCall = Object.prototype.hasOwnProperty.call(data, "call");
         const originalCall = data.call;
         data.call = function (model, method, args, ...rest) {
             if (model === "pos.order.line" && method === "get_existing_lots") {
-                args = [...args, warehouseId];
+                args = [...args, warehouseId, !warehouseId];
             }
             return originalCall.call(this, model, method, args, ...rest);
         };

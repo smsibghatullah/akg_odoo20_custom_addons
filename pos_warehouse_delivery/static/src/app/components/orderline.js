@@ -35,9 +35,9 @@ patch(Orderline.prototype, {
         return this.pos.getDefaultWarehouse();
     },
 
-    /** Line warehouse, falling back to the POS default for lines without one */
+    /** Warehouse of the line (false = "None": lots of all warehouses) */
     get selectedWarehouse() {
-        return this.line.warehouse_id || this.defaultWarehouse || false;
+        return this.line.warehouse_id || false;
     },
 
     get selectedWarehouseId() {
@@ -45,7 +45,7 @@ patch(Orderline.prototype, {
     },
 
     get warehouseName() {
-        return this.selectedWarehouse?.name || "";
+        return this.selectedWarehouse?.name || "None";
     },
 
     get allowShipLater() {
@@ -74,20 +74,19 @@ patch(Orderline.prototype, {
         ev.stopPropagation();
         const select = ev.target;
         const id = parseInt(select.value);
-        const warehouseId = isNaN(id) ? false : id;
-        const oldId = this.line.warehouse_id?.id || this.selectedWarehouseId || "";
+        const warehouseId = isNaN(id) ? false : id; // false = "None"
+        const oldId = this.line.warehouse_id?.id || false;
         const product = this.line.product_id;
         if (
-            warehouseId &&
             warehouseId !== oldId &&
             this.pos.isLotRequiredFor(product) &&
             !this.line.refunded_orderline_id
         ) {
-            // lots belong to a warehouse: the old lot is dropped and one lot of
-            // the new warehouse must be chosen (cancel keeps the old warehouse)
+            // lots belong to a warehouse ("None" = all warehouses): the old lot is
+            // dropped and one lot must be chosen again (cancel keeps the old choice)
             const done = await this.pos.repickLotsForWarehouse(this.line, warehouseId);
             if (!done) {
-                select.value = String(oldId);
+                select.value = String(oldId || "");
             }
             return;
         }

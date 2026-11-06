@@ -14,7 +14,7 @@
                         <span class="pos-wh-field-label">Warehouse</span>
                         <select class="pos-wh-select form-select form-select-sm"
                                 t-on-change="this.onWarehouseChange">
-                            <option t-if="!this.defaultWarehouse" value="">-- Select --</option>
+                            <option value="" t-att-selected="!this.selectedWarehouseId">None (all lots)</option>
                             <t t-foreach="this.warehouseOptions" t-as="wh" t-key="wh.id">
                                 <option t-att-value="wh.id"
                                         t-att-selected="this.selectedWarehouseId === wh.id"
