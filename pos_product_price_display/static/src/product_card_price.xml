@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_product_price_display.ProductCard" t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//article" position="inside">
+            <span t-if="this.tilePrice and !this.props.isComboPopup"
+                  class="tile-price position-absolute bottom-0 start-0 m-1 px-1 rounded-1 text-bg-primary"
+                  t-out="this.tilePrice"/>
+        </xpath>
+    </t>
+</templates>
