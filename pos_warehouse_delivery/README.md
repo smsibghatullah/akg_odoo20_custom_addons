@@ -23,3 +23,15 @@ Point of Sale -> Configuration -> Point of Sale -> (shop) -> Configuration tab:
 - Orders screen par refund panel ("Select the product(s) to refund") mein har refundable line par **Warehouse dropdown** + **Ship Later** checkbox (+ Ship Date).
 - Chuni hui warehouse refund order line mein copy hoti hai; refund ki return delivery usi warehouse se banti hai.
 - **Refund orders ki delivery hamesha Done** state mein banti hai (ship later ON ho tab bhi). Agar core validation fail ho to `stock.picking._akgr_force_done()` force-validate karta hai (fail ho to log warning).
+
+## v20.0.1.2.0 - Lot / Serial per warehouse
+- Lot/serial popup mein sirf **line ki warehouse** ke lots aate hain (us warehouse ki saari internal locations ka net stock > 0). `pos.order.line.get_existing_lots` ko optional `warehouse_id` mila (bina warehouse ke core behaviour).
+- Lot/serial wale product ko **bagair lot chune order mein add nahi hone dete** (popup cancel = line hat jati hai). Sirf tab jab POS ke operation type mein lots use hon.
+- Orderline par warehouse dropdown badalne par purana lot hat jata hai aur **nayi warehouse ke lots dobara chunne parte hain**. Cancel karne par purani warehouse/lot wapas.
+- Faltu `pos_product_attribute.py` override hata diya (wo kuch nahi karta tha).
+
+## v20.0.1.4.0 - Lots: sab lots pehle, phir warehouse-wise
+- Product par pehli baar click: lot popup mein **saari warehouses ke lots** (net stock > 0).
+- Orderline par warehouse dropdown se warehouse chunne ke baad lots **us warehouse ke hisaab se filter** hote hain; purana lot hat jata hai aur naya lot chunna parta hai (cancel = purani warehouse/lot wapas).
+- Lot ke bagair tracked product add nahi hota (popup cancel = line hat jati hai).
+- ("None" option v1.3.0 mein tha, v1.4.0 mein hata diya.)
