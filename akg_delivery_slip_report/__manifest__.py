@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Delivery Slip Report',
-    'version': '20.0.1.2.0',
+    'version': '20.0.1.2.1',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Delivery Slip (stock.picking) PDF in the AKG layout.',

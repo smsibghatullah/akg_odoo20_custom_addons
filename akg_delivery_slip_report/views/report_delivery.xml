@@ -26,14 +26,14 @@
 
             <table style="margin-top:4px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:50%; padding-right:20px;border:0 none !important">
+                    <td style="width:58%; padding-right:20px;border:0 none !important">
                         <t t-if="customer">
                             <div class="lb">Customer Address:</div>
                             <address t-out="doc._akgr_addr(customer)"/>
                             <div t-if="customer.vat" style="font-size:14px;"><t t-out="doc._akgd_vat_label()"/>: <t t-out="customer.vat"/></div>
                         </t>
                     </td>
-                    <td style="width:50%;border:0 none !important">
+                    <td style="width:42%;border:0 none !important">
                         <t t-if="delivery">
                             <div class="lb">Warehouse Address:</div>
                             <address t-out="doc._akgr_addr(delivery)"/>

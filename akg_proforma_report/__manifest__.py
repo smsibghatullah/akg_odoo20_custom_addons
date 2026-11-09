@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Pro-Forma Invoice Report',
-    'version': '20.0.1.1.1',
+    'version': '20.0.1.2.0',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Pro-Forma Invoice PDF in the AKG layout, with its own Print menu entry.',
@@ -17,7 +17,7 @@ depend on the standard action / the "Pro-Forma Invoice" setting.  The standard
 action stays usable for e-mail templates (its template is swapped at render time).
 """,
     'license': 'LGPL-3',
-    'depends': ['sale', 'akg_doc_reports'],
+    'depends': ['sale', 'akg_report_layout', 'akg_doc_reports'],
     'data': [
         'views/report_proforma.xml',
         'data/report_action.xml',
