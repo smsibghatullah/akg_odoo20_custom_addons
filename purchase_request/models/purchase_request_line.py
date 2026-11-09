@@ -295,8 +295,9 @@ class PurchaseRequestLine(models.Model):
         for rec in self:
             rec.purchased_qty = 0.0
             for line in rec.purchase_lines.filtered(lambda x: x.state != "cancel"):
-                if rec.product_uom_id and line.product_uom_id != rec.product_uom_id:
-                    rec.purchased_qty += line.product_uom_id._compute_quantity(
+                # Odoo 19/20: purchase.order.line uses uom_id (product_uom_id is gone)
+                if rec.product_uom_id and line.uom_id != rec.product_uom_id:
+                    rec.purchased_qty += line.uom_id._compute_quantity(
                         line.product_qty, rec.product_uom_id
                     )
                 else:
