@@ -3,6 +3,8 @@
 
 from odoo import models
 
+from .compat import uom_of
+
 
 class Orderpoint(models.Model):
     _inherit = "stock.warehouse.orderpoint"
@@ -21,6 +23,6 @@ class Orderpoint(models.Model):
             ]
         ):
             res[prline.orderpoint_id.id] += prline.product_uom_id._compute_quantity(
-                prline.product_qty, prline.orderpoint_id.product_uom, round=False
+                prline.product_qty, uom_of(prline.orderpoint_id), round=False
             )
         return res

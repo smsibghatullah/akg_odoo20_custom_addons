@@ -6,6 +6,8 @@ from markupsafe import Markup
 from odoo import api, models
 from odoo.tools import html_escape
 
+from .compat import uom_of
+
 
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
@@ -73,7 +75,7 @@ class StockMoveLine(models.Model):
             "picking_name": ml.picking_id.name,
             "product_name": ml.product_id.display_name,
             "product_qty": allocated_qty,
-            "product_uom": ml.product_uom_id.name,
+            "product_uom": uom_of(ml).name,
             "location_name": ml.location_dest_id.display_name,
             "requestor": request.requested_by.partner_id.name,
         }
@@ -85,7 +87,7 @@ class StockMoveLine(models.Model):
             # We do sudo because potentially the user that completes the move
             #  may not have permissions for purchase.request.
             to_allocate_qty = ml.quantity
-            to_allocate_uom = ml.product_uom_id
+            to_allocate_uom = uom_of(ml)
             for allocation in ml.move_id.purchase_request_allocation_ids.sudo():
                 allocated_qty = 0.0
                 if allocation.open_product_qty and to_allocate_qty:
