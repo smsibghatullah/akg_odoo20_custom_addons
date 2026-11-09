@@ -13,7 +13,6 @@
                 <div t-attf-class="article akgr o_company_#{company.id}_layout" dir="ltr"
                      t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
                     <t t-call="akg_report_layout.akg_css"/>
-                    <t t-call="akg_report_layout.akg_header_inline"/>
 
                     <div class="title" style="margin:6px 0 18px 0;">
                         Purchase Request <t t-out="o.name"/>
@@ -69,6 +68,7 @@
                     </t>
                 </div>
 
+                <t t-call="akg_report_layout.akg_header"/>
                 <t t-call="akg_report_layout.akg_footer"/>
             </t>
         </t>
