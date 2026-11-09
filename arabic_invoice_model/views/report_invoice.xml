@@ -45,24 +45,30 @@
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
                 @font-face { font-family: 'Oswald'; font-weight: bold;
                     src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
-                .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: bold; color: #222; }
+                /* WEIGHT RULES (same as the Odoo 16 invoice): text = normal, labels / headings / totals labels = bold */
+                .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-size: 15px; font-weight: normal; font-style: normal; color: #222; }
+                .akg-doc, .akg-doc * { font-style: normal; }
+                .akg-doc address, .akg-doc address * { font-weight: normal !important; font-style: normal !important; }
+                .akg-doc b, .akg-doc strong { font-weight: bold; }
                 html .akg-doc.akg-doc table { border-collapse: collapse; width: 100%; border: 0 none !important; }
                 html .akg-doc.akg-doc table td, html .akg-doc.akg-doc table th { border: 0 none !important; background: transparent; box-shadow: none; padding: 0; vertical-align: top; }
                 html .akg-doc.akg-doc table.lines { border-bottom: 2px solid #444 !important; }
                 html .akg-doc.akg-doc table.lines th { border-top: 2px solid #444 !important; border-bottom: 2px solid #444 !important; padding: 7px 8px; text-align: right; font-size: 14px; font-weight: bold; text-transform: uppercase; line-height: 1.5; }
-                html .akg-doc.akg-doc table.lines td { border-bottom: 1px solid #ccc !important; border-left: 1px solid #ddd !important; padding: 14px 8px; text-align: right; }
+                html .akg-doc.akg-doc table.lines td { border-bottom: 1px solid #ccc !important; border-left: 1px solid #ddd !important; padding: 14px 8px; text-align: right; font-weight: normal; }
+                html .akg-doc.akg-doc table.lines td * { font-weight: normal; }
                 html .akg-doc.akg-doc table.lines td:first-child { border-left: 0 none !important; }
-                html .akg-doc.akg-doc table.tot td { border: 1px solid #e3e3e3 !important; padding: 15px 9px; text-align: right; }
-                html .akg-doc.akg-doc table.info td { padding: 3px 0; font-size: 15px; }
-                .akg-doc .ar { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
-                .akg-doc .ar-n { font-family: 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: normal; color: #222; }
-                .akg-doc .teal { color: #1ca3b8; }
+                html .akg-doc.akg-doc table.tot td { border: 1px solid #e3e3e3 !important; padding: 15px 9px; text-align: right; font-weight: normal; }
+                html .akg-doc.akg-doc table.info td { padding: 3px 0; font-size: 15px; font-weight: normal; }
+                .akg-doc .ar { font-family: 'Oswald', 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: bold; color: #555; }
+                .akg-doc .ar-n { font-family: 'Oswald', 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-weight: normal; color: #222; }
+                .akg-doc .teal { color: #1ca3b8; font-weight: bold; }
                 .akg-doc .lines th .ar { font-size: 13px; text-transform: none; display: block; }
-                .akg-doc .tot .lbl { font-family: 'DejaVu Sans', sans-serif; font-weight: bold; color: #555; font-size: 13px; }
+                .akg-doc .tot .lbl { font-weight: bold; color: #555; font-size: 14px; }
+                .akg-doc .lb { font-weight: bold; }
             </style>
 
-            <!-- Shared header (akg_report_layout), printed inside the page body -->
-            <t t-call="akg_report_layout.akg_header_inline"/>
+            <!-- Header printed inside the page body (logo + company name / Tax ID / website) -->
+            <t t-call="arabic_invoice_model.akg_inv_header"/>
 
             <!-- ============ Customer address (right) ============ -->
             <table style="width:100%; margin-top:4px;border:0 none !important">
@@ -82,13 +88,13 @@
             <!-- ============ Title row ============ -->
             <table style="width:100%; margin-top:14px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:38%; text-align:left; font-size:24px;border:0 none !important" class="teal">
+                    <td style="width:38%; text-align:left; font-size:24px; white-space:nowrap;border:0 none !important" class="teal">
                         <t t-out="titles[0]"/>
                     </td>
                     <td style="width:26%; text-align:center; font-size:24px; font-weight:bold;border:0 none !important" class="teal">
                         <t t-if="o.name and o.name != '/'" t-out="o.name"/>
                     </td>
-                    <td style="width:36%; text-align:right; font-size:24px;border:0 none !important" class="teal">
+                    <td style="width:36%; text-align:right; font-size:24px; white-space:nowrap;border:0 none !important" class="teal">
                         <span class="ar teal"><t t-out="titles[1]"/></span>
                     </td>
                 </tr>
@@ -230,9 +236,9 @@
                             <t t-foreach="o._akg_tax_group_lines()" t-as="tax_group">
                                 <tr style="border:0 none !important">
                                     <td style="border:1px solid #e3e3e3 !important"><span t-out="tax_group['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                    <td style="border:1px solid #e3e3e3 !important">
+                                    <td class="lbl" style="border:1px solid #e3e3e3 !important">
                                         <t t-out="tax_group['name']"/>
-                                        <t t-if="tax_group['name_ar']"> <span class="ar-n"><t t-out="tax_group['name_ar']"/></span></t>
+                                        <t t-if="tax_group['name_ar']"> <t t-out="tax_group['name_ar']"/></t>
                                     </td>
                                 </tr>
                             </t>
@@ -246,7 +252,7 @@
                                     <tr style="border:0 none !important">
                                         <td style="border:1px solid #e3e3e3 !important"><span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                                         <td style="font-style:italic;border:1px solid #e3e3e3 !important">
-                                            <div style="font-style:italic;"><span class="ar-n" style="font-style:italic;">Paid on/دفعت في:</span></div>
+                                            <div style="font-style:italic;"><span class="ar-n" style="font-style:italic;font-weight:normal;">Paid on/دفعت في:</span></div>
                                             <div dir="ltr" style="text-align:left;"><t t-out="payment_vals['date']"/></div>
                                             <div t-if="payment_vals.get('method')" style="font-style:normal; color:#555;">
                                                 <t t-out="payment_vals['method']"/>
@@ -269,9 +275,9 @@
             <table t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference"
                    style="width:100%; margin-top:22px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:25%; white-space:nowrap;border:0 none !important">Payment Reference :</td>
+                    <td class="lb" style="width:25%; white-space:nowrap;border:0 none !important">Payment Reference :</td>
                     <td style="width:50%; text-align:center; font-weight:bold;border:0 none !important"><t t-out="o.payment_reference"/></td>
-                    <td style="width:25%; text-align:right;border:0 none !important" class="ar-n">: رقم إشارة الدفعة</td>
+                    <td style="width:25%; text-align:right;border:0 none !important" class="ar">: رقم إشارة الدفعة</td>
                 </tr>
             </table>
 
@@ -286,7 +292,7 @@
                 <tr style="border:0 none !important">
                     <td style="width:12%; white-space:nowrap; font-weight:bold;border:0 none !important">Note:</td>
                     <td style="width:76%; white-space: pre-line;border:0 none !important"><t t-out="pos_note"/></td>
-                    <td style="width:12%; text-align:right;border:0 none !important" class="ar-n">: ملاحظات</td>
+                    <td style="width:12%; text-align:right;border:0 none !important" class="ar">: ملاحظات</td>
                 </tr>
             </table>
             <t t-set="terms" t-value="o._akg_terms()"/>
@@ -304,8 +310,8 @@
             </table>
             <table t-if="notes['incoterm_en']" style="width:100%; margin-top:10px;border:0 none !important">
                 <tr style="border:0 none !important">
-                    <td style="width:50%;border:0 none !important"><b>Incoterm:</b> <t t-out="notes['incoterm_en']"/></td>
-                    <td style="width:50%; text-align:right;border:0 none !important"><span class="ar-n"><b>شرط تجاري:</b> <t t-out="notes['incoterm_ar']"/></span></td>
+                    <td style="width:50%;border:0 none !important"><span class="lb">Incoterm:</span> <t t-out="notes['incoterm_en']"/></td>
+                    <td style="width:50%; text-align:right;border:0 none !important"><span class="ar">شرط تجاري:</span> <span class="ar-n"><t t-out="notes['incoterm_ar']"/></span></td>
                 </tr>
             </table>
 
@@ -313,5 +319,22 @@
 
         <!-- Shared footer (akg_report_layout) -->
         <t t-call="akg_report_layout.akg_footer"/>
+    </template>
+
+    <!-- Header block: logo left, company name (bold) / Tax ID / website right. Same as the Odoo 16 invoice. -->
+    <template id="akg_inv_header">
+        <table style="width:100%; margin:0 0 6px 0; border:0 none !important">
+            <tr style="border:0 none !important">
+                <td style="width:50%; border:0 none !important; vertical-align:top">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                         style="max-height:90px; max-width:240px" alt="Logo"/>
+                </td>
+                <td style="width:50%; border:0 none !important; vertical-align:top">
+                    <div class="lb" style="font-size:15px; margin-bottom:10px; white-space:nowrap"><t t-out="company.name"/></div>
+                    <div t-if="company.vat" style="font-size:15px; margin-bottom:10px">Tax ID: <t t-out="company.vat"/></div>
+                    <div t-if="company.website" style="font-size:15px; color:#1a73e8"><t t-out="company.website"/></div>
+                </td>
+            </tr>
+        </table>
     </template>
 </odoo>
