@@ -15,17 +15,8 @@ class IrActionsReport(models.Model):
 
     @api.model
     def _akgd_paperformat(self):
-        """AKG paper format with a small top margin (the header is now printed inside the page,
-        so it can no longer be cut off at the top). Copy of akg_doc_reports' format, created once."""
-        Paper = self.env['report.paperformat']
-        name = 'AKG A4 - body header'
-        paper = Paper.search([('name', '=', name)], limit=1)
-        if paper:
-            return paper
-        base = self.env.ref('akg_doc_reports.paperformat_akgr', raise_if_not_found=False)
-        if not base:
-            return Paper
-        return base.copy({'name': name, 'margin_top': 12, 'header_spacing': 0})
+        """Shared AKG paper format (top margin leaves room for the repeating header)."""
+        return self.env.ref('akg_doc_reports.paperformat_akgr', raise_if_not_found=False)
 
     @api.model
     def _akgd_apply_report(self):

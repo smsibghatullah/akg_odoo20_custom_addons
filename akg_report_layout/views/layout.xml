@@ -2,8 +2,16 @@
 <odoo>
 
     <!-- Shared CSS. Header, body and footer are separate documents for wkhtmltopdf,
-         so each block calls this template. No @font-face on purpose. -->
+         so each block calls this template. Fonts come from akg_fonts. -->
+    <!-- Oswald (Latin subset, embedded as data URI) so header, body and footer - which are three
+         separate documents for wkhtmltopdf - all use the same font. Arabic falls back to DejaVu. -->
+    <template id="akg_fonts">
+        <t t-set="fco" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
+        <style><t t-out="fco._akgr_font_css()"/></style>
+    </template>
+
     <template id="akg_css">
+        <t t-call="akg_report_layout.akg_fonts"/>
         <style>
             html .akgr.akgr { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'Liberation Sans Narrow', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: bold; color: #222; }
             /* Odoo 20 report css draws borders on every table: switch them all off ... */

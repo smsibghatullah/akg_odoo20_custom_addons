@@ -2,6 +2,7 @@
 import base64
 import io
 import logging
+from functools import lru_cache
 
 from PIL import Image
 
@@ -10,9 +11,35 @@ from odoo.tools import file_open
 
 _logger = logging.getLogger(__name__)
 
+AKGR_FONT_FILES = (
+    ('normal', 'akg_report_layout/static/src/fonts/Oswald-Regular-latin.ttf'),
+    ('bold', 'akg_report_layout/static/src/fonts/Oswald-Bold-latin.ttf'),
+)
+
+
+@lru_cache(maxsize=1)
+def _akgr_font_css_cached():
+    css = ''
+    for weight, path in AKGR_FONT_FILES:
+        try:
+            with file_open(path, 'rb') as f:
+                data = base64.b64encode(f.read()).decode()
+        except Exception:
+            _logger.warning('akg_report_layout: font file %s not found', path)
+            continue
+        css += ("@font-face { font-family: 'Oswald'; font-weight: %s; font-style: normal; "
+                "src: url(data:font/truetype;base64,%s) format('truetype'); }\n" % (weight, data))
+    return css
+
 
 class ResCompany(models.Model):
     _inherit = 'res.company'
+
+    @api.model
+    def _akgr_font_css(self):
+        """@font-face rules (Oswald Regular + Bold) as one string, read once per server process."""
+        from markupsafe import Markup
+        return Markup(_akgr_font_css_cached())
 
     def _akgr_logo_uri(self):
         """Logo re-encoded to PNG (old WebKit in wkhtmltopdf cannot draw WebP)."""

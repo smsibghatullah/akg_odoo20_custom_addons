@@ -40,11 +40,8 @@
              t-att-data-oe-id="o and o.id"
              t-att-data-oe-lang="o and o.env.context.get('lang')"
              style="padding-bottom: 10px;">
+            <t t-call="akg_report_layout.akg_fonts"/>
             <style>
-                @font-face { font-family: 'Oswald'; font-weight: normal;
-                    src: url('/arabic_invoice_model/static/src/fonts/Oswald-Regular.ttf') format('truetype'); }
-                @font-face { font-family: 'Oswald'; font-weight: bold;
-                    src: url('/arabic_invoice_model/static/src/fonts/Oswald-Bold.ttf') format('truetype'); }
                 /* Same as the Odoo 16 invoice: EVERYTHING is bold (Oswald Bold). */
                 .akg-doc { direction: ltr; unicode-bidi: embed; font-family: 'Oswald', 'DejaVu Sans Condensed', 'DejaVu Sans', 'Noto Sans Arabic', sans-serif; font-size: 15px; font-weight: bold; font-style: normal; color: #222; }
                 .akg-doc, .akg-doc * { font-style: normal; font-weight: bold; }
@@ -69,8 +66,6 @@
                 .akg-doc .lb { font-weight: bold; }
             </style>
 
-            <!-- Header printed inside the page body (logo + company name / Tax ID / website) -->
-            <t t-call="arabic_invoice_model.akg_inv_header"/>
 
             <!-- ============ Customer address (right) ============ -->
             <table style="width:100%; margin-top:4px;border:0 none !important">
@@ -321,24 +316,9 @@
 
         </div>
 
-        <!-- Shared footer (akg_report_layout) -->
+        <!-- Header + footer: repeated on EVERY page (div.header / div.footer, akg_report_layout) -->
+        <t t-call="akg_report_layout.akg_header"/>
         <t t-call="akg_report_layout.akg_footer"/>
     </template>
 
-    <!-- Header block: logo left, company name (bold) / Tax ID / website right. Same as the Odoo 16 invoice. -->
-    <template id="akg_inv_header">
-        <table style="width:100%; margin:0 0 6px 0; border:0 none !important">
-            <tr style="border:0 none !important">
-                <td style="width:50%; border:0 none !important; vertical-align:top">
-                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                         style="max-height:90px; max-width:240px" alt="Logo"/>
-                </td>
-                <td style="width:50%; border:0 none !important; vertical-align:top">
-                    <div class="lb" style="font-size:15px; margin-bottom:10px; white-space:nowrap"><t t-out="company.name"/></div>
-                    <div t-if="company.vat" style="font-size:15px; margin-bottom:10px">Tax ID: <t t-out="company.vat"/></div>
-                    <div t-if="company.website" style="font-size:15px; color:#1a73e8"><t t-out="company.website"/></div>
-                </td>
-            </tr>
-        </table>
-    </template>
 </odoo>

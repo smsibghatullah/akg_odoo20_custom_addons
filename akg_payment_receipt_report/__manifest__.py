@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Payment Receipt Report',
-    'version': '20.0.1.0.2',
+    'version': '20.0.1.1.0',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Payment Receipt / Refund Confirmation (account.payment) PDF in the AKG layout.',
@@ -17,7 +17,7 @@ to this template and to the AKG paper format on every install / upgrade; a rende
 is the safety net.
 """,
     'license': 'LGPL-3',
-    'depends': ['account', 'akg_doc_reports'],
+    'depends': ['account', 'akg_report_layout', 'akg_doc_reports'],
     'data': [
         'views/report_payment.xml',
         'data/report_action.xml',

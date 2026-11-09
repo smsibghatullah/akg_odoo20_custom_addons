@@ -19,7 +19,6 @@
              t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
              t-att-data-oe-lang="doc.env.context.get('lang')">
             <t t-call="akg_doc_reports.akgr_css"/>
-            <t t-call="akg_payment_receipt_report.akgp_header"/>
 
             <div class="title"><t t-out="doc._akgp_title()"/>: <t t-out="doc.name or ''"/></div>
 
@@ -53,22 +52,9 @@
             </table>
         </div>
 
+        <!-- header + footer repeat on EVERY page -->
+        <t t-call="akg_report_layout.akg_header"/>
         <t t-call="akg_doc_reports.akgr_footer"/>
     </template>
 
-    <template id="akgp_header">
-        <table style="width:100%;border:0 none !important;margin:0 0 8px 0">
-            <tr style="border:0 none !important">
-                <td style="width:50%;border:0 none !important;vertical-align:top;padding:0">
-                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                         style="max-height:90px;max-width:240px" alt="Logo"/>
-                </td>
-                <td style="width:50%;border:0 none !important;vertical-align:top;padding:0">
-                    <div style="font-size:15px;font-weight:bold;margin-bottom:8px"><t t-out="company.name"/></div>
-                    <div t-if="company.vat" style="font-size:14px;margin-bottom:8px">Tax ID: <t t-out="company.vat"/></div>
-                    <div t-if="company.website" style="font-size:14px;color:#1a73e8"><t t-out="company.website"/></div>
-                </td>
-            </tr>
-        </table>
-    </template>
 </odoo>

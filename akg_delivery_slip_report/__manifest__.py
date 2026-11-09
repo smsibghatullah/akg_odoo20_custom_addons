@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Delivery Slip Report',
-    'version': '20.0.1.1.1',
+    'version': '20.0.1.2.0',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'Delivery Slip (stock.picking) PDF in the AKG layout.',
@@ -15,7 +15,7 @@ The standard "Delivery Slip" print action is pointed to this template and to the
 AKG paper format on every install / upgrade; a render-time swap is the safety net.
 """,
     'license': 'LGPL-3',
-    'depends': ['stock', 'akg_doc_reports'],
+    'depends': ['stock', 'akg_report_layout', 'akg_doc_reports'],
     'data': [
         'views/report_delivery.xml',
         'data/report_action.xml',

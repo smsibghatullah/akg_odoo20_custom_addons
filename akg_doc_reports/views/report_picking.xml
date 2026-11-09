@@ -21,7 +21,6 @@
              t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id"
              t-att-data-oe-lang="doc.env.context.get('lang')">
             <t t-call="akg_doc_reports.akgr_css"/>
-            <t t-call="akg_report_layout.akg_header_inline"/>
 
             <div t-if="barcode_uri" style="text-align:right; margin-top:4px;">
                 <img t-att-src="barcode_uri" style="width:300px; height:50px;"/>
@@ -75,6 +74,8 @@
             <div t-if="doc._akgr_note()" style="margin-top:16px;"><t t-out="doc._akgr_note()"/></div>
         </div>
 
+        <!-- header + footer are repeated on EVERY page (div.header / div.footer) -->
+        <t t-call="akg_report_layout.akg_header"/>
         <t t-call="akg_doc_reports.akgr_footer"/>
     </template>
 </odoo>
