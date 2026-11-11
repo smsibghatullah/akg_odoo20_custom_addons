@@ -37,7 +37,7 @@
                         <t t-if="delivery">
                             <div class="lb">Warehouse Address:</div>
                             <address t-out="doc._akgr_addr(delivery)"/>
-                            <div t-if="delivery_phone" style="font-size:14px;"><t t-out="delivery_phone"/></div>
+                            <!-- <div t-if="delivery_phone" style="font-size:14px;"><t t-out="delivery_phone"/></div> -->
                         </t>
                     </td>
                 </tr>
