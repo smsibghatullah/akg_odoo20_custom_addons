@@ -293,8 +293,10 @@ class AccountMove(models.Model):
                 en = company.with_context(lang=LANG_EN).invoice_terms
                 ar = company.with_context(lang=LANG_AR).invoice_terms
             else:
-                base = (company.website or
-                        self.env['ir.config_parameter'].sudo().get_param('web.base.url') or '')
+                # plain search: get_param() does not exist on ir.config_parameter in Odoo 20
+                param = self.env['ir.config_parameter'].sudo().search(
+                    [('key', '=', 'web.base.url')], limit=1)
+                base = (company.website or (param.value if param else '') or '')
                 if base and not base.startswith('http'):
                     base = 'http://' + base
                 en = ar = "Terms & Conditions: %s/terms" % base.rstrip('/')

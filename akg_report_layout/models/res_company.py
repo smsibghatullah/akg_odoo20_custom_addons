@@ -98,7 +98,10 @@ class ResCompany(models.Model):
         # header_spacing differs per server: wkhtmltopdf draws the header line at (margin_top - spacing).
         # Default 6. If a server draws the header too low, set the system parameter
         # akg_report_layout.header_spacing (e.g. 38) - it survives every module update.
-        raw = self.env['ir.config_parameter'].sudo().get_param('akg_report_layout.header_spacing')
+        # read with a plain search: get_param() does not exist on ir.config_parameter in Odoo 20
+        param = self.env['ir.config_parameter'].sudo().search(
+            [('key', '=', 'akg_report_layout.header_spacing')], limit=1)
+        raw = param.value if param else False
         try:
             spacing = float(raw) if raw not in (False, None, '') else 6.0
         except ValueError:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - Common Report Header / Footer',
-    'version': '20.0.1.3.1',
+    'version': '20.0.1.3.2',
     'author': 'AKG Hardware',
     'category': 'Hidden',
     'summary': 'One shared AKG header/footer for every PDF report (inherits web.external_layout_lines).',
