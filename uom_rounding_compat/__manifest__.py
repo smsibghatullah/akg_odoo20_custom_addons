@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'UoM rounding (Odoo 16 compatibility)',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.1.0',
     'category': 'Hidden',
     'summary': 'Gives uom.uom back the `rounding` attribute used by migrated custom modules',
     'description': """
