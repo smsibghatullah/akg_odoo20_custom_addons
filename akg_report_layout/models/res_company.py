@@ -95,8 +95,16 @@ class ResCompany(models.Model):
         """Every AKG paper format: top margin 38 mm, header spacing 6 mm (= 32 mm for the repeating header),
         bottom 34 mm. Written on every update so a format edited by hand in a database cannot push
         the header over the document (header too low / overlapping the address block)."""
+        # header_spacing differs per server: wkhtmltopdf draws the header line at (margin_top - spacing).
+        # Default 6. If a server draws the header too low, set the system parameter
+        # akg_report_layout.header_spacing (e.g. 38) - it survives every module update.
+        raw = self.env['ir.config_parameter'].sudo().get_param('akg_report_layout.header_spacing')
+        try:
+            spacing = float(raw) if raw not in (False, None, '') else 6.0
+        except ValueError:
+            spacing = 6.0
         vals = {'format': 'A4', 'orientation': 'Portrait', 'margin_top': 38, 'margin_bottom': 34,
-                'margin_left': 8, 'margin_right': 8, 'header_spacing': 6, 'header_line': False, 'dpi': 90}
+                'margin_left': 8, 'margin_right': 8, 'header_spacing': spacing, 'header_line': False, 'dpi': 90}
         for xmlid in ('akg_report_layout.paperformat_akg', 'akg_doc_reports.paperformat_akgr',
                       'arabic_invoice_model.paperformat_akg_invoice'):
             paper = self.env.ref(xmlid, raise_if_not_found=False)

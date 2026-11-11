@@ -15,4 +15,5 @@
     </record>
 
     <function model="ir.actions.report" name="_akg_apply_arabic_invoice_reports"/>
+    <function model="res.company" name="_akgr_force_paperformats"/>
 </odoo>
