@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'GCC - Arabic/English Invoice (AKG)',
-    'version': '20.0.1.6.3',
+    'version': '20.0.1.6.4',
     'author': 'AKG Hardware',
     'category': 'Accounting/Localizations',
     'summary': 'Bilingual Arabic/English tax invoice & delivery note for Odoo 20',

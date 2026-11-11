@@ -48,10 +48,9 @@
         <!-- In the Document Layout preview `company` is a base.document.layout wizard record -->
         <t t-set="co" t-value="company.company_id if company._name == 'base.document.layout' else company"/>
         <t t-set="logo_uri" t-value="co._akgr_logo_uri()"/>
-        <!-- NATURAL height on purpose: wkhtmltopdf measures the height of this block and draws it with its
-             BOTTOM edge at (margin_top - header_spacing) = 32 mm, so it fills 9..32 mm of EVERY page.
-             Do NOT give it a fixed height / padding-top / overflow: hidden (wkhtmltopdf then measures ~0 and the
-             header is drawn at 32 mm, on top of the document body). -->
+        <!-- wkhtmltopdf draws this block STARTING at (margin_top - header_spacing) = 38 - 28 = 10 mm, on EVERY page.
+             It is ~22 mm tall (ends at ~32 mm); the document body starts at 38 mm. Keep natural height:
+             no fixed height / padding-top / overflow here. To move it, change header_spacing only. -->
         <div class="header" dir="ltr" style="width:100%; margin:0; padding:0;">
             <t t-call="akg_report_layout.akg_css"/>
             <div class="akgr" style="display:table; width:100%;">

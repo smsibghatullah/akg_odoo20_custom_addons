@@ -92,20 +92,20 @@ class ResCompany(models.Model):
 
     @api.model
     def _akgr_force_paperformats(self):
-        """Every AKG paper format: top margin 38 mm, header spacing 6 mm (= 32 mm for the repeating header),
-        bottom 34 mm. Written on every update so a format edited by hand in a database cannot push
-        the header over the document (header too low / overlapping the address block)."""
-        # header_spacing differs per server: wkhtmltopdf draws the header line at (margin_top - spacing).
-        # Default 6. If a server draws the header too low, set the system parameter
-        # akg_report_layout.header_spacing (e.g. 38) - it survives every module update.
+        """Every AKG paper format: top margin 38 mm, header spacing 28 mm. wkhtmltopdf draws the repeating
+        header STARTING at (margin_top - header_spacing) = 10 mm, so the ~22 mm tall header fills 10..32 mm
+        of every page and the document body (starts at 38 mm) is never covered. Written on every update so a
+        format edited by hand in a database cannot push the header over the document."""
+        # To move the header: system parameter akg_report_layout.header_spacing_mm (header top = 38 - value).
+        # Bigger value = header higher. It survives every module update. (Old key ...header_spacing is ignored.)
         # read with a plain search: get_param() does not exist on ir.config_parameter in Odoo 20
         param = self.env['ir.config_parameter'].sudo().search(
-            [('key', '=', 'akg_report_layout.header_spacing')], limit=1)
+            [('key', '=', 'akg_report_layout.header_spacing_mm')], limit=1)
         raw = param.value if param else False
         try:
-            spacing = float(raw) if raw not in (False, None, '') else 6.0
+            spacing = float(raw) if raw not in (False, None, '') else 28.0
         except ValueError:
-            spacing = 6.0
+            spacing = 28.0
         vals = {'format': 'A4', 'orientation': 'Portrait', 'margin_top': 38, 'margin_bottom': 34,
                 'margin_left': 8, 'margin_right': 8, 'header_spacing': spacing, 'header_line': False, 'dpi': 90}
         for xmlid in ('akg_report_layout.paperformat_akg', 'akg_doc_reports.paperformat_akgr',

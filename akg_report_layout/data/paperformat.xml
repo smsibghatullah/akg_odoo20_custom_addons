@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- margin_top - header_spacing (= 32 mm) is the height reserved for the repeating header (div.header);
-         the header is ~25 mm tall. If margin_top were smaller the header would be cut at the top of the page. -->
+    <!-- On this server wkhtmltopdf draws the repeating header (div.header) STARTING at
+         (margin_top - header_spacing) = 38 - 28 = 10 mm and downwards (~22 mm tall -> ends at ~32 mm).
+         The document body starts at margin_top = 38 mm. Move the header up/down with header_spacing only. -->
     <record id="paperformat_akg" model="report.paperformat">
         <field name="name">AKG Documents - shared (A4, header/footer)</field>
         <field name="format">A4</field>
@@ -11,7 +12,7 @@
         <field name="margin_left">8</field>
         <field name="margin_right">8</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">6</field>
+        <field name="header_spacing">28</field>
         <field name="dpi">90</field>
     </record>
 </odoo>
