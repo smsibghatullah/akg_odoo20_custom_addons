@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 
-from .common import barcode_svg_uri, chunk, first_field
+from .common import barcode_svg_uri, chunk, first_field, uom_of
 
 
 class StockPicking(models.Model):
@@ -64,7 +64,7 @@ class StockPicking(models.Model):
             demand = first_field(move, ['product_uom_qty'], 0.0)
             done = first_field(move, ['quantity', 'quantity_done'], 0.0)
             qty = (done or demand) if self.state == 'done' else (demand or done)
-            uom = first_field(move, ['product_uom', 'product_uom_id']) or product.uom_id
+            uom = uom_of(move, product.uom_id)
             lots = []
             if 'move_line_ids' in move._fields and 'lot_id' in self.env['stock.move.line']._fields:
                 lots = [l for l in move.move_line_ids.mapped('lot_id.name') if l]

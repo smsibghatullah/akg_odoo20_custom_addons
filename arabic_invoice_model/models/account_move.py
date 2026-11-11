@@ -36,6 +36,14 @@ def _b64_to_data_uri(value):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    def _akg_line_uom(self, line):
+        """Unit name of an invoice line (field is uom_id or product_uom_id depending on the version)."""
+        for name in ('uom_id', 'product_uom_id', 'product_uom'):
+            field = line._fields.get(name)
+            if field is not None and field.comodel_name == 'uom.uom' and line[name]:
+                return line[name].name or ''
+        return line.product_id.uom_id.name or ''
+
     pos_note = fields.Text(string='POS Note', compute='_compute_pos_note')
 
     def _compute_pos_note(self):

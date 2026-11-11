@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 
-from .common import chunk, first_field, tax_group_rows
+from .common import chunk, first_field, tax_group_rows, uom_of
 
 
 class PurchaseOrder(models.Model):
@@ -52,7 +52,7 @@ class PurchaseOrder(models.Model):
                 rows.append({'type': dtype, 'name': line.name})
                 continue
             product = line.product_id
-            uom = first_field(line, ['product_uom_id', 'product_uom'])
+            uom = uom_of(line, product.uom_id)
             taxes = first_field(line, ['tax_ids', 'taxes_id'])
             rows.append({
                 'type': 'line',

@@ -193,7 +193,7 @@
                                 <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important"><span t-field="line.price_unit"/></td>
                                 <td style="white-space:nowrap;border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                     <span t-field="line.quantity"/>
-                                    <span t-if="line.product_uom_id" t-field="line.product_uom_id"/>
+                                    <span t-out="o._akg_line_uom(line)"/>
                                 </td>
                                 <td style="border:0 none !important;border-bottom:1px solid #ccc !important;border-left:1px solid #ddd !important">
                                     <t t-set="names" t-value="o._akg_line_names(line)"/>

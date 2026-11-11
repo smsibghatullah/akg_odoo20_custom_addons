@@ -18,6 +18,17 @@ def first_field(rec, names, default=False):
     return default
 
 
+def uom_of(rec, fallback=None):
+    """UoM record of a sale / purchase line or stock move, whatever the field is called.
+    Odoo 19/20 renamed product_uom / product_uom_id to uom_id on several models; a missing name
+    used to give an EMPTY unit on the report (e.g. purchase order and delivery slip)."""
+    for name in ('uom_id', 'product_uom_id', 'product_uom'):
+        field = rec._fields.get(name)
+        if field is not None and field.comodel_name == 'uom.uom' and rec[name]:
+            return rec[name]
+    return fallback if fallback is not None else rec.env['uom.uom']
+
+
 def phone_of(partner):
     for fname in ('mobile', 'phone'):
         if partner and fname in partner._fields and partner[fname]:

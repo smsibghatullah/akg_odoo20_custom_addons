@@ -91,6 +91,20 @@ class ResCompany(models.Model):
         }
 
     @api.model
+    def _akgr_force_paperformats(self):
+        """Every AKG paper format: top margin 38 mm, header spacing 6 mm (= 32 mm for the repeating header),
+        bottom 34 mm. Written on every update so a format edited by hand in a database cannot push
+        the header over the document (header too low / overlapping the address block)."""
+        vals = {'format': 'A4', 'orientation': 'Portrait', 'margin_top': 38, 'margin_bottom': 34,
+                'margin_left': 8, 'margin_right': 8, 'header_spacing': 6, 'header_line': False, 'dpi': 90}
+        for xmlid in ('akg_report_layout.paperformat_akg', 'akg_doc_reports.paperformat_akgr',
+                      'arabic_invoice_model.paperformat_akg_invoice'):
+            paper = self.env.ref(xmlid, raise_if_not_found=False)
+            if paper:
+                paper.sudo().write(vals)
+        return True
+
+    @api.model
     def _akg_apply_company_layout(self):
         """Select the 'Lines' document layout for every company.
 

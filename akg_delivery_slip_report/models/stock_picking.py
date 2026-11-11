@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models
 
-from odoo.addons.akg_doc_reports.models.common import first_field, phone_of
+from odoo.addons.akg_doc_reports.models.common import first_field, phone_of, uom_of
 
 
 class StockPicking(models.Model):
@@ -66,7 +66,7 @@ class StockPicking(models.Model):
             extra = first_field(move, ['description_picking'])
             if extra and extra not in name:
                 name = '%s\n%s' % (name, extra)
-            uom = first_field(move, ['product_uom_id', 'product_uom'])
+            uom = uom_of(move, product.uom_id)
             lots = []
             if 'move_line_ids' in move._fields and 'lot_id' in self.env['stock.move.line']._fields:
                 lots = [l for l in move.move_line_ids.mapped('lot_id.name') if l]
