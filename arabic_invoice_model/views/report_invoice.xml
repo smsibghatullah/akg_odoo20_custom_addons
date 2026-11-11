@@ -49,6 +49,12 @@
                 .akg-doc address { color: #111; font-size: 16px; line-height: 1.55; }
                 .akg-doc address [itemprop="name"], .akg-doc address [itemprop="name"] * { font-size: 20px !important; font-weight: bold !important; color: #111 !important; }
                 .akg-doc b, .akg-doc strong { font-weight: bold; }
+                /* HARD RESET (same as .akgr): Odoo 20 / themes draw borders on table, tbody, tr, td ...
+                   Nothing but the borders defined below may ever be drawn. */
+                html body .akg-doc.akg-doc table, html body .akg-doc.akg-doc thead, html body .akg-doc.akg-doc tbody, html body .akg-doc.akg-doc tfoot,
+                html body .akg-doc.akg-doc tr, html body .akg-doc.akg-doc td, html body .akg-doc.akg-doc th { border: 0 none !important; border-style: none !important; outline: 0 none !important; box-shadow: none !important; background-image: none !important; }
+                html body .akg-doc.akg-doc table { border-spacing: 0; background: transparent; }
+                html body .akg-doc.akg-doc hr { display: none; }
                 html .akg-doc.akg-doc table { border-collapse: collapse; width: 100%; border: 0 none !important; }
                 html .akg-doc.akg-doc table td, html .akg-doc.akg-doc table th { border: 0 none !important; background: transparent; box-shadow: none; padding: 0; vertical-align: top; }
                 html .akg-doc.akg-doc table.lines { border-bottom: 2px solid #444 !important; }
