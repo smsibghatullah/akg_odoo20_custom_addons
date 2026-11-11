@@ -90,6 +90,14 @@ class AccountPayment(models.Model):
                                        help="Enable/disable if approving"
                                             " person.")
 
+    @api.model
+    def _approval_selection_values(self):
+        """Return the values of the 'state' field that exist on this Odoo
+        version (the standard states differ between Odoo versions)."""
+        selection = self.env['account.payment'].fields_get(
+            ['state'])['state']['selection']
+        return [item[0] for item in selection]
+
     def _is_pos_payment(self):
         """POS session payments are created and posted automatically while
         closing a session, so they must never wait for approval."""
@@ -112,7 +120,14 @@ class AccountPayment(models.Model):
                 return
         approved_payments = payments.filtered(lambda p: p.state == 'approved')
         if approved_payments:
-            approved_payments.state = 'in_process'
+            # 'approved' is our own state, the standard posting flow only moves
+            # a *draft* payment forward (draft -> in process / paid ...), so put
+            # it back to draft first. Do NOT hard-code a state such as
+            # 'in_process': it is not a valid state on this Odoo 20 build and
+            # the standard compute sets the right state once the journal
+            # entry is posted.
+            approved_payments.with_context(tracking_disable=True).write(
+                {'state': 'draft'})
         return super().action_post()
 
     def _check_payment_approval(self):
@@ -157,6 +172,13 @@ class AccountPayment(models.Model):
     def reject_transfer(self):
         """This function changes state to rejected state if approving person
                 reject approval"""
+        values = self._approval_selection_values()
+        for target in ('rejected', 'canceled', 'cancelled', 'cancel'):
+            if target in values:
+                break
+        else:
+            raise UserError(_("This Odoo version has no rejected or cancelled "
+                              "payment state."))
         self.write({
-            'state': 'rejected'
+            'state': target
         })
