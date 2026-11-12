@@ -27,7 +27,7 @@ Strengthen your Odoo operations with Credit Limit Approval, covering customer cr
     'category': 'Sales',
     'depends': ['sale_management'],
     'data': [
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
         'data/credit_limit_approval_mail.xml',
         'wizard/warning_wizard.xml',
         'views/res_partner.xml',

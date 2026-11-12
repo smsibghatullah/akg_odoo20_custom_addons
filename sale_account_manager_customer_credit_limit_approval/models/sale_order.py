@@ -30,9 +30,10 @@ class SaleOrder(models.Model):
                                           related='company_id.currency_id')
 
     def get_so_for_approval(self):
-        web = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        so_base_url = self.env['ir.config_parameter'].sudo().get_param(
-            'web.base.url') + '/web#id=%d&menu_id=%d&cids=%d&action=%d&model=sale.order&view_type=form' % (
+        # Odoo 20: ir.config_parameter has no get_param(); read the value with a plain search
+        param = self.env['ir.config_parameter'].sudo().search([('key', '=', 'web.base.url')], limit=1)
+        web = param.value if param else ''
+        so_base_url = web + '/web#id=%d&menu_id=%d&cids=%d&action=%d&model=sale.order&view_type=form' % (
                           self.id, self.env.ref('sale.sale_menu_root').id,
                           self.env.company.id,
                           self.env.ref('sale.action_quotations_with_onboarding').id)
