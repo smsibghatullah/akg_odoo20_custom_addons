@@ -45,3 +45,17 @@ class UomUom(models.Model):
             return float_round(value, precision_digits=self._compat_digits(),
                                rounding_method=rounding_method)
         return super().round(value, rounding_method, *args, **kwargs)
+
+    # `last_line.uom_id._compute_price(...)` (purchase supplier price lookup) and
+    # `line.uom_id._compute_quantity(...)` crash with "Expected singleton: uom.uom()"
+    # when a migrated line has no UoM. With no unit we assume the amount is already
+    # in the target unit (the real fix is to fill the missing uom_id, see README).
+    def _compute_price(self, price, to_unit):
+        if not self:
+            return price
+        return super()._compute_price(price, to_unit)
+
+    def _compute_quantity(self, qty, to_unit, *args, **kwargs):
+        if not self:
+            return qty
+        return super()._compute_quantity(qty, to_unit, *args, **kwargs)
