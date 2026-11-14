@@ -41,10 +41,21 @@ patch(PosStore.prototype, {
         return newLine;
     },
 
-    async updateSOLines(line, convertedLine, newLine) {
-        if (!newLine || !line?.product_id) {
+    /**
+     * Replaces every other updateSOLines override (some of them read `.tracking` of an undefined
+     * record for lot/serial products and crash). Same behaviour as standard Odoo: price, discount
+     * and the split of non-groupable units. Lots are NOT pre-filled from the sale order.
+     */
+    async updateSOLines(line, convertedLine, newLine, newLineValues, state) {
+        if (!newLine) {
             return;
         }
-        return super.updateSOLines(...arguments);
+        if (convertedLine?.price_unit !== undefined) {
+            newLine.setUnitPrice(convertedLine.price_unit);
+        }
+        newLine.setDiscount(line.discount);
+        if (line?.product_id) {
+            this.splitSOLine(line, convertedLine, newLine, newLineValues, state);
+        }
     },
 });
