@@ -29,9 +29,14 @@ patch(ProductScreen.prototype, {
     onNumpadClick(buttonValue) {
         if (this.pos.accessRight.disablePriceButton) {
             if (buttonValue === "price") {
+                const cashier = this.pos.accessRight.loggedCashier;
+                // diagnostic line: shows WHO is logged in and how the POS classified him
+                const info = `${cashier?.name || "?"} | role: ${cashier?._role} | price manager: ${cashier?._price_manager}`;
+                // eslint-disable-next-line no-console
+                console.warn("[akg_pos_price_manager_only] price blocked for:", info, cashier);
                 this.dialog.add(AlertDialog, {
                     title: _t("Price change not allowed"),
-                    body: _t("Only the POS manager can change the price."),
+                    body: _t("Only the POS manager can change the price.") + "\n\n(" + info + ")",
                 });
                 return;
             }
