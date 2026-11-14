@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - POS Price Control: managers only',
-    'version': '20.0.1.0.1',
+    'version': '20.0.1.0.2',
     'category': 'Sales/Point of Sale',
     'summary': 'With "Price Control" ON only the POS manager can change a price; the Price button is disabled for everybody else.',
     'description': """

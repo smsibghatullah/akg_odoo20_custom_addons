@@ -5,7 +5,7 @@ import { PosAccessRightPlugin } from "@point_of_sale/app/plugins/access_right_pl
 import { ProductScreen } from "@point_of_sale/app/screens/product_screen/product_screen";
 
 patch(PosAccessRightPlugin.prototype, {
-    /** true only for a POS manager (see models/hr_employee.py for the rule) */
+    /** true only for a POS manager (rule: models/hr_employee.py) */
     get akgIsPriceManager() {
         const cashier = this.loggedCashier;
         if (!cashier) {
@@ -17,30 +17,58 @@ patch(PosAccessRightPlugin.prototype, {
         return cashier._role === "manager";
     },
 
+    /**
+     * Price Control ON  -> locked for everybody who is not a price manager.
+     * The decision is made HERE only: other patches of `disablePriceButton` (Odoo or custom POS modules)
+     * must not be able to lock a manager out, nor to unlock a cashier.
+     */
+    get akgPriceLocked() {
+        return !!this.config.restrict_price_control && !this.akgIsPriceManager;
+    },
+
     get disablePriceButton() {
-        return (
-            super.disablePriceButton ||
-            (!!this.config.restrict_price_control && !this.akgIsPriceManager)
-        );
+        if (this.config.restrict_price_control) {
+            return this.akgPriceLocked;
+        }
+        return super.disablePriceButton;
     },
 });
 
 patch(ProductScreen.prototype, {
+    getNumpadButtons() {
+        const buttons = super.getNumpadButtons(...arguments);
+        if (!this.pos.config.restrict_price_control) {
+            return buttons;
+        }
+        const locked = this.pos.accessRight.akgPriceLocked;
+        const isCombo = !!this.currentOrder?.getSelectedOrderline()?.isPartOfCombo();
+        return buttons.map((button) =>
+            button.value === "price" ? { ...button, disabled: locked || isCombo } : button
+        );
+    },
+
     onNumpadClick(buttonValue) {
-        if (this.pos.accessRight.disablePriceButton) {
+        if (this.pos.config.restrict_price_control) {
+            const locked = this.pos.accessRight.akgPriceLocked;
             if (buttonValue === "price") {
-                const cashier = this.pos.accessRight.loggedCashier;
-                // diagnostic line: shows WHO is logged in and how the POS classified him
-                const info = `${cashier?.name || "?"} | role: ${cashier?._role} | price manager: ${cashier?._price_manager}`;
-                // eslint-disable-next-line no-console
-                console.warn("[akg_pos_price_manager_only] price blocked for:", info, cashier);
-                this.dialog.add(AlertDialog, {
-                    title: _t("Price change not allowed"),
-                    body: _t("Only the POS manager can change the price.") + "\n\n(" + info + ")",
-                });
+                if (locked) {
+                    const cashier = this.pos.accessRight.loggedCashier;
+                    const info = `${cashier?.name || "?"} | role: ${cashier?._role} | price manager: ${cashier?._price_manager}`;
+                    // eslint-disable-next-line no-console
+                    console.warn("[akg_pos_price_manager_only] price blocked for:", info, cashier);
+                    this.dialog.add(AlertDialog, {
+                        title: _t("Price change not allowed"),
+                        body: _t("Only the POS manager can change the price.") + "\n\n(" + info + ")",
+                    });
+                    return;
+                }
+                // price manager: switch to price mode here (same as the standard code)
+                this.numberBuffer.capture();
+                this.numberBuffer.reset();
+                this.pos.numpadMode = "price";
                 return;
             }
-            if (this.pos.numpadMode === "price") {
+            if (locked && this.pos.numpadMode === "price") {
                 // a cashier must never type into the price field (e.g. after switching cashier)
                 this.pos.numpadMode = "quantity";
             }
