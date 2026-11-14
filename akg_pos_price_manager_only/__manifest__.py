@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AKG - POS Price Control: managers only',
-    'version': '20.0.1.0.2',
+    'version': '20.0.1.1.0',
     'category': 'Sales/Point of Sale',
     'summary': 'With "Price Control" ON only the POS manager can change a price; the Price button is disabled for everybody else.',
     'description': """
@@ -18,8 +18,11 @@ button. This module decides by the POS settings instead:
 
 The Price button is greyed out and a click is blocked with a message. Works per POS (each POS has its own
 "Price Control" switch).
+
+Also: settling a quotation/sale order that contains lot/serial tracked products no longer crashes
+(static/src/app/settle_so_tracked_fix.js).
 """,
-    'depends': ['point_of_sale', 'pos_hr'],
+    'depends': ['point_of_sale', 'pos_hr', 'pos_sale'],
     'data': [],
     'assets': {
         'point_of_sale._assets_pos': [
