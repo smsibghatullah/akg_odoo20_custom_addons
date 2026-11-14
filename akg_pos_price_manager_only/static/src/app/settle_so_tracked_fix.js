@@ -26,12 +26,25 @@ patch(PosStore.prototype, {
         }
     },
 
+    /** a line is usable only if it still exists in the POS models and still belongs to an order */
+    _akgLineAlive(line) {
+        if (!line) {
+            return false;
+        }
+        try {
+            return !!this.models["pos.order.line"].get(line.id) && !!line.order_id;
+        } catch {
+            return false;
+        }
+    },
+
     async addLineToCurrentOrder(vals, opts = {}, configure = true) {
         const line = await super.addLineToCurrentOrder(...arguments);
-        if (line || !this._akgSettlingSO || !vals?.sale_order_line_id) {
+        if (this._akgLineAlive(line) || !this._akgSettlingSO || !vals?.sale_order_line_id) {
             return line;
         }
-        // sale order line that was refused (lot/serial required): add it without the check
+        // The line was refused (lot/serial required): the other code created it and DELETED it again
+        // (it may even return that deleted line). Add it again without the check.
         const order = this.getOrder();
         if (!order || !vals.product_id) {
             return line;
@@ -47,7 +60,7 @@ patch(PosStore.prototype, {
      * and the split of non-groupable units. Lots are NOT pre-filled from the sale order.
      */
     async updateSOLines(line, convertedLine, newLine, newLineValues, state) {
-        if (!newLine) {
+        if (!this._akgLineAlive(newLine)) {
             return;
         }
         // Some custom "update" listeners (other modules) throw while the value is already written.
