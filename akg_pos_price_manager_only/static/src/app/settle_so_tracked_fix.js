@@ -50,12 +50,24 @@ patch(PosStore.prototype, {
         if (!newLine) {
             return;
         }
+        // Some custom "update" listeners (other modules) throw while the value is already written.
+        // A listener error must not abort the settle of the whole sale order.
+        const safe = (label, fn) => {
+            try {
+                return fn();
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.warn("[akg_pos_price_manager_only] settle SO: ignored error in", label, e);
+            }
+        };
         if (convertedLine?.price_unit !== undefined) {
-            newLine.setUnitPrice(convertedLine.price_unit);
+            safe("setUnitPrice", () => newLine.setUnitPrice(convertedLine.price_unit));
         }
-        newLine.setDiscount(line.discount);
+        safe("setDiscount", () => newLine.setDiscount(line.discount));
         if (line?.product_id) {
-            this.splitSOLine(line, convertedLine, newLine, newLineValues, state);
+            safe("splitSOLine", () =>
+                this.splitSOLine(line, convertedLine, newLine, newLineValues, state)
+            );
         }
     },
 });
