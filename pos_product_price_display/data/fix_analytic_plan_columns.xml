@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- runs on every install / update: creates the missing x_plan<ID>_id fields (harmless when they exist) -->
+    <function model="account.analytic.plan" name="_akg_sync_plan_columns"/>
+</odoo>
