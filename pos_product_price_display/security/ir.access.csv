@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_pos_user_stock_landed_cost,pos user read stock.landed.cost,stock.landed.cost,point_of_sale.group_pos_user,r,
+access_pos_user_stock_landed_cost_lines,pos user read stock.landed.cost.lines,stock.landed.cost.lines,point_of_sale.group_pos_user,r,
+access_pos_user_stock_valuation_adjustment_lines,pos user read stock.valuation.adjustment.lines,stock.valuation.adjustment.lines,point_of_sale.group_pos_user,r,
